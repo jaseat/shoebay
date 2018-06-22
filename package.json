@@ -8,14 +8,16 @@
   "scripts": {
     "server": "nodemon src/app.js",
     "client": "cd client && yarn start",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev": "NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "devwin": "set NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "build": "cd client && yarn build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node src/app.js",
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "morgan": "^1.9.0"
   },
   "devDependencies": {
     "concurrently": "^3.6.0",
