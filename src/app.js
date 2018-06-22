@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(logger('dev'));
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '/../client/build')));
 
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
