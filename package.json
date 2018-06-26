@@ -6,6 +6,7 @@
   "author": "jaseat <jpseatris@ucdavis.edu>",
   "license": "MIT",
   "scripts": {
+    "install": "cd client && yarn",
     "server": "nodemon src/app.js",
     "client": "cd client && yarn start",
     "dev": "NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
