@@ -13,3 +13,10 @@ export function removeFilter(filter) {
     filter,
   };
 }
+
+export function priceChange(value) {
+  return {
+    type: types.CHANGE_PRICE,
+    value,
+  };
+}

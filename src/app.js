@@ -27,6 +27,8 @@ if (process.env.NODE_ENV === 'development') {
     );
     next();
   });
+
+  const quote = "test 'testing'";
 }
 
 app.use('/', html);
