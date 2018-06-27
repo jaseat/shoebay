@@ -1,25 +1,9 @@
 import React from 'react';
 import { ListItem } from '@material-ui/core';
 
-function getValue(WrappedComponent) {
-  return class extends React.Component {
-    handleClick = (e, handleClick, value) => {
-      e.preventDefault();
-      handleClick(value);
-    };
-    render() {
-      const { handleClick, value, ...other } = this.props;
-      return (
-        <WrappedComponent
-          component="a"
-          href=""
-          onClick={e => this.handleClick(e, handleClick, value)}
-          {...other}
-        />
-      );
-    }
-  };
-}
+import { handleClickHOC } from '../HOC';
+
+const ListValueOnClick = handleClickHOC(ListItem, 'onClick');
 
 const filterList = [
   {
@@ -36,12 +20,12 @@ const filterList = [
   },
 ];
 
-const ListValueOnClick = getValue(ListItem);
-
 const ListData = props => (
   <div>
     {filterList.map(f => (
       <ListValueOnClick
+        component="a"
+        href=""
         key={f.name}
         handleClick={props.handleClick}
         value={f.value}

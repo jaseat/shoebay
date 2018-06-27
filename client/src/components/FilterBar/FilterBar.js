@@ -1,15 +1,20 @@
 import React from 'react';
 import { Toolbar, Chip } from '@material-ui/core';
 
-const handleDelete = (filter, action) => () => {
-  action(filter);
-};
+import { handleClickHOC } from '../HOC';
+
+const ChipOnClick = handleClickHOC(Chip, 'onDelete');
 
 const FilterBar = props => (
   <Toolbar>
     Filters:
     {props.filters.map(f => (
-      <Chip key={f} onDelete={handleDelete(f, props.removeFilter)} label={f} />
+      <ChipOnClick
+        key={f}
+        value={f}
+        handleClick={props.removeFilter}
+        label={f}
+      />
     ))}
   </Toolbar>
 );

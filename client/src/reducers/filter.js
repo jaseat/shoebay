@@ -2,6 +2,7 @@ import { FilterTypes as types } from '../action-types';
 
 const initialState = {
   filters: [],
+  priceRange: { min: 0, max: 200 },
 };
 
 export default function(state = initialState, action) {
@@ -19,7 +20,6 @@ export default function(state = initialState, action) {
       //If index !== -1 (i.e. filter is in array) remove that filter
       //Otherwise return the current state
       const idx = state.filters.findIndex(e => e === action.filter);
-      console.log(idx);
       if (idx !== -1) {
         const newFilter = [...state.filters];
         newFilter.splice(idx, 1);
@@ -27,6 +27,16 @@ export default function(state = initialState, action) {
           filters: newFilter,
         });
       } else return state;
+    case types.CHANGE_PRICE:
+      const priceFilter = `Price: ${action.value.min}-${action.value.max}`;
+      const idx1 = state.filters.findIndex(e => /^Price/.test(e));
+      const newFilter = [...state.filters];
+      if (idx1 !== -1) newFilter.splice(idx1, 1, priceFilter);
+      else newFilter.push(priceFilter);
+      return Object.assign({}, state, {
+        priceRange: action.value,
+        filters: newFilter,
+      });
     default:
       return state;
   }
