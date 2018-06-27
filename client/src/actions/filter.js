@@ -1,4 +1,4 @@
-import { FilterTypes as types } from '../action-types';
+import { FilterTypes as types } from "../action-types";
 
 export function addFilter(filter) {
   return {

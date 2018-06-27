@@ -1,13 +1,23 @@
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-
-const html = require('./routes/html');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
+// pass passport for configuration
+require('./auth')(passport);
+//log for dev
 app.use(logger('dev'));
+//needed for auth
+app.use(cookieParser());
+//session set up
+app.use(session({ secret: 'should_be_in_env_when_dployed_on_heroku' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
 app.use(express.static(path.join(__dirname, '/../client/build')));
 
 if (process.env.NODE_ENV === 'development') {
@@ -31,6 +41,6 @@ if (process.env.NODE_ENV === 'development') {
   const quote = "test 'testing'";
 }
 
-app.use('/', html);
+require('./routes')(app, passport);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
