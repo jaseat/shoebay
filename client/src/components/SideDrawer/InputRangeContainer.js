@@ -18,6 +18,7 @@ class InputRangeContainer extends Component {
         <InputRange
           maxValue={200}
           minValue={0}
+          formatLabel={value => `$${value}`}
           value={this.state.value}
           onChange={this.handleChange}
           onChangeComplete={this.props.priceChange}
