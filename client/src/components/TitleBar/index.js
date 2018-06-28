@@ -1,7 +1,7 @@
-import { connect } from "react-redux";
-import TitleBar from "./TitleBar";
+import { connect } from 'react-redux';
+import TitleBar from './TitleBar';
 
 export default connect(
-  state => ({ isUserLoggedIn: state.isUserLoggedIn }),
+  state => ({ userId: state.user.userId }),
   null
 )(TitleBar);

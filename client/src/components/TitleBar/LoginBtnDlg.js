@@ -1,61 +1,69 @@
-import React from "react"
-import Button from "@material-ui/core/Button"
-import TextField from "@material-ui/core/TextField"
-import Dialog from "@material-ui/core/Dialog"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogContentText from "@material-ui/core/DialogContentText"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogActions from "@material-ui/core/DialogActions"
-import { LogInIcon } from "../../style/Icons"
-
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import Grid from '@material-ui/core/Grid';
+import PureIcon from '../../style/Icons';
+import { connect } from 'react-redux';
+import { userLogin } from '../../actions/user';
+import type { USER_ACTION } from '../../@flow-types';
 // props types
 //login method
 type P = {
-  props?: any,
-  // handleLogIn?: (email: string, password: string) => void,
-}
+  userLogin: (id: string) => USER_ACTION,
+};
 
 type S = {
   open_dialog: boolean,
   is_btn_active: boolean,
   user_email: string,
   user_password: string,
-}
+};
 
 class LoginBtnDlg extends React.Component<P, S> {
   state = {
     open_dialog: false,
     is_btn_active: false,
-    user_email: "",
-    user_password: "",
-  }
+    user_email: '',
+    user_password: '',
+  };
 
   _handleOpenDialog = (): void => {
-    this.setState({ open_dialog: true })
-  }
+    this.setState({ open_dialog: true });
+  };
 
   _handleCloseDialog = (): void => {
-    this.setState({ open_dialog: false })
-  }
+    this.setState({ open_dialog: false });
+  };
 
-  _handleInput = (name: string) => (event: Object) => {
-    this.setState({ [name]: event.target.value })
+  _handleInput = (name: string) => (
+    event: SyntheticInputEvent<EventTarget>
+  ) => {
+    this.setState({ [name]: event.target.value });
     if (!this.state.is_btn_active) {
-      if (this._isCompleted("user_email") && this._isCompleted("user_password"))
-        this.setState({ is_btn_active: true })
+      if (this._isCompleted('user_email') && this._isCompleted('user_password'))
+        this.setState({ is_btn_active: true });
     }
-  }
+  };
 
   _isCompleted = (name: string): boolean => {
-    if (this.state[name].length > 0) return true
-    return false
-  }
+    if (this.state[name].length > 0) return true;
+    return false;
+  };
+
+  _handleLogin = (): void => {
+    this.props.userLogin('123');
+    this._handleCloseDialog();
+  };
 
   render() {
     return (
       <React.Fragment>
         <Button variant="flat" onClick={this._handleOpenDialog}>
-          <LogInIcon color="secondary" />
+          <PureIcon iconType="LogIn" />
           Login
         </Button>
         <Dialog
@@ -65,34 +73,47 @@ class LoginBtnDlg extends React.Component<P, S> {
         >
           <DialogTitle id="login-dialog">Log In</DialogTitle>
           <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="user-email"
-              label="Email"
-              type="email"
-              fullWidth
-              value={this.state.user_email}
-              onChange={this._handleInput("user_email")}
-            />
-            <TextField
-              margin="dense"
-              id="user-password"
-              label="Password"
-              type="password"
-              fullWidth
-              value={this.state.user_password}
-              onChange={this._handleInput("user_password")}
-            />
+            <Grid container spacing={8} alignItems="flex-end">
+              <Grid item xs={1}>
+                <PureIcon iconType="Email" />
+              </Grid>
+              <Grid item xs={11}>
+                <TextField
+                  label="Email"
+                  fullWidth
+                  value={this.state.user_email}
+                  onChange={this._handleInput('user_email')}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <PureIcon iconType="Lock" />
+              </Grid>
+              <Grid item xs={11}>
+                <TextField
+                  label="Password"
+                  type="password"
+                  fullWidth
+                  value={this.state.user_password}
+                  onChange={this._handleInput('user_password')}
+                />
+              </Grid>
+            </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={this._handleCloseDialog}>Cancel</Button>
-            {/* props method for log in onClick*/}
-            <Button disabled={!this.state.is_btn_active}>Log In</Button>
+            <Button
+              disabled={!this.state.is_btn_active}
+              onClick={this._handleLogin}
+            >
+              Log In
+            </Button>
           </DialogActions>
         </Dialog>
       </React.Fragment>
-    )
+    );
   }
 }
-export default LoginBtnDlg
+export default connect(
+  null,
+  { userLogin }
+)(LoginBtnDlg);

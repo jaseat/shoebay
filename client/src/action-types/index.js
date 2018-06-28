@@ -1,3 +1,4 @@
-import FilterTypes from './filter';
+import FilterTypes from "./filter";
+import UserTypes from "./user";
 
-export { FilterTypes };
+export { FilterTypes, UserTypes };
