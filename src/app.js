@@ -2,13 +2,16 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const passport = require('passport');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-// pass passport for configuration
-require('./auth')(passport);
+//routes
+const html = require('./routes/html');
+const auth = require('./routes/auth');
+
 //log for dev
 app.use(logger('dev'));
 //needed for auth
@@ -41,6 +44,7 @@ if (process.env.NODE_ENV === 'development') {
   const quote = "test 'testing'";
 }
 
-require('./routes')(app, passport);
+app.use('/', html);
+app.use('/auth', auth);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

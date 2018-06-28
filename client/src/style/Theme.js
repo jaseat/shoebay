@@ -26,6 +26,11 @@ const Theme = createMuiTheme({
         backgroundColor: 'rgb(255 ,255,255)',
       },
     },
+    MuiChip: {
+      root: {
+        backgroundColor: '#82f7ff',
+      },
+    },
   },
 });
 export default Theme;

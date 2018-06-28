@@ -59,7 +59,7 @@ class UserMenu extends React.Component<P, S> {
             horizontal: 'center',
           }}
         >
-          <MenuItem onClick={this.handleClose}>
+          <MenuItem variant="flat" onClick={this.handleClose}>
             <PureIcon iconType="AccountBox" />Profile
           </MenuItem>
           <MenuItem onClick={this.handleClose}>
