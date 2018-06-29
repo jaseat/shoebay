@@ -1,24 +1,22 @@
 import React from 'react';
-import { Drawer, List, withStyles } from '@material-ui/core';
-import ListData from './ListData';
-import InputRangeContainer from './InputRangeContainer';
-
-const drawerWidth = 240;
-
+import { Drawer, withStyles } from '@material-ui/core';
+import DepartmentGroup from './DepartmentGroup';
+import PriceGroup from './PriceGroup';
+import SizeGroup from './SizeGroup';
 const styles = theme => ({
   drawerPaper: {
     position: 'relative',
-    width: drawerWidth,
-    height: '80vh',
+    width: 280,
+    height:
+      window.innerHeight - theme.mixins.toolbar.minHeight - theme.spacing.unit,
   },
 });
 
 const SideDrawer = props => (
   <Drawer variant="permanent" classes={{ paper: props.classes.drawerPaper }}>
-    <List dense disablePadding>
-      <ListData handleClick={props.addFilter} />
-      <InputRangeContainer priceChange={props.priceChange} />
-    </List>
+    <DepartmentGroup />
+    <PriceGroup />
+    <SizeGroup />
   </Drawer>
 );
 
