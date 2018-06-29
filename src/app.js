@@ -21,7 +21,7 @@ app.use(session({ secret: 'should_be_in_env_when_dployed_on_heroku' })); // sess
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-// app.use(express.static(path.join(__dirname, '/../client/build')));
+app.use(express.static(path.join(__dirname, '/client/build')));
 
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
