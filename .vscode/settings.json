@@ -1,0 +1,20 @@
+{
+  "extensions.ignoreRecommendations": true,
+  "editor.tabSize": 2,
+  "files.trimTrailingWhitespace": true,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+  "editor.quickSuggestionsDelay": 3,
+  "editor.formatOnSave": true,
+  "editor.parameterHints": true,
+  "editor.wordBasedSuggestions": true,
+  "prettier.semi": true,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "es5",
+  "files.insertFinalNewline": true,
+  "javascript.validate.enable": false,
+  "prettier.singleQuote": true
+}
