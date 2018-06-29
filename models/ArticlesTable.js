@@ -3,37 +3,21 @@ module.exports = function(sequelize, DataTypes) {
     userID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
-        len: [1],
-      },
     },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [1],
+        len: [255],
       },
     },
     date: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.Date,
       allowNull: false,
-      validate: {
-        len: [1],
-      },
     },
     text: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
-      validate: {
-        len: [1],
-      },
-    },
-    images: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [1],
-      },
     },
   });
   return ArticlesTable;

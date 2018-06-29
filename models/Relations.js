@@ -4,14 +4,50 @@ var ArticlesTable = require("./ArticlesTable");
 var ProductTable = require("./ProductTable");
 var CommentsTable = require("./CommentsTable");
 
-Users.associate = function(models) {
-  Users.hasMany(models.Privilege, {
+Privilege.associate = function(models) {
+  Privilege.hasMany(models.Users, {
     onDelete: "cascade",
   });
 };
 
-Privilege.associate = function(models) {
-  Privilege.belongsTo(models.Users, {
+Users.associate = function(models) {
+  Users.belongsTo(models.Privilege, {
+    foreignKey: {
+      allowNull: false,
+    },
+  });
+};
+
+Users.associate = function(models) {
+  Users.hasMany(models.ArticlesTable, {
+    onDelete: "cascade",
+  });
+};
+
+ArticlesTable.associate = function(models) {
+  ArticlesTable.belongsTo(models.Users, {
+    foreignKey: {
+      allowNull: false,
+    },
+  });
+};
+
+Users.associate = function(models) {
+  Users.hasMany(model.ProductTable, {
+    foreignKey: {
+      allowNull: false,
+    },
+  });
+};
+
+Users.associate = function(models) {
+  Users.hasMany(models.CommentsTable, {
+    onDelete: "cascade",
+  });
+};
+
+CommentsTable.associate = function(models) {
+  CommentsTable.belongsTo(models.Users, {
     foreignKey: {
       allowNull: false,
     },
@@ -19,13 +55,13 @@ Privilege.associate = function(models) {
 };
 
 ArticlesTable.associate = function(models) {
-  ArticlesTable.hasMany(models.Users, {
+  ArticlesTable.hasMany(models.CommentsTable, {
     onDelete: "cascade",
   });
 };
 
-Users.associate = function(models) {
-  Users.belongsTo(models.ArticlesTable, {
+CommentsTable.associate = function(models) {
+  CommentsTable.belongsTo(models.ArticlesTable, {
     foreignKey: {
       allowNull: false,
     },
@@ -33,49 +69,27 @@ Users.associate = function(models) {
 };
 
 ProductTable.associate = function(models) {
-  ProductTable.hasMany(model.Users, {
-    foreignKey: {
-      allowNull: false,
-    },
-  });
-};
-
-CommentsTable.associate = function(models) {
-  CommentsTable.hasMany(models.Users, {
+  ProductTable.hasMany(models.CommentsTable, {
     onDelete: "cascade",
   });
 };
 
-Users.associate = function(models) {
-  Users.belongsTo(models.CommentsTable, {
+CommentsTable.associate = function(models) {
+  CommentsTable.belongsTo(models.ProductTable, {
     foreignKey: {
       allowNull: false,
     },
-  });
-};
-
-CommentsTable.associate = function(models) {
-  CommentsTable.hasMany(models.ArticlesTable, {
-    onDelete: "cascade",
   });
 };
 
 ArticlesTable.associate = function(models) {
-  ArticlesTable.belongsTo(models.CommentsTable, {
-    foreignKey: {
-      allowNull: false,
-    },
-  });
-};
-
-CommentsTable.associate = function(models) {
-  CommentsTable.hasMany(models.ProducTable, {
+  ArticlesTable.hasMany(models.Imgs, {
     onDelete: "cascade",
   });
 };
 
-ProducTable.associate = function(models) {
-  ProductTable.belongsTo(models.CommentsTable, {
+Imgs.associate = function(models) {
+  Imgs.belongsTo(models.ArticlesTable, {
     foreignKey: {
       allowNull: false,
     },
