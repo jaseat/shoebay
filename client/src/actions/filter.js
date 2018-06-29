@@ -1,22 +1,21 @@
-import { FilterTypes as types } from "../action-types";
+import { FilterTypes as types } from '../action-types';
+import type { FILTER_ACTION } from '../@flow-types';
 
-export function addFilter(filter) {
+export function addFilter(name: string, value: string): FILTER_ACTION {
   return {
     type: types.ADD_FILTER,
-    filter,
+    payload: {
+      name,
+      value,
+    },
   };
 }
 
-export function removeFilter(filter) {
+export function removeFilter(name: string): FILTER_ACTION {
   return {
     type: types.REMOVE_FILTER,
-    filter,
-  };
-}
-
-export function priceChange(value) {
-  return {
-    type: types.CHANGE_PRICE,
-    value,
+    payload: {
+      name,
+    },
   };
 }

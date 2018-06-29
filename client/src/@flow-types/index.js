@@ -1,9 +1,17 @@
-import { UserTypes as types } from '../action-types';
+import * as types from '../action-types';
 
 export type USER_ACTION = {
-  type: typeof types.LOGIN | typeof types.LOGOUT,
+  type: typeof types.UserTypes.LOGIN | typeof types.UserTypes.LOGOUT,
+  userId: string | null,
+};
+
+export type FILTER_ACTION = {
+  type:
+    | typeof types.FilterTypes.REMOVE_FILTER
+    | typeof types.FilterTypes.ADD_FILTER,
   payload: {
-    userId: string | null,
+    name: string,
+    value?: string,
   },
 };
 

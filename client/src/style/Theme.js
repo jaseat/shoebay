@@ -28,7 +28,8 @@ const Theme = createMuiTheme({
     },
     MuiChip: {
       root: {
-        backgroundColor: '#82f7ff',
+        backgroundColor: '#40c4ff',
+        margin: 3,
       },
     },
   },
