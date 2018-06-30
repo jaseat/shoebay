@@ -10,6 +10,7 @@
     "dev-prepare-win": "set NODE_ENV=development&sequelize db:drop&sequelize db:create&sequelize db:migrate&sequelize db:seed:all",
     "install": "cd client && yarn",
     "server": "nodemon src/app.js",
+    "production-test": "set NODE_ENV=production&&nodemon src/app.js",
     "client": "cd client && yarn start",
     "dev": "NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "devwin": "set NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
