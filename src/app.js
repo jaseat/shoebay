@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const passport = require('passport');
-// const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const app = express();
@@ -14,14 +13,13 @@ const auth = require('./routes/auth');
 
 //log for dev
 app.use(logger('dev'));
-//needed for auth
-// app.use(cookieParser());
 //session set up
 app.use(session({ secret: 'should_be_in_env_when_dployed_on_heroku' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 app.use(express.static(path.join(__dirname, '/../client/build')));
+
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
     const allowed_header = ['http://localhost:3000'];
