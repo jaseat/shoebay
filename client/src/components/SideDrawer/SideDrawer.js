@@ -1,25 +1,34 @@
-import React, { Component, Children } from 'react';
+import * as React from 'react';
 import { Drawer, withStyles } from '@material-ui/core';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Hidden from '@material-ui/core/Hidden';
-import DepartmentGroup from './DepartmentGroup';
-import PriceGroup from './PriceGroup';
-import SizeGroup from './SizeGroup';
+
+type P = {
+  classes: Object,
+  children: React.Element<void>,
+};
+
+type S = { mobileOpen: boolean };
 
 const styles = theme => ({
   drawerPaper: {
     width: 300,
-    [theme.breakpoints.up('md')]: {
+    position: 'fixed',
+    [theme.breakpoints.up('sm')]: {
+      width: 200,
       position: 'relative',
       height:
         window.innerHeight -
         theme.mixins.toolbar.minHeight -
         theme.spacing.unit,
     },
+    [theme.breakpoints.up('md')]: {
+      width: 300,
+    },
   },
 });
 
-class SideDrawer extends Component<any, { mobileOpen: boolean }> {
+class SideDrawer extends React.Component<P, S> {
   state = {
     mobileOpen: false,
   };
@@ -27,30 +36,20 @@ class SideDrawer extends Component<any, { mobileOpen: boolean }> {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
   render() {
-    const children = (
-      <div style={{ width: '100%', overflowX: 'hidden' }}>
-        <DepartmentGroup />
-        <PriceGroup />
-        <SizeGroup />
-      </div>
-    );
-
+    const { classes, children } = this.props;
     return (
       <React.Fragment>
-        <Hidden smDown implementation="js">
-          <Drawer
-            variant="permanent"
-            classes={{ paper: this.props.classes.drawerPaper }}
-          >
+        <Hidden xsDown implementation="css">
+          <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
             {children}
           </Drawer>
         </Hidden>
-        <Hidden mdUp>
+        <Hidden smUp>
           <SwipeableDrawer
             open={this.state.mobileOpen}
             onClose={this.toggleMobileDrawer}
             onOpen={this.toggleMobileDrawer}
-            classes={{ paper: this.props.classes.drawerPaper }}
+            classes={{ paper: classes.drawerPaper }}
           >
             {children}
           </SwipeableDrawer>

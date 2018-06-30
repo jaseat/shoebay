@@ -43,9 +43,11 @@ class DepartmentGroup extends Component<any, { value: string }> {
   }
 }
 
-export default connect(
+const ConnectedDepartmentGroup = connect(
   state => ({
     value: state.filter.filters.Department,
   }),
   actions
-)(ExpansionDecor(DepartmentGroup, 'Department'));
+)(DepartmentGroup);
+
+export default ExpansionDecor(ConnectedDepartmentGroup, 'Department');

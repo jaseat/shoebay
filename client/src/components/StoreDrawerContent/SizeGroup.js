@@ -31,16 +31,6 @@ const sizes = [
   16,
 ];
 
-// const buttonStyles = {
-//   minWidth: 50,
-//   minHeight: 50,
-//   border: '1px solid black',
-//   borderRadius: 5,
-//   backgroundColor: '#fff',
-//   margin: 4,
-//   outline: 'none',
-// };
-
 class SizeGroup extends Component<any> {
   handleClick = value => {
     return e => {
@@ -54,7 +44,7 @@ class SizeGroup extends Component<any> {
       <Grid container alignItems="flex-start" justify="space-between">
         {sizes.map(s => {
           return (
-            <Grid item xs={4} key={s}>
+            <Grid item xs={3} sm={6} md={3} key={s}>
               <Button
                 variant="outlined"
                 size="small"
@@ -70,7 +60,9 @@ class SizeGroup extends Component<any> {
   }
 }
 
-export default connect(
+const ConnectedSizeGroup = connect(
   null,
   { addFilter }
-)(ExpansionDecor(SizeGroup, 'Sizes'));
+)(SizeGroup);
+
+export default ExpansionDecor(ConnectedSizeGroup, 'Sizes');

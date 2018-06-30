@@ -5,8 +5,7 @@ import Theme from './style/Theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
 //custom
 import TitleBar from './components/TitleBar';
-import SideDrawer from './components/SideDrawer';
-import FilterBar from './components/FilterBar';
+import StorePage from './components/StorePage/StorePage';
 
 class App extends Component<{}> {
   render() {
@@ -14,8 +13,7 @@ class App extends Component<{}> {
       <MuiThemeProvider theme={Theme}>
         <CssBaseline />
         <TitleBar />
-        <FilterBar />
-        <SideDrawer />
+        <StorePage />
       </MuiThemeProvider>
     );
   }

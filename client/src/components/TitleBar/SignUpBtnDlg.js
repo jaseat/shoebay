@@ -121,10 +121,9 @@ class SignUpBtnDlg extends React.Component<P, S> {
           <DialogActions>
             <Button onClick={this._handleCloseDialog}>Cancel</Button>
             <Button
-              color="secondary"
+              color="primary"
               onClick={this._handleSignup}
               variant="raised"
-              color="primary"
             >
               Sign Up
             </Button>

@@ -39,7 +39,9 @@ class PriceGroup extends Component<P> {
   }
 }
 
-export default connect(
+const ConnectedPriceGroup = connect(
   null,
   { addFilter }
-)(ExpansionDecor(PriceGroup, 'Price Range'));
+)(PriceGroup);
+
+export default ExpansionDecor(ConnectedPriceGroup, 'Price Range');
