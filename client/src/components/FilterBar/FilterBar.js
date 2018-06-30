@@ -7,11 +7,15 @@ type P = {
   removeFilter: (name: string) => FILTER_ACTION,
 };
 
-const deleteChip = (key, method) => {
-  return () => {
-    method(key);
+class WrappedChip extends React.PureComponent<any> {
+  deleteChip = () => {
+    this.props.delete(this.props.n);
   };
-};
+  render() {
+    const { v, n, onDelete } = this.props;
+    return <Chip label={v} onDelete={this.deleteChip} />;
+  }
+}
 
 const FilterBar = (props: P) => {
   const values = Object.values(props.filters);
@@ -23,10 +27,11 @@ const FilterBar = (props: P) => {
         <div>
           {values.map((v: any, i) => {
             return (
-              <Chip
-                label={v}
+              <WrappedChip
                 key={v}
-                onDelete={deleteChip(names[i], props.removeFilter)}
+                v={v}
+                n={names[i]}
+                delete={props.removeFilter}
               />
             );
           })}
