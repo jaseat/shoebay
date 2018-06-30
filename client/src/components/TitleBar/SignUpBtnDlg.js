@@ -67,9 +67,9 @@ class SignUpBtnDlg extends React.Component<P, S> {
         >
           <DialogTitle id="signup-dialog">Sign Up</DialogTitle>
           <DialogContent>
-            <Grid container spacing={8} alignItems="flex-end">
+            <Grid container alignItems="flex-end" spacing={8}>
               <Grid item xs={1}>
-                <PureIcon iconType="AccountBox" />
+                <PureIcon iconType="AccountBox" color="primary" />
               </Grid>
               <Grid item xs={11}>
                 <TextField
@@ -81,7 +81,7 @@ class SignUpBtnDlg extends React.Component<P, S> {
                 />
               </Grid>
               <Grid item xs={1}>
-                <PureIcon iconType="Email" />
+                <PureIcon iconType="Email" color="primary" />
               </Grid>
               <Grid item xs={11}>
                 <TextField
@@ -93,9 +93,9 @@ class SignUpBtnDlg extends React.Component<P, S> {
                 />
               </Grid>
               <Grid item xs={1}>
-                <PureIcon iconType="Lock" />
+                <PureIcon iconType="LockPlus" color="primary" />
               </Grid>
-              <Grid item xs={5}>
+              <Grid item md={5} xs={11}>
                 <TextField
                   id="user-password"
                   label="Password"
@@ -105,7 +105,8 @@ class SignUpBtnDlg extends React.Component<P, S> {
                   onChange={this._handleInput('user_password')}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={1} />
+              <Grid item md={5} xs={11}>
                 <TextField
                   id="confirm-password"
                   label="Confirm Password"
@@ -119,7 +120,11 @@ class SignUpBtnDlg extends React.Component<P, S> {
           </DialogContent>
           <DialogActions>
             <Button onClick={this._handleCloseDialog}>Cancel</Button>
-            <Button color="secondary" onClick={this._handleSignup}>
+            <Button
+              color="primary"
+              onClick={this._handleSignup}
+              variant="raised"
+            >
               Sign Up
             </Button>
           </DialogActions>

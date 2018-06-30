@@ -11,9 +11,9 @@ export default function(
 ): STATE {
   switch (action.type) {
     case types.LOGIN:
-      return Object.assign({}, state, { userId: action.payload.userId });
+      return Object.assign({}, state, { userId: action.userId });
     case types.LOGOUT:
-      return Object.assign({}, state, { userId: action.payload.userId });
+      return Object.assign({}, state, { userId: action.userId });
     default:
       return state;
   }

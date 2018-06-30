@@ -75,7 +75,7 @@ class LoginBtnDlg extends React.Component<P, S> {
           <DialogContent>
             <Grid container spacing={8} alignItems="flex-end">
               <Grid item xs={1}>
-                <PureIcon iconType="Email" />
+                <PureIcon iconType="Email" color="primary" />
               </Grid>
               <Grid item xs={11}>
                 <TextField
@@ -86,7 +86,7 @@ class LoginBtnDlg extends React.Component<P, S> {
                 />
               </Grid>
               <Grid item xs={1}>
-                <PureIcon iconType="Lock" />
+                <PureIcon iconType="LockQuestion" color="primary" />
               </Grid>
               <Grid item xs={11}>
                 <TextField
@@ -104,6 +104,8 @@ class LoginBtnDlg extends React.Component<P, S> {
             <Button
               disabled={!this.state.is_btn_active}
               onClick={this._handleLogin}
+              variant="raised"
+              color="primary"
             >
               Log In
             </Button>

@@ -23,7 +23,7 @@ const composedEnhancers = compose(
   applyMiddleware(...middleware),
   ...enhancers
 );
-
+// $FlowFixMe
 const store = createStore(rootReducer, initialState, composedEnhancers);
 
 export default store;

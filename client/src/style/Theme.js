@@ -3,22 +3,23 @@ import { createMuiTheme } from '@material-ui/core/styles';
 const Theme = createMuiTheme({
   palette: {
     type: 'light',
-    background: {
-      default: '#fff',
-    },
+    // background: {
+    //   default: '#fff',
+    // },
     primary: {
-      main: '#40c4ff',
-      light: '#82f7ff',
-      dark: '#0094cc',
+      main: '#7986cb',
+      light: '#aab6fe',
+      dark: '#49599a',
     },
     secondary: {
-      main: '#bf360c',
-      light: '#f9683a',
-      dark: '#870000',
+      main: '#ffe082',
+      light: '#ffffb3',
+      dark: '#caae53',
     },
   },
   typography: {
     fontSize: 16,
+    fontFamily: 'Marcellus SC, serif',
   },
   overrides: {
     MuiAppBar: {
@@ -28,7 +29,8 @@ const Theme = createMuiTheme({
     },
     MuiChip: {
       root: {
-        backgroundColor: '#82f7ff',
+        backgroundColor: '#7986cb',
+        margin: 3,
       },
     },
   },
