@@ -11,7 +11,7 @@ export function ExpansionDecor(Child: React.ComponentType<any>, title: string) {
       return (
         <ExpansionPanel>
           <ExpansionPanelSummary
-            expandIcon={<PureIcon iconType="ChevronDown" color="secondary" />}
+            expandIcon={<PureIcon iconType="ChevronDown" />}
           >
             <Typography variant="subheading">{title}</Typography>
           </ExpansionPanelSummary>

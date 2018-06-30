@@ -24,7 +24,7 @@ const FilterBar = (props: P) => {
           {values.map((v: any, i) => {
             return (
               <Chip
-                label={`${names[i]}: ${v}`}
+                label={v}
                 key={v}
                 onDelete={deleteChip(names[i], props.removeFilter)}
               />

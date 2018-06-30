@@ -35,7 +35,7 @@ class DepartmentGroup extends Component<any, { value: string }> {
             label="Men"
           />
         </RadioGroup>
-        <Button onClick={this.handleClear} variant="flat" color="secondary">
+        <Button onClick={this.handleClear} variant="flat">
           Clear
         </Button>
       </div>

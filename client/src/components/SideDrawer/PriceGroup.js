@@ -26,7 +26,7 @@ class PriceGroup extends Component<P> {
   };
   render() {
     return (
-      <List>
+      <List style={{ width: '100%' }}>
         {priceBrackets.map(b => {
           return (
             <ListItem button onClick={this.handleClick(b)} key={b}>
