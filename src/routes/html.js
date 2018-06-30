@@ -9,5 +9,5 @@ if (process.env.NODE_ENV === 'production') {
     console.log(path.join(__dirname, '/../../client/build', 'index.html'));
     res.sendFile(path.join(__dirname, '/../../client/build', 'index.html'));
   });
-}
+} else console.log('not in production');
 module.exports = router;
