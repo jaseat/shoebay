@@ -5,25 +5,37 @@ import Hidden from '@material-ui/core/Hidden';
 
 type P = {
   classes: Object,
-  children: React.Element<void>,
+  children: React.Node,
 };
 
 type S = { mobileOpen: boolean };
 
 const styles = theme => ({
-  drawerPaper: {
+  fake: {
     width: 300,
-    position: 'fixed',
+    display: 'inline-block',
+    background: theme.palette.secondary.main,
+    height:
+      window.innerHeight - theme.mixins.toolbar.minHeight - theme.spacing.unit,
     [theme.breakpoints.up('sm')]: {
       width: 200,
-      position: 'relative',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: 250,
+    },
+  },
+  drawerPaper: {
+    width: 300,
+    [theme.breakpoints.up('sm')]: {
+      width: 200,
+      top: theme.mixins.toolbar.minHeight + theme.spacing.unit,
       height:
         window.innerHeight -
         theme.mixins.toolbar.minHeight -
         theme.spacing.unit,
     },
     [theme.breakpoints.up('md')]: {
-      width: 300,
+      width: 250,
     },
   },
 });
@@ -37,9 +49,11 @@ class SideDrawer extends React.Component<P, S> {
   };
   render() {
     const { classes, children } = this.props;
+
     return (
       <React.Fragment>
-        <Hidden xsDown implementation="css">
+        <Hidden xsDown implementation="js">
+          <div className={classes.fake} />
           <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
             {children}
           </Drawer>

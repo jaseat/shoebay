@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -8,8 +8,17 @@ import SignUpBtnDlg from './SignUpBtnDlg';
 
 import { connect } from 'react-redux';
 import { userLogout } from '../../actions/user';
+import type { USER_ACTION } from '../../@flow-types';
 
-class PhoneMenu extends Component {
+type P = {
+  userId: string,
+  userLogout: null => USER_ACTION,
+};
+type S = {
+  anchorEl: null | HTMLButtonElement,
+};
+
+class PhoneMenu extends React.Component<P, S> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -53,7 +62,7 @@ class PhoneMenu extends Component {
           }}
         >
           <MenuItem>
-            <PureIcon iconType="Store" />Shop
+            <PureIcon iconType="Store" />Store
           </MenuItem>
           <MenuItem>
             <PureIcon iconType="Blog" />Blog

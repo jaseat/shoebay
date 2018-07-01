@@ -21,7 +21,7 @@ type Props = {
 
 const TitleBar = (props: Props) => {
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="sticky" color="primary">
       <ToolBar>
         <Grid container alignItems="center">
           <Grid item md={6} xs={11}>
@@ -32,7 +32,7 @@ const TitleBar = (props: Props) => {
             <Grid item md={6} xs={11}>
               <Typography align="right" variant="button">
                 <Button variant="flat">
-                  <PureIcon iconType="Store" />Shop
+                  <PureIcon iconType="Store" />Store
                 </Button>
                 <Button variant="flat">
                   <PureIcon iconType="Blog" />Blog

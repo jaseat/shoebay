@@ -3,12 +3,12 @@ import DepartmentGroup from './DepartmentGroup';
 import PriceGroup from './PriceGroup';
 import SizeGroup from './SizeGroup';
 
-export default props => {
+export default (props: any) => {
   return (
-    <React.Fragment>
+    <div>
       <DepartmentGroup />
       <PriceGroup />
       <SizeGroup />
-    </React.Fragment>
+    </div>
   );
 };

@@ -44,7 +44,7 @@ class SizeGroup extends Component<any> {
       <Grid container alignItems="flex-start" justify="space-between">
         {sizes.map(s => {
           return (
-            <Grid item xs={3} sm={6} md={3} key={s}>
+            <Grid item xs={3} sm={6} md={4} key={s}>
               <Button
                 variant="outlined"
                 size="small"
