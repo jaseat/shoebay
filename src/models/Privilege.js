@@ -1,17 +1,20 @@
-module.exports = () => {
-  return {
-    function(sequelize, DataTypes) {
-      var Privilege = sequelize.define("Privilege", {
-        userType: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          validate: {
-            len: [1],
-          },
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  var Privilege = sequelize.define(
+    'Privilege',
+    {
+      userType: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: [1],
         },
-      });
-
-      return Privilege;
+      },
     },
+    {}
+  );
+  Privilege.associate = function(models) {
+    Privilege.hasMany(models.User);
   };
+  return Privilege;
 };

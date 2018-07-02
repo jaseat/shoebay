@@ -1,4 +1,4 @@
-require("dotenv").config({ path: ".env" });
+require('dotenv').config({ path: '.env' });
 
 // console.log(process.env);
 
@@ -8,8 +8,8 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB,
     host: process.env.DB_HOSTNAME,
-    dialect: "mysql",
     port: process.env.DB_PORT,
+    dialect: 'mysql',
     logging: false,
   },
   test: {
@@ -27,5 +27,6 @@ module.exports = {
     host: process.env.PROD_DB_HOSTNAME,
     dialect: process.env.PROD_DB_DIALECT,
     port: process.env.PROD_DB_PORT,
+    dialect: 'mysql',
   },
 };

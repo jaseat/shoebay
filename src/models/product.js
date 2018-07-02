@@ -1,53 +1,49 @@
-module.exports = {
-  up: function(queryInterface, DataTypes) {
-    return queryInterface.createTable("Users", {
-      firstName: {
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  var Product = sequelize.define(
+    'Product',
+    {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           len: [1],
         },
       },
-      lastName: {
+      brand: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           len: [1],
         },
       },
-      email: {
+      category: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           len: [1],
         },
       },
-      password: {
+      color: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           len: [1],
         },
       },
-      paymentMethods: {
-        type: DataTypes.STRING,
+      size: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-          len: [1],
-        },
       },
-      footIMG: {
-        type: DataTypes.STRING,
+      price: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-          len: [1],
-        },
       },
-    });
-
-    return Users;
-  },
-  down: queryInterface => {
-    return queryInterface.dropTable("Privilege");
-  },
+    },
+    {}
+  );
+  Product.associate = function(models) {
+    Product.belongsTo(models.User);
+  };
+  return Product;
 };
