@@ -3,45 +3,54 @@ const path = require('path');
 const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
+const graphqhlHTTP = require('express-graphql');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 //routes
-const html = require("./routes/html");
-const auth = require("./routes/auth");
+const html = require('./routes/html');
+const auth = require('./routes/auth');
 
 //log for dev
 app.use(logger('dev'));
 //needed for auth
 // app.use(cookieParser());
 //session set up
-app.use(session({ secret: "should_be_in_env_when_dployed_on_heroku" })); // session secret
+app.use(session({ secret: 'should_be_in_env_when_dployed_on_heroku' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-app.use(express.static(path.join(__dirname, "/../client/build")));
+app.use(express.static(path.join(__dirname, '/../client/build')));
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
-    const allowed_header = ["http://localhost:3000"];
+    const allowed_header = ['http://localhost:3000'];
     const origin = req.headers.origin;
     if (allowed_header.indexOf(origin) > -1) {
-      res.header("Access-Control-Allow-Origin", origin);
+      res.header('Access-Control-Allow-Origin', origin);
     }
     res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, ideaJWT, Accept"
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, ideaJWT, Accept'
     );
     res.header(
-      "Access-Control-Allow-Methods",
-      "POST, GET, OPTIONS, PUT, DELETE"
+      'Access-Control-Allow-Methods',
+      'POST, GET, OPTIONS, PUT, DELETE'
     );
     next();
   });
 }
 
 app.use('/auth', auth);
+app.use(
+  '/api/graphql',
+  graphqhlHTTP({
+    schema: require('./graphql').schema,
+    rootValue: require('./graphql').root,
+    graphiql: true,
+  })
+);
 app.use('/', html);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
