@@ -5,88 +5,101 @@ import Typography from '@material-ui/core/Typography';
 import PureIcon from '../../style/Icons';
 import Grid from '@material-ui/core/Grid';
 
+type P = {
+  width: number,
+  height: number,
+};
 type S = {
-  imgSrc: string,
-  c_width: number,
+  points: Array<{ x: number, y: number }>,
 };
 
-class Canvas extends React.Component<any, S> {
+const fillStyleColor = 'rgba(244, 86, 66, 0.5 )';
+
+class Canvas extends React.Component<P, S> {
+  canvas: { current: null | React$ElementRef<typeof HTMLCanvasElement> };
   constructor() {
     super();
     this.state = {
-      imgSrc: '',
-      c_width: 0,
+      points: [],
     };
-    this.img = React.createRef();
+    this.canvas = React.createRef();
   }
-  handleSubmit = event => {
-    event.preventDefault();
-    var reader = new FileReader();
-    reader.onload = e => {
-      this.setState({ imgSrc: e.target.result });
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  };
 
-  handleClick = event => {
+  drawPoint = (event: Object) => {
     event.preventDefault();
-    const ctx = event.target.getContext('2d');
-    const native = event.nativeEvent;
-    const posX = native.offsetX;
-    const posY = native.offsetY;
+    const ctx = event.currentTarget.getContext('2d');
+    //getting mouse position inside canvas
+    const posX = event.nativeEvent.offsetX;
+    const posY = event.nativeEvent.offsetY;
     ctx.beginPath();
     ctx.moveTo(posX, posY);
-    ctx.arc(posX, posY, 5, 0, 2 * Math.PI);
-    ctx.fillStyle = '#f44253';
+    ctx.arc(posX, posY, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = fillStyleColor;
     ctx.fill();
+    this.setState(prevState => ({
+      points: [...prevState.points, { x: posX, y: posY }],
+    }));
   };
 
-  update = () => {
-    this.setState({
-      c_width: this.img.current.offsetWidth,
-    });
+  drawShape = (event: SyntheticEvent<HTMLButtonElement>) => {
+    if (this.state.points.length > 0) {
+      const { width, height } = this.props;
+      const { points } = this.state;
+      // $FlowFixMe
+      const ctx = this.canvas.current.getContext('2d');
+      ctx.beginPath();
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = fillStyleColor;
+      //moving to starting point
+      ctx.moveTo(points[0].x, points[0].y);
+      //going throught all remaining points and connecting them with lines
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+  };
+
+  clear = () => {
+    const { width, height } = this.props;
+    if (this.canvas.current) {
+      const ctx = this.canvas.current.getContext('2d');
+      ctx.beginPath();
+      ctx.clearRect(0, 0, width, height);
+      this.setState({ points: [] });
+    }
   };
 
   render() {
     return (
-      <Grid container>
-        <Grid item xs={12}>
-          {this.state.imgSrc && (
-            <div style={{ position: 'relative' }}>
-              <img
-                id="up-img"
-                src={this.state.imgSrc}
-                alt="something"
-                style={{ height: 300 }}
-                ref={this.img}
-              />
-
-              <canvas
-                width={this.state.c_width}
-                height={300}
-                style={{
-                  position: 'relative',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                }}
-                onClick={this.handleClick}
-              />
-            </div>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <input
-            type="file"
-            accept="image/*"
-            id="fab-submit"
-            style={{ display: 'none' }}
-            onInput={this.handleSubmit}
+      <Grid
+        container
+        // spacing={32}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
+      >
+        <Grid item xs={11}>
+          <canvas
+            ref={this.canvas}
+            width={this.props.width}
+            height={this.props.height}
+            style={{
+              border: '1px solid #f44253',
+            }}
+            onClick={this.drawPoint}
           />
-          <label htmlFor="fab-submit">
-            <Button component="span">Upload</Button>
-          </label>
-          {this.state.imgSrc && <Button onClick={this.update}>Update</Button>}
+        </Grid>
+        <Grid item xs={1}>
+          <Button variant="outlined" onClick={this.drawShape}>
+            Fill
+          </Button>
+          <Button variant="outlined" onClick={this.clear}>
+            Clear
+          </Button>
         </Grid>
       </Grid>
     );

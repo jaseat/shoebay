@@ -3,9 +3,7 @@ import SideDrawer from '../SideDrawer/SideDrawer';
 import FilterBar from '../FilterBar';
 import { withStyles } from '@material-ui/core/styles';
 import StoreDrawerContent from '../StoreDrawerContent';
-import Canvas from '../SearchContainer/Canvas';
-import Grid from '@material-ui/core/Grid';
-import Hidden from '@material-ui/core/Hidden';
+import Container from '../SearchContainer/Container';
 
 const style = theme => ({
   root: {
@@ -15,6 +13,9 @@ const style = theme => ({
   },
   container: {
     flexGrow: 1,
+    display: 'inline-block',
+    height:
+      window.innerHeight - theme.mixins.toolbar.minHeight - theme.spacing.unit,
     overflowY: 'auto',
     padding: theme.spacing.unit * 3,
     backgroundColor: theme.palette.background.default,
@@ -29,7 +30,7 @@ const StorePage = props => {
         <StoreDrawerContent />
       </SideDrawer>
       <div className={props.classes.container}>
-        <Canvas />
+        <Container />
       </div>
     </div>
   );
