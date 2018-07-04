@@ -6,7 +6,7 @@ const {
   GraphQLNonNull,
   GraphQLList,
 } = require('graphql');
-const db = require('../models');
+const db = require('../db');
 
 module.exports.NodeInterface = new GraphQLInterfaceType({
   name: 'Node',
@@ -16,7 +16,7 @@ module.exports.NodeInterface = new GraphQLInterfaceType({
     },
   },
   resolveType: source => {
-    if (source.__tableName === db.User.getName()) {
+    if (source.__tableName === db.User.getTableName()) {
       return UserType;
     }
   },

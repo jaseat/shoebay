@@ -3,7 +3,16 @@ module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define(
     'User',
     {
-      first_name: {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        get() {
+          return 'user:' + this.getDataValue('id');
+        },
+      },
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -33,14 +42,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       paymentMethod: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1],
         },
       },
       footImg: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1],
         },
@@ -54,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Article);
     User.hasMany(models.Product);
   };
-  User.getTableName = function() {
+  User.getName = function() {
     return 'user';
   };
   return User;
