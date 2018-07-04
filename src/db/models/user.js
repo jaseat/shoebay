@@ -54,5 +54,8 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Article);
     User.hasMany(models.Product);
   };
+  User.getName = function() {
+    return 'user';
+  };
   return User;
 };
