@@ -21,3 +21,15 @@ module.exports.NodeInterface = new GraphQLInterfaceType({
     }
   },
 });
+
+const resolveId = source => {};
+
+module.exports.UserType = new GraphQLObjectType({
+  name: 'User',
+  fields: {
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: resolveId,
+    },
+  },
+});
