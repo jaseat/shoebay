@@ -28,4 +28,13 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.splitNodeId = nodeId => {
+  const [tableName, dbId] = nodeId.split(':');
+  return { tableName, dbId };
+};
+
+db.dbIdToNodeId = (dbId, tableName) => {
+  return `${tableName}:${dbId}`;
+};
+
 module.exports = db;

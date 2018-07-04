@@ -8,6 +8,9 @@ const graphqhlHTTP = require('express-graphql');
 const app = express();
 const port = process.env.PORT || 3001;
 
+//Graphql schema
+const { Schema } = require('./graphql');
+
 //routes
 const html = require('./routes/html');
 const auth = require('./routes/auth');
@@ -45,9 +48,9 @@ app.use('/auth', auth);
 app.use(
   '/api/graphql',
   graphqhlHTTP({
-    schema: require('./graphql').schema,
-    rootValue: require('./graphql').root,
+    schema: Schema,
     graphiql: true,
+    pretty: true,
   })
 );
 app.use('/', html);
