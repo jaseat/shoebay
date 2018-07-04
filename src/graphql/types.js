@@ -31,5 +31,20 @@ module.exports.UserType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLID),
       resolve: resolveId,
     },
+    firstName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    lastName: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    paymentMethod: {
+      type: GraphQLString,
+    },
+    footImg: {
+      type: GraphQLString,
+    },
   },
 });

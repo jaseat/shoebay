@@ -23,7 +23,6 @@ describe('Database', function() {
     it('should get user id as user:1', function(done) {
       this.timeout(5000);
       db.User.findById(1).then(user => {
-        console.log(user.id);
         expect(user.id).to.equal('user:1');
         done();
       });
