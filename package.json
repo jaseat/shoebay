@@ -15,7 +15,7 @@
     "dev": "NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "devwin": "set NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "build": "cd client && yarn build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node src/app.js",
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
@@ -35,7 +35,9 @@
     "sequelize-cli": "^4.0.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "concurrently": "^3.6.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.17.5"
   }
 }
