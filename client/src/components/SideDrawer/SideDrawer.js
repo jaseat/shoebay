@@ -11,7 +11,7 @@ type P = {
 type S = { mobileOpen: boolean };
 
 const styles = theme => ({
-  fake: {
+  placeholder: {
     width: 300,
     display: 'inline-block',
     background: theme.palette.secondary.main,
@@ -26,8 +26,10 @@ const styles = theme => ({
   },
   drawerPaper: {
     width: 300,
+    position: 'fixed',
     [theme.breakpoints.up('sm')]: {
       width: 200,
+      position: 'fixed',
       top: theme.mixins.toolbar.minHeight + theme.spacing.unit,
       height:
         window.innerHeight -
@@ -53,7 +55,7 @@ class SideDrawer extends React.Component<P, S> {
     return (
       <React.Fragment>
         <Hidden xsDown implementation="js">
-          <div className={classes.fake} />
+          <div className={classes.placeholder} />
           <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
             {children}
           </Drawer>
