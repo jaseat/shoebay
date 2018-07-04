@@ -1,5 +1,6 @@
 var expect = require('chai').expect;
 var db = require('../src/db');
+var sequelize = require('../src/db/config/sequelize');
 
 describe('Database', function() {
   describe('user table', function() {
@@ -24,6 +25,7 @@ describe('Database', function() {
       this.timeout(5000);
       db.User.findById(1).then(user => {
         expect(user.id).to.equal('user:1');
+        sequelize.close();
         done();
       });
     });

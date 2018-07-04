@@ -18,7 +18,7 @@
     "build": "cd client && yarn build",
     "pretest": "cross-env-shell NODE_ENV=test yarn test-prepare",
     "test": "cross-env NODE_ENV=test mocha",
-    "posttest": "cross-env NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn clien\"",
+    "posttest": "cross-env NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node src/app.js",
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
