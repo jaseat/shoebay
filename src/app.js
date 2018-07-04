@@ -14,8 +14,7 @@ const auth = require('./routes/auth');
 
 //log for dev
 app.use(logger('dev'));
-//needed for auth
-// app.use(cookieParser());
+
 //session set up
 app.use(session({ secret: 'should_be_in_env_when_dployed_on_heroku' })); // session secret
 app.use(passport.initialize());
