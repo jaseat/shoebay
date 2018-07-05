@@ -52,6 +52,14 @@ const RootMutation = new GraphQLObjectType({
         return loaders.logIn(args.email, args.password, context.req);
       },
     },
+    logOut: {
+      description: 'Log out user',
+      type: GraphQLString,
+      resolve(source, args, context){
+        context.req.logout();
+        return 'Logged out';
+      }
+    }
     createUser: {
       description: 'Create a new user',
       type: UserType,
