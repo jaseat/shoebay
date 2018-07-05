@@ -70,7 +70,7 @@ app.use(
   // })
   graphqhlHTTP(req => {
     const context = {
-      user: 'user:' + req.user.id,
+      user: 'user:' + (req.user ? req.user.id : 'null'),
       req,
       db,
     };

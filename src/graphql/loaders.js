@@ -22,6 +22,7 @@ const nodeLoaders = {
 
 module.exports.getNodeById = nodeId => {
   const { tableName, dbId } = db.splitNodeId(nodeId);
+  if (dbId === 'null') return new Error('Invalid Id');
   return nodeLoaders[tableName].load(dbId);
 };
 

@@ -19,7 +19,6 @@ const RootQuery = new GraphQLObjectType({
     viewer: {
       type: NodeInterface,
       resolve(source, args, context) {
-        console.log(context.user.id);
         return loaders.getNodeById(context.user);
       },
     },
@@ -55,11 +54,11 @@ const RootMutation = new GraphQLObjectType({
     logOut: {
       description: 'Log out user',
       type: GraphQLString,
-      resolve(source, args, context){
+      resolve(source, args, context) {
         context.req.logout();
         return 'Logged out';
-      }
-    }
+      },
+    },
     createUser: {
       description: 'Create a new user',
       type: UserType,
