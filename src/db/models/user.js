@@ -1,4 +1,6 @@
 'use strict';
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define(
     'User',
@@ -8,9 +10,6 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
-        get() {
-          return 'user:' + this.getDataValue('id');
-        },
       },
       firstName: {
         type: DataTypes.STRING,
@@ -66,5 +65,28 @@ module.exports = (sequelize, DataTypes) => {
   User.getName = function() {
     return 'user';
   };
+
+  User.beforeCreate((user, options) => {
+    return cryptPassword(user.password).then(success => {
+      user.password = success;
+    });
+  });
+
+  User.prototype.validPassword = function(plainTextPassword) {
+    return bcrypt.compare(plainTextPassword, this.password);
+  };
+
+  function cryptPassword(password) {
+    return new Promise(function(resolve, reject) {
+      bcrypt.genSalt(10, function(err, salt) {
+        if (err) return reject(err);
+        bcrypt.hash(password, salt, function(err, hash) {
+          if (err) return reject(err);
+          return resolve(hash);
+        });
+      });
+    });
+  }
+
   return User;
 };

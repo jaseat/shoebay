@@ -4,12 +4,21 @@ const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
 const graphqhlHTTP = require('express-graphql');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 //Graphql schema
 const { Schema } = require('./graphql');
+
+//database
+const db = require('./db');
+const sequelize = require('./db/config/sequelize');
+
+const myStore = new SequelizeStore({
+  db: sequelize,
+});
 
 //routes
 const html = require('./routes/html');
@@ -19,7 +28,14 @@ const auth = require('./routes/auth');
 app.use(logger('dev'));
 
 //session set up
-app.use(session({ secret: 'should_be_in_env_when_dployed_on_heroku' })); // session secret
+app.use(
+  session({
+    store: myStore,
+    secret: 'should_be_in_env_when_dployed_on_heroku', // session secret
+  })
+);
+myStore.sync();
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
@@ -47,10 +63,18 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/auth', auth);
 app.use(
   '/api/graphql',
-  graphqhlHTTP({
-    schema: Schema,
-    graphiql: true,
-    pretty: true,
+  // graphqhlHTTP({
+  //   schema: Schema,
+  //   graphiql: true,
+  //   pretty: true,
+  // })
+  graphqhlHTTP(req => {
+    const context = {
+      user: 'user:' + req.user.id,
+      req,
+      db,
+    };
+    return { schema: Schema, graphiql: true, context, pretty: true };
   })
 );
 app.use('/', html);

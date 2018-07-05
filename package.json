@@ -23,7 +23,9 @@
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "bcrypt-nodejs": "^0.0.3",
+    "connect-session-sequelize": "^5.2.2",
     "cookie-parser": "^1.4.3",
     "dataloader": "^1.4.0",
     "dotenv": "^6.0.0",

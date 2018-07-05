@@ -1,5 +1,6 @@
 const db = require('../db');
 const DataLoader = require('dataloader');
+const passport = require('../auth');
 
 const createNodeLoader = table => {
   return new DataLoader(ids => {
@@ -45,4 +46,22 @@ module.exports.createUser = ({
       user.__tableName = 'user';
       return user;
     });
+};
+
+module.exports.logIn = (email, password, req) => {
+  return new Promise((resolve, reject) => {
+    req.body = {
+      email,
+      password,
+    };
+    passport.authenticate('local', (err, user) => {
+      if (err) reject(err);
+      if (!user) reject('Unauthorized');
+      // resolve(user.id);
+      req.logIn(user, err => {
+        if (err) return reject(err);
+        return resolve(user.id);
+      });
+    })(req, {});
+  });
 };

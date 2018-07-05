@@ -19,7 +19,8 @@ const RootQuery = new GraphQLObjectType({
     viewer: {
       type: NodeInterface,
       resolve(source, args, context) {
-        return loaders.getNodeById(context);
+        console.log(context.user.id);
+        return loaders.getNodeById(context.user);
       },
     },
     node: {
@@ -40,10 +41,22 @@ const RootMutation = new GraphQLObjectType({
   name: 'RootMutation',
   description: 'The root mutation',
   fields: {
+    logIn: {
+      description: 'Log in user',
+      type: GraphQLString,
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        password: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(source, args, context) {
+        return loaders.logIn(args.email, args.password, context.req);
+      },
+    },
     createUser: {
+      description: 'Create a new user',
       type: UserType,
       args: {
-        input: { type: UserInputType },
+        input: { type: new GraphQLNonNull(UserInputType) },
       },
       resolve(source, args, context) {
         return loaders.createUser(args.input);
