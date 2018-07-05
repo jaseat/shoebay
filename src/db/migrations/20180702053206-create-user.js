@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      first_name: {
+      firstName: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -25,11 +25,11 @@ module.exports = {
         type: Sequelize.STRING,
       },
       paymentMethod: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       footImg: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       PrivilegeId: {
