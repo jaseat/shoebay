@@ -11,28 +11,15 @@ const {
 } = require('graphql');
 const loaders = require('./loaders');
 const { NodeInterface, UserType, UserInputType } = require('./types');
+const { ViewQuery, NodeQuery, ShapeSearchQuery } = require('./queries');
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
   description: 'The root query',
   fields: {
-    viewer: {
-      type: NodeInterface,
-      resolve(source, args, context) {
-        return loaders.getNodeById(context.user);
-      },
-    },
-    node: {
-      type: NodeInterface,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID),
-        },
-      },
-      resolve(source, args, context, info) {
-        return loaders.getNodeById(args.id);
-      },
-    },
+    ...ViewQuery,
+    ...NodeQuery,
+    ...ShapeSearchQuery,
   },
 });
 

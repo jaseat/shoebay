@@ -2,6 +2,7 @@ const {
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLID,
+  GraphQLInt,
   GraphQLString,
   GraphQLNonNull,
   GraphQLList,
@@ -80,8 +81,21 @@ const UserInputType = new GraphQLInputObjectType({
   },
 });
 
+const PointInputType = new GraphQLInputObjectType({
+  name: 'PointInput',
+  fields: {
+    x: {
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+    y: {
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+  },
+});
+
 module.exports = {
   NodeInterface,
   UserType,
   UserInputType,
+  PointInputType,
 };
