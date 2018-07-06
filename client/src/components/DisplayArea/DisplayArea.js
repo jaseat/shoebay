@@ -2,7 +2,7 @@ import React from 'react';
 import 'react-virtualized/styles.css';
 import { Column, Table } from 'react-virtualized';
 import { List } from 'react-virtualized';
-import rowRenderer from '../TestArray/TestArray';
+import rowRenderer from '../DisplayList/DisplayList';
 import list from '../List/List';
 
 const listHeight = 600;
