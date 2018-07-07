@@ -3,6 +3,7 @@ const {
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLID,
+  GraphQLInt,
   GraphQLString,
   GraphQLNonNull,
   GraphQLList,
@@ -80,7 +81,7 @@ const LogOutQuery = {
     type: GraphQLString,
     resolve(source, args, context) {
       context.req.logout();
-      return 'Logged out';
+      return null;
     },
   },
 };
