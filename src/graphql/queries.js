@@ -8,13 +8,13 @@ const {
   GraphQLList,
   GraphQLInputObjectType,
 } = require('graphql');
-const { NodeInterface, UserType, ProductType } = require('./types');
-const { PointInputType } = require('./input-types');
+const Types = require('./types');
+const InputTypes = require('./input-types');
 const resolvers = require('./resolvers');
 
 const ViewQuery = {
   viewer: {
-    type: UserType,
+    type: Types.UserType,
     resolve(source, args, context) {
       if (context.user)
         return resolvers.getNodeById(
@@ -29,10 +29,10 @@ const ViewQuery = {
 
 const NodeQuery = {
   node: {
-    type: NodeInterface,
+    type: Types.NodeInterface,
     args: {
-      id: {
-        type: new GraphQLNonNull(GraphQLID),
+      input: {
+        type: new GraphQLNonNull(InputTypes.NodeInputType),
       },
     },
     resolve(source, args, context, info) {
@@ -43,10 +43,10 @@ const NodeQuery = {
 
 const ShapeSearchQuery = {
   shapeSearch: {
-    type: new GraphQLList(ProductType),
+    type: new GraphQLList(Types.ProductType),
     args: {
       points: {
-        type: new GraphQLList(PointInputType),
+        type: new GraphQLList(InputTypes.PointInputType),
       },
     },
     resolve(source, args, context, info) {
@@ -60,8 +60,9 @@ const LogInQuery = {
     description: 'Log in user',
     type: GraphQLString,
     args: {
-      email: { type: new GraphQLNonNull(GraphQLString) },
-      password: { type: new GraphQLNonNull(GraphQLString) },
+      input: {
+        type: new GraphQLNonNull(InputTypes.LogInInputType),
+      },
     },
     resolve(source, args, context) {
       return resolvers.logIn(args.email, args.password, context.req);
