@@ -31,6 +31,11 @@ const resolveId = source => {
   return db.dbIdToNodeId(source.id, source.__tableName);
 };
 
+const resolveProtected = (source, args, context, { fieldName }) => {
+  if (context.user && context.user.id === source.id) return source[fieldName];
+  else return 'Unauthorized';
+};
+
 const UserType = new GraphQLObjectType({
   name: 'User',
   interfaces: [NodeInterface],
@@ -47,12 +52,15 @@ const UserType = new GraphQLObjectType({
     },
     email: {
       type: new GraphQLNonNull(GraphQLString),
+      resolve: resolveProtected,
     },
     paymentMethod: {
       type: GraphQLString,
+      resolve: resolveProtected,
     },
     footImg: {
       type: GraphQLString,
+      resolve: resolveProtected,
     },
   },
 });

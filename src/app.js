@@ -15,6 +15,7 @@ const { Schema } = require('./graphql');
 //database
 const db = require('./db');
 const sequelize = require('./db/config/sequelize');
+const Loaders = require('./dataloader/loaders');
 
 const myStore = new SequelizeStore({
   db: sequelize,
@@ -70,8 +71,9 @@ app.use(
   // })
   graphqhlHTTP(req => {
     const context = {
-      user: 'user:' + (req.user ? req.user.id : 'null'),
-      req,
+      user: req.user ? req.user : null,
+      loaders: Loaders.nodeLoaders(req.user ? req.user.id : null),
+      req: req,
       db,
     };
     return { schema: Schema, graphiql: true, context, pretty: true };
