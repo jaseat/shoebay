@@ -8,12 +8,6 @@ export const fetchQuery = async (
   query: string,
   variables: Object
 ): Promise<Object> => {
-  console.log(
-    JSON.stringify({
-      query: query,
-      variables,
-    })
-  );
   const options = {
     method: 'POST',
     body: JSON.stringify({
@@ -25,7 +19,11 @@ export const fetchQuery = async (
       Accept: 'application/json',
     },
   };
-  const res = await fetch('api/graphql', options);
+  const url =
+    process.env.NODE_ENV === 'test'
+      ? 'http://localhost:3001/api/graphql'
+      : '/api/graphql';
+  const res = await fetch(url, options);
   const data = await res.json();
   return data;
 };
@@ -39,6 +37,5 @@ export const fetchQuery = async (
  */
 export const logIn = async (credentials: Object): Promise<Object> => {
   const query = `query LogIn($input:LogInInput!){logIn(input:$input)}`;
-  const data = await fetchQuery(query, { input: credentials });
-  return data;
+  return fetchQuery(query, { input: credentials });
 };

@@ -18,8 +18,10 @@
     "build": "cd client && yarn build",
     "pretest": "cross-env-shell NODE_ENV=test yarn test-prepare",
     "test": "cross-env NODE_ENV=test mocha",
-    "posttest": "cross-env NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "posttest": "yarn begin-test-server",
     "start": "node src/app.js",
+    "begin-test-server": "cross-env NODE_ENV=test yarn server",
+    "test-client": "cd client && yarn test",
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
@@ -35,6 +37,7 @@
     "graphql": "^0.13.2",
     "morgan": "^1.9.0",
     "mysql2": "^1.5.3",
+    "npm-run-all": "^4.1.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "sequelize": "^4.38.0",
