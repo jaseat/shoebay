@@ -23,6 +23,7 @@
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
+    "apac": "^3.0.2",
     "bcrypt": "^2.0.1",
     "bcrypt-nodejs": "^0.0.3",
     "connect-session-sequelize": "^5.2.2",
@@ -33,6 +34,7 @@
     "express-graphql": "^0.6.12",
     "express-session": "^1.15.6",
     "graphql": "^0.13.2",
+    "install": "^0.12.1",
     "morgan": "^1.9.0",
     "mysql2": "^1.5.3",
     "passport": "^0.4.0",
