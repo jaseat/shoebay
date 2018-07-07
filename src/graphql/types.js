@@ -3,6 +3,7 @@ const {
   GraphQLObjectType,
   GraphQLID,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLString,
   GraphQLNonNull,
   GraphQLList,
@@ -65,38 +66,34 @@ const UserType = new GraphQLObjectType({
   },
 });
 
-const UserInputType = new GraphQLInputObjectType({
-  name: 'UserInput',
+const ProductType = new GraphQLObjectType({
+  name: 'Product',
+  interfaces: [NodeInterface],
   fields: {
-    firstName: {
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: resolveId,
+    },
+    name: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    lastName: {
+    brand: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    email: {
+    category: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    password: {
+    color: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    paymentMethod: {
-      type: GraphQLString,
+    size: {
+      type: new GraphQLNonNull(GraphQLString),
     },
-    footImg: {
-      type: GraphQLString,
+    price: {
+      type: new GraphQLNonNull(GraphQLString),
     },
-  },
-});
-
-const PointInputType = new GraphQLInputObjectType({
-  name: 'PointInput',
-  fields: {
-    x: {
-      type: new GraphQLNonNull(GraphQLInt),
-    },
-    y: {
-      type: new GraphQLNonNull(GraphQLInt),
+    similarity: {
+      type: GraphQLFloat,
     },
   },
 });
@@ -104,6 +101,5 @@ const PointInputType = new GraphQLInputObjectType({
 module.exports = {
   NodeInterface,
   UserType,
-  UserInputType,
-  PointInputType,
+  ProductType,
 };

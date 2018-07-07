@@ -41,3 +41,7 @@ module.exports.logIn = (email, password, req) => {
     })(req);
   });
 };
+
+module.exports.shapeSearch = points => {
+  return null;
+};

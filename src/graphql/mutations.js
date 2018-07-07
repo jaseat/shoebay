@@ -8,13 +8,8 @@ const {
   GraphQLList,
   GraphQLInputObjectType,
 } = require('graphql');
-const {
-  NodeInterface,
-  UserType,
-  UserInputType,
-  ShapeSearchInputType,
-  PointInputType,
-} = require('./types');
+const { NodeInterface, UserType } = require('./types');
+const { UserInputType, PointInputType } = require('./input-types');
 const resolvers = require('./resolvers');
 
 const CreateUserMutation = {

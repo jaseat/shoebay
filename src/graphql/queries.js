@@ -8,27 +8,21 @@ const {
   GraphQLList,
   GraphQLInputObjectType,
 } = require('graphql');
-const {
-  NodeInterface,
-  UserType,
-  UserInputType,
-  ShapeSearchInputType,
-  PointInputType,
-} = require('./types');
+const { NodeInterface, UserType, ProductType } = require('./types');
+const { PointInputType } = require('./input-types');
 const resolvers = require('./resolvers');
 
 const ViewQuery = {
   viewer: {
     type: UserType,
     resolve(source, args, context) {
-      console.log(`user:${context.user.id}`);
       if (context.user)
         return resolvers.getNodeById(
           `user:${context.user.id}`,
           context.loaders,
           context.db
         );
-      else return new Error('Unauthorized');
+      else return new Error('Please log in.');
     },
   },
 };
@@ -49,15 +43,14 @@ const NodeQuery = {
 
 const ShapeSearchQuery = {
   shapeSearch: {
-    type: new GraphQLList(GraphQLString),
+    type: new GraphQLList(ProductType),
     args: {
       points: {
         type: new GraphQLList(PointInputType),
       },
     },
     resolve(source, args, context, info) {
-      console.log('Args.points:', args.points);
-      return args.points.map(p => JSON.stringify(p));
+      return resolvers.shapeSearch(args.points);
     },
   },
 };
