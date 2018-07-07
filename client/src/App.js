@@ -6,6 +6,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 //custom
 import TitleBar from './components/TitleBar';
 import StorePage from './components/StorePage/StorePage';
+import DisplayArea from './components/DisplayArea/DisplayArea';
+import { InfiniteLoader, List } from 'react-virtualized';
+import loremIpsum from 'lorem-ipsum';
+import rowRenderer from './components/TestArray/TestArray';
 
 class App extends Component<{}> {
   render() {
@@ -14,6 +18,7 @@ class App extends Component<{}> {
         <CssBaseline />
         <TitleBar />
         <StorePage />
+        <DisplayArea />
       </MuiThemeProvider>
     );
   }
