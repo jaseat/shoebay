@@ -23,6 +23,7 @@
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
+    "amazon-product-api": "^0.4.4",
     "apac": "^3.0.2",
     "bcrypt": "^2.0.1",
     "bcrypt-nodejs": "^0.0.3",

@@ -1,29 +1,36 @@
-const { OperationHelper } = require('apac');
+var amazon = require('amazon-product-api');
 
-const opHelper = new OperationHelper({
+var client = amazon.createClient({
   awsId: 'AKIAJQ3AS4URJTVW54AQ',
   awsSecret: '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',
-  assocId: 'mobilea0a3089-20',
-  maxRequestsPerSecond: 1,
+  awsTag: 'mobilea0a3089-20',
 });
 
 var requestBuilder = function(params) {
-  let keywords = params.keywords;
-  opHelper
-    .execute('ItemSearch', {
-      SearchIndex: 'Fashion',
-      Keywords: keywords,
-      ResponseGroup: 'ItemAttributes,Offers',
+  const { MinPrice, MaxPrice, Department, Type, keywords } = params;
+  client
+    .itemSearch({
+      MinimumPrice: MinPrice,
+      MaximumPrice: MaxPrice,
+      searchIndex: Department,
+      Title: Type,
+      keywords: keywords,
+      responseGroup: 'ItemAttributes,Offers,Images',
     })
-    .then(response => {
-      //console.log('Results object: /n \n', response.result);
-      console.log('Raw response body: /n \n', response.responseBody);
+    .then(function(results) {
+      console.log(results);
     })
-    .catch(err => {
-      console.error('Something went wrong! ', err);
+    .catch(function(err) {
+      console.log(err[0].Error);
     });
 };
 
-requestBuilder({ keywords: 'shoes' });
+requestBuilder({
+  keywords: 'shoes size 10',
+  MinPrice: '500',
+  MaxPrice: '2500',
+  Department: 'FashionMen',
+  Type: 'sports',
+});
 
-export default ApiCalls;
+// export default ApiCalls;
