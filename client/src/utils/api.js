@@ -38,7 +38,7 @@ export const fetchQuery = async (
  * @returns Promise containing user id.
  */
 export const logIn = async (credentials: Object): Promise<Object> => {
-  const query = `query LogIn($input:LogInInput){logIn(input:$input)}`;
-  const data = await fetchQuery(query, credentials);
+  const query = `query LogIn($input:LogInInput!){logIn(input:$input)}`;
+  const data = await fetchQuery(query, { input: credentials });
   return data;
 };

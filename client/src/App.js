@@ -7,12 +7,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TitleBar from './components/TitleBar';
 import StorePage from './components/StorePage/StorePage';
 
-import { fetchQuery } from './utils/api';
+import { fetchQuery, logIn } from './utils/api';
 
 class App extends Component<{}> {
   componentDidMount() {
-    const query = `{
-      node(id:$id){
+    const query = `query NodeQuery($input: NodeInput!){
+      node(input:$input){
         ...on User {
           id
           firstName
@@ -20,9 +20,14 @@ class App extends Component<{}> {
       }
     }`;
     const variables = {
-      id: 'user:1',
+      input: { id: 'user:1' },
     };
     fetchQuery(query, variables).then(data => console.log(data));
+    const credentials = {
+      email: 'test@test.com',
+      password: 'test',
+    };
+    logIn(credentials).then(data => console.log(data));
   }
   render() {
     return (

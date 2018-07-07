@@ -36,7 +36,7 @@ const NodeQuery = {
       },
     },
     resolve(source, args, context, info) {
-      return resolvers.getNodeById(args.id, context.loaders, context.db);
+      return resolvers.getNodeById(args.input.id, context.loaders, context.db);
     },
   },
 };
@@ -65,7 +65,11 @@ const LogInQuery = {
       },
     },
     resolve(source, args, context) {
-      return resolvers.logIn(args.email, args.password, context.req);
+      return resolvers.logIn(
+        args.input.email,
+        args.input.password,
+        context.req
+      );
     },
   },
 };
