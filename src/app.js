@@ -76,7 +76,12 @@ app.use(
       req: req,
       db,
     };
-    return { schema: Schema, graphiql: true, context, pretty: true };
+    return {
+      schema: Schema,
+      graphiql: process.env.NODE_ENV === 'production' ? false : true,
+      context,
+      pretty: true,
+    };
   })
 );
 app.use('/', html);

@@ -16,8 +16,6 @@ for (let i = 0; i < 10; i++) {
   paths.push(points);
 }
 
-console.log('Path 0', paths[0]);
-
 describe('Sketchy', function() {
   describe('points to svg', function() {
     it('should equal 1', function() {
@@ -26,9 +24,6 @@ describe('Sketchy', function() {
         const idx2 = Math.floor(Math.random() * paths.length);
         const svg1 = Sketchy.convertPointArraysToSVG([paths[idx1]]);
         const svg2 = Sketchy.convertPointArraysToSVG([paths[idx2]]);
-        console.log(idx1, paths[idx1]);
-        console.log(idx2, paths[idx2]);
-        console.log('Similarity', Sketchy.shapeContextMatch(svg1, svg2));
       }
       expect(1).to.equal(1);
     });
