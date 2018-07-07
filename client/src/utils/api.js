@@ -8,6 +8,12 @@ export const fetchQuery = async (
   query: string,
   variables: Object
 ): Promise<Object> => {
+  console.log(
+    JSON.stringify({
+      query: query,
+      variables,
+    })
+  );
   const options = {
     method: 'POST',
     body: JSON.stringify({
@@ -15,7 +21,8 @@ export const fetchQuery = async (
       variables,
     }),
     headers: {
-      'content-type': 'application/graphql',
+      'content-type': 'application/json',
+      Accept: 'application/json',
     },
   };
   const res = await fetch('api/graphql', options);

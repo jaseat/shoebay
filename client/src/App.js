@@ -7,7 +7,23 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TitleBar from './components/TitleBar';
 import StorePage from './components/StorePage/StorePage';
 
+import { fetchQuery } from './utils/api';
+
 class App extends Component<{}> {
+  componentDidMount() {
+    const query = `{
+      node(id:$id){
+        ...on User {
+          id
+          firstName
+        }
+      }
+    }`;
+    const variables = {
+      id: 'user:1',
+    };
+    fetchQuery(query, variables).then(data => console.log(data));
+  }
   render() {
     return (
       <MuiThemeProvider theme={Theme}>
