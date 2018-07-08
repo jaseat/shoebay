@@ -1,15 +1,15 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 //TODO
-const Theme = createMuiTheme({
+const ThemeLight = createMuiTheme({
   palette: {
     type: 'light',
     // background: {
     //   default: '#fff',
     // },
     primary: {
-      main: '#7986cb',
-      light: '#aab6fe',
-      dark: '#49599a',
+      main: '#4caf50',
+      light: '#80e27e',
+      dark: '#087f23',
     },
     secondary: {
       main: '#ffe082',
@@ -29,10 +29,55 @@ const Theme = createMuiTheme({
     },
     MuiChip: {
       root: {
-        backgroundColor: '#7986cb',
-        margin: 3,
+        backgroundColor: '#80e27e',
+        margin: 2,
+      },
+    },
+    MuiButton: {
+      fab: {
+        boxShadow: 'none',
       },
     },
   },
 });
-export default Theme;
+const ThemeDark = createMuiTheme({
+  palette: {
+    type: 'dark',
+    // background: {
+    //   default: '#fff',
+    // },
+    primary: {
+      main: '#4caf50',
+      light: '#80e27e',
+      dark: '#087f23',
+    },
+    secondary: {
+      main: '#ff8a65',
+      light: '#ffbb93',
+      dark: '#c75b39',
+    },
+  },
+  typography: {
+    fontSize: 16,
+    fontFamily: 'Marcellus SC, serif',
+  },
+  overrides: {
+    MuiAppBar: {
+      colorDefault: {
+        backgroundColor: 'rgb(255 ,255,255)',
+      },
+    },
+    MuiChip: {
+      root: {
+        backgroundColor: '#087f23',
+        margin: 2,
+      },
+    },
+    MuiButton: {
+      fab: {
+        boxShadow: 'none',
+      },
+    },
+  },
+});
+export { ThemeLight, ThemeDark };

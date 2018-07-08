@@ -1,13 +1,10 @@
 import * as React from 'react';
-
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import { Button, Grid } from '@material-ui/core';
 
 const plcUrl = require('../../style/img/foot-side.png');
 
 type P = {
-  ipt_id: string,
-  img_id: string,
+  inpt_id: string,
   height: number,
   setWidth: number => void,
 };
@@ -44,7 +41,6 @@ class AddImage extends React.Component<P, S> {
         <Grid item xs={12}>
           {this.state.src ? (
             <img
-              id={this.props.img_id}
               src={this.state.src}
               alt="user-img"
               style={{ height: this.props.height }}
@@ -62,11 +58,11 @@ class AddImage extends React.Component<P, S> {
           <input
             type="file"
             accept="image/*"
-            id={this.props.ipt_id}
+            id={this.props.inpt_id}
             style={{ display: 'none' }}
             onInput={this.handleSubmitImg}
           />
-          <label htmlFor={this.props.ipt_id}>
+          <label htmlFor={this.props.inpt_id}>
             <Button variant="raised" color="primary" component="span">
               Upload
             </Button>

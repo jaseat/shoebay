@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
+//material-ui
+import { Radio, RadioGroup, FormControlLabel, Button } from '@material-ui/core';
+//custom
 import { ExpansionDecor } from './ExpansionDecor';
-
+//redux
 import { connect } from 'react-redux';
 import * as actions from '../../actions/filter';
+//types
+import type { FILTER_ACTION } from '../../@flow-types';
 
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
+type P = {
+  value: string,
+  addFilter: (key: string, value: string) => FILTER_ACTION,
+  removeFilter: (key: string) => FILTER_ACTION,
+};
 
-class DepartmentGroup extends Component<any, { value: string }> {
-  handleChange = event => {
-    this.props.addFilter('Department', event.target.value);
+class DepartmentGroup extends Component<P> {
+  handleChange = (event: SyntheticEvent<HTMLInputElement>) => {
+    this.props.addFilter('department', event.currentTarget.value);
   };
-  handleClear = () => {
-    this.props.removeFilter('Department');
+
+  handleClear = (): void => {
+    this.props.removeFilter('department');
   };
+
   render() {
     return (
       <div>
@@ -43,9 +51,9 @@ class DepartmentGroup extends Component<any, { value: string }> {
   }
 }
 
-const ConnectedDepartmentGroup = connect(
+let ConnectedDepartmentGroup = connect(
   state => ({
-    value: state.filter.filters.Department,
+    value: state.filter.filters.department,
   }),
   actions
 )(DepartmentGroup);

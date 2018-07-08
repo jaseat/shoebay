@@ -3,11 +3,16 @@ import AddImage from './AddImage';
 import Canvas from './Canvas';
 import Button from '@material-ui/core/Button';
 
+type P = {
+  inpt_id: string,
+  height: number,
+  color: string,
+};
 type S = {
   width: null | number,
 };
 
-class Container extends React.Component<any, S> {
+class Container extends React.Component<P, S> {
   state = {
     width: null,
   };
@@ -18,12 +23,17 @@ class Container extends React.Component<any, S> {
     return (
       <div style={{ position: 'relative', display: 'inline-block' }}>
         <AddImage
-          height={300}
-          img_id="img-side"
-          ipt_id="ipt-side"
+          height={this.props.height}
+          inpt_id={this.props.inpt_id}
           setWidth={this.setWidth}
         />
-        {this.state.width && <Canvas height={300} width={this.state.width} />}
+        {this.state.width && (
+          <Canvas
+            height={this.props.height}
+            width={this.state.width}
+            color={this.props.color}
+          />
+        )}
       </div>
     );
   }

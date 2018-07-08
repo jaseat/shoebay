@@ -1,8 +1,12 @@
 import * as React from 'react';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
+//material-ui
+import {
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  Typography,
+} from '@material-ui/core';
+//custom
 import PureIcon from '../../style/Icons';
 
 export function ExpansionDecor(Child: React.ComponentType<any>, title: string) {

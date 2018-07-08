@@ -1,19 +1,16 @@
 import * as React from 'react';
-
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Button, Grid, Typography } from '@material-ui/core';
 import PureIcon from '../../style/Icons';
-import Grid from '@material-ui/core/Grid';
 
 type P = {
   width: number,
   height: number,
+  color: string,
 };
+
 type S = {
   points: Array<{ x: number, y: number }>,
 };
-
-const fillStyleColor = 'rgba(244, 86, 66, 0.5 )';
 
 class Canvas extends React.Component<P, S> {
   canvas: { current: null | React$ElementRef<typeof HTMLCanvasElement> };
@@ -33,15 +30,17 @@ class Canvas extends React.Component<P, S> {
     const posY = event.nativeEvent.offsetY;
     ctx.beginPath();
     ctx.moveTo(posX, posY);
-    ctx.arc(posX, posY, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = fillStyleColor;
+    ctx.arc(posX, posY, 8, 0, 2 * Math.PI);
+    ctx.fillStyle = this.props.color;
     ctx.fill();
     this.setState(prevState => ({
       points: [...prevState.points, { x: posX, y: posY }],
     }));
   };
 
-  drawShape = (event: SyntheticEvent<HTMLButtonElement>) => {
+  drawShape = (method: 'fill' | 'stroke') => (
+    event: SyntheticEvent<HTMLButtonElement>
+  ) => {
     if (this.state.points.length > 0) {
       const { width, height } = this.props;
       const { points } = this.state;
@@ -49,15 +48,21 @@ class Canvas extends React.Component<P, S> {
       const ctx = this.canvas.current.getContext('2d');
       ctx.beginPath();
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = fillStyleColor;
+      ctx.fillStyle = this.props.color;
+      ctx.strokeStyle = this.props.color;
       //moving to starting point
       ctx.moveTo(points[0].x, points[0].y);
       //going throught all remaining points and connecting them with lines
       for (let i = 1; i < points.length; i++) {
         ctx.lineTo(points[i].x, points[i].y);
       }
+      switch (method) {
+        case 'fill':
+          return ctx.fill();
+        case 'stroke':
+          return ctx.stroke();
+      }
       ctx.closePath();
-      ctx.fill();
     }
   };
 
@@ -94,8 +99,11 @@ class Canvas extends React.Component<P, S> {
           />
         </Grid>
         <Grid item xs={1}>
-          <Button variant="outlined" onClick={this.drawShape}>
+          <Button variant="outlined" onClick={this.drawShape('fill')}>
             Fill
+          </Button>
+          <Button variant="outlined" onClick={this.drawShape('stroke')}>
+            Line
           </Button>
           <Button variant="outlined" onClick={this.clear}>
             Clear
