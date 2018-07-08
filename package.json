@@ -6,22 +6,28 @@
   "author": "jaseat <jpseatris@ucdavis.edu>",
   "license": "MIT",
   "scripts": {
-    "dev-prepare": "NODE_ENV=development&sequelize db:drop&sequelize db:create&sequelize db:migrate&sequelize db:seed:all",
-    "dev-prepare-win": "set NODE_ENV=development&sequelize db:drop&sequelize db:create&sequelize db:migrate&sequelize db:seed:all",
+    "prepare-db": "sequelize db:drop&sequelize db:create&sequelize db:migrate&sequelize db:seed:all",
+    "dev-prepare": "cross-env NODE_ENV=development yarn prepare-db",
+    "test-prepare": "cross-env NODE_ENV=test yarn prepare-db",
+    "production-prepare": "cross-env NODE_ENV=production yarn prepare-db",
     "install": "cd client && yarn",
     "server": "nodemon src/app.js",
     "production-test": "set NODE_ENV=production&&nodemon src/app.js",
     "client": "cd client && yarn start",
-    "dev": "NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "devwin": "set NODE_ENV=development&&concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev": "cross-env NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "build": "cd client && yarn build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "pretest": "cross-env-shell NODE_ENV=test yarn test-prepare",
+    "test": "cross-env NODE_ENV=test mocha",
+    "posttest": "cross-env NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node src/app.js",
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "bcrypt-nodejs": "^0.0.3",
+    "connect-session-sequelize": "^5.2.2",
     "cookie-parser": "^1.4.3",
+    "dataloader": "^1.4.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
@@ -35,7 +41,10 @@
     "sequelize-cli": "^4.0.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "concurrently": "^3.6.0",
+    "cross-env": "^5.2.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.17.5"
   }
 }
