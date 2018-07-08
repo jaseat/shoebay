@@ -77,23 +77,58 @@ const ProductType = new GraphQLObjectType({
     name: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    brand: {
+    departhment: {
       type: new GraphQLNonNull(GraphQLString),
     },
     category: {
       type: new GraphQLNonNull(GraphQLString),
     },
+    size: {
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+    width: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
     color: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    size: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
     price: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLFloat),
     },
     similarity: {
       type: GraphQLFloat,
+    },
+  },
+});
+
+// const SearchInterface = new GraphQLInterfaceType({
+//   name: 'SearchInterface',
+//   fields: {
+
+//   }
+// })
+
+const SearchType = new GraphQLObjectType({
+  name: 'Search',
+  description: 'Search for products',
+  fields: {
+    byShape: {
+      args: {
+        input: { type: new GraphQLNonNull(ShapeSearchInputType) },
+      },
+      type: new GraphQLNonNull(ProductType),
+    },
+    byImage: {
+      args: {
+        input: { type: new GraphQLNonNull(ImageSearchInputType) },
+      },
+      type: new GraphQLNonNull(ProductType),
+    },
+    byText: {
+      args: {
+        input: { type: new GraphQLNonNull(TextSearcgInputType) },
+      },
+      type: new GraphQLNonNull(ProductType),
     },
   },
 });
