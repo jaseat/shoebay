@@ -1,11 +1,7 @@
 import React from 'react';
 //material-ui
-import AppBar from '@material-ui/core/AppBar';
+import { AppBar, Button, Grid, Typography, Hidden } from '@material-ui/core';
 import ToolBar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Hidden from '@material-ui/core/Hidden';
 //custom components
 import LoginBtnDlg from './LoginBtnDlg';
 import SignUpBtnDlg from './SignUpBtnDlg';
@@ -16,12 +12,12 @@ import PureIcon from '../../style/Icons';
 import LogoSvg from '../../style/LogoSvg';
 
 type Props = {
-  userId: ?string,
+  userId: null | string,
 };
 
 const TitleBar = (props: Props) => {
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="sticky" color="primary">
       <ToolBar>
         <Grid container alignItems="center">
           <Grid item md={6} xs={11}>
@@ -32,10 +28,13 @@ const TitleBar = (props: Props) => {
             <Grid item md={6} xs={11}>
               <Typography align="right" variant="button">
                 <Button variant="flat">
-                  <PureIcon iconType="Store" />Shop
+                  <PureIcon iconType="Store" />Store
                 </Button>
                 <Button variant="flat">
                   <PureIcon iconType="Blog" />Blog
+                </Button>
+                <Button variant="flat">
+                  <PureIcon iconType="StarCalendar" />Coming Soon
                 </Button>
                 {props.userId !== null ? (
                   <UserMenu />

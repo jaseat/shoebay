@@ -2,13 +2,19 @@ import React from 'react';
 import DepartmentGroup from './DepartmentGroup';
 import PriceGroup from './PriceGroup';
 import SizeGroup from './SizeGroup';
+import WidthGroup from './WidthGroup';
+import ColorGroup from './ColorGroup';
+import CategoryGroup from './CategoryGroup';
 
-export default props => {
+export default (props: any) => {
   return (
-    <React.Fragment>
+    <div>
       <DepartmentGroup />
-      <PriceGroup />
+      <CategoryGroup />
       <SizeGroup />
-    </React.Fragment>
+      <WidthGroup />
+      <ColorGroup />
+      <PriceGroup />
+    </div>
   );
 };

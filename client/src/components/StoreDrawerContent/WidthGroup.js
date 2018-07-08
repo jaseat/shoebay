@@ -9,31 +9,29 @@ import { addFilter } from '../../actions/filter';
 //types
 import type { FILTER_ACTION } from '../../@flow-types';
 
-const priceBrackets: Array<string> = [
-  'Under $25',
-  '$25-$50',
-  '$50-$100',
-  '$100-$200',
-  'Over $200',
-];
-
 type P = {
   addFilter: (key: string, value: string) => FILTER_ACTION,
 };
 
-class PriceGroup extends Component<P> {
-  handleClick = (value: string) => {
+const widthSizes = ['XXN', 'XN', 'N', 'M', 'W', 'XW', 'XXW'];
+
+class WidthGroup extends Component<P> {
+  handleClick = value => {
     return () => {
-      this.props.addFilter('price', value);
+      //this if we want to have description in ()
+      // let newValue = value.split(' ');
+      // console.log(newValue[0]);
+      // newValue = newValue[1].replace(/[)]/g, '');
+      this.props.addFilter('width', value);
     };
   };
   render() {
     return (
       <List style={{ width: '100%' }}>
-        {priceBrackets.map(b => {
+        {widthSizes.map(w => {
           return (
-            <ListItem button onClick={this.handleClick(b)} key={b}>
-              <Typography variant="body2">{b}</Typography>
+            <ListItem button onClick={this.handleClick(w)} key={w}>
+              <Typography variant="body2">{w}</Typography>
             </ListItem>
           );
         })}
@@ -42,9 +40,9 @@ class PriceGroup extends Component<P> {
   }
 }
 
-const ConnectedPriceGroup = connect(
+const ConnectedWidthGroup = connect(
   null,
   { addFilter }
-)(PriceGroup);
+)(WidthGroup);
 
-export default ExpansionDecor(ConnectedPriceGroup, 'Price Range');
+export default ExpansionDecor(ConnectedWidthGroup, 'Width');

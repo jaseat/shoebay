@@ -1,20 +1,24 @@
 import * as React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  Button,
+  TextField,
+  Grid,
+} from '@material-ui/core';
+//custom
 import PureIcon from '../../style/Icons';
-
+//redux
 import { connect } from 'react-redux';
 import { userLogin } from '../../actions/user';
+//type
 import type { USER_ACTION } from '../../@flow-types';
-// props types
-//login method
+
 type P = {
   userLogin: (id: string) => USER_ACTION,
+  closeParent?: void => void,
 };
 
 type S = {
@@ -51,6 +55,7 @@ class SignUpBtnDlg extends React.Component<P, S> {
   _handleSignup = () => {
     this.props.userLogin('1234');
     this._handleCloseDialog();
+    if (this.props.closeParent) this.props.closeParent();
   };
 
   render() {
