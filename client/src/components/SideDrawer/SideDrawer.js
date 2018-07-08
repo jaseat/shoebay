@@ -1,21 +1,19 @@
 import * as React from 'react';
-import { Drawer, withStyles } from '@material-ui/core';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Hidden from '@material-ui/core/Hidden';
+import { Drawer, withStyles, SwipeableDrawer, Hidden } from '@material-ui/core';
 
 type P = {
-  classes: Object,
-  children: React.Element<void>,
+  classes: { drawerPaper: {} },
+  children: React.Node,
 };
 
 type S = { mobileOpen: boolean };
 
 const styles = theme => ({
   drawerPaper: {
-    width: 300,
+    width: window.innerWidth,
     position: 'fixed',
     [theme.breakpoints.up('sm')]: {
-      width: 200,
+      width: 240,
       position: 'relative',
       height:
         window.innerHeight -
@@ -23,7 +21,7 @@ const styles = theme => ({
         theme.spacing.unit,
     },
     [theme.breakpoints.up('md')]: {
-      width: 300,
+      width: 280,
     },
   },
 });
@@ -32,14 +30,17 @@ class SideDrawer extends React.Component<P, S> {
   state = {
     mobileOpen: false,
   };
-  toggleMobileDrawer = () => {
+
+  toggleMobileDrawer = (): void => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
+
   render() {
     const { classes, children } = this.props;
+
     return (
       <React.Fragment>
-        <Hidden xsDown implementation="css">
+        <Hidden xsDown implementation="js">
           <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
             {children}
           </Drawer>

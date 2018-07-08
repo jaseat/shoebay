@@ -15,4 +15,11 @@ export type FILTER_ACTION = {
   },
 };
 
+export type THEME_ACTION = {
+  type: typeof types.ThemeTypes.USE_DARK,
+  payload: {
+    value: boolean,
+  },
+};
+
 export type STATE = {};

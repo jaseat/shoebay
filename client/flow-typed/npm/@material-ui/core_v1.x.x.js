@@ -1,5 +1,5 @@
-// flow-typed signature: 80094e5eb28c5caef098e22d297e7d2e
-// flow-typed version: 99cb4a4e98/@material-ui/core_v1.x.x/flow_>=v0.58.x
+// flow-typed signature: f5950085f4cea2c28193e81936b39c0c
+// flow-typed version: 87af10140d/@material-ui/core_v1.x.x/flow_>=v0.58.x
 
 declare module "@material-ui/core/AppBar/AppBar" {
   declare type Color = "inherit" | "primary" | "secondary" | "default";
@@ -38,7 +38,7 @@ declare module "@material-ui/core/Avatar" {
 }
 
 declare module "@material-ui/core/Badge/Badge" {
-  declare type Color = "default" | "primary" | "accent";
+  declare type Color = "default" | "primary" | "secondary" | "error";
 
   declare module.exports: React$ComponentType<{
     badgeContent: React$Node,
@@ -476,7 +476,14 @@ declare module "@material-ui/core/withMobileDialog" {
 
 declare module "@material-ui/core/withWidth" {
   import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
-  declare export var isWidthUp: (matchWidth: Breakpoint, currentWidth: Breakpoint) => boolean;
+  declare export var isWidthUp: (
+    matchWidth: Breakpoint,
+    currentWidth: Breakpoint
+  ) => boolean;
+  declare export var isWidthDown: (
+    matchWidth: Breakpoint,
+    currentWidth: Breakpoint
+  ) => boolean;
   declare export default $Exports<"@material-ui/core/withWidth/withWidth">;
 }
 
@@ -2498,14 +2505,12 @@ declare module "@material-ui/core/utils/requirePropFactory" {
 
 declare module "@material-ui/core/withWidth/withWidth" {
   import type { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
-  declare module.exports: (
-    options?: {|
-      withTheme?: boolean,
-      noSSR?: boolean,
-      initialWidth?: Breakpoint,
-      resizeInterval?: number
-    |}
-  ) => <Props: {}>(
+  declare module.exports: (options?: {|
+    withTheme?: boolean,
+    noSSR?: boolean,
+    initialWidth?: Breakpoint,
+    resizeInterval?: number
+  |}) => <Props: {}>(
     Component: React$ComponentType<Props>
   ) => React$ComponentType<$Diff<Props, { width: Breakpoint }>>;
 }

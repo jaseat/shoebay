@@ -1,19 +1,25 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import Grid from '@material-ui/core/Grid';
+//material-ui
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  Grid,
+} from '@material-ui/core';
+//custom
 import PureIcon from '../../style/Icons';
+//redux
 import { connect } from 'react-redux';
 import { userLogin } from '../../actions/user';
+//types
 import type { USER_ACTION } from '../../@flow-types';
-// props types
-//login method
+
 type P = {
   userLogin: (id: string) => USER_ACTION,
+  closeParent?: void => void,
 };
 
 type S = {
@@ -115,6 +121,7 @@ class LoginBtnDlg extends React.Component<P, S> {
     );
   }
 }
+
 export default connect(
   null,
   { userLogin }

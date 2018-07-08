@@ -1,19 +1,27 @@
 import * as React from 'react';
-import Button from '@material-ui/core/Button';
-import Popover from '@material-ui/core/Popover';
-import MenuItem from '@material-ui/core/MenuItem';
+//material-ui
+import { Button, Popover, MenuItem } from '@material-ui/core';
+//custom
 import PureIcon from '../../style/Icons';
+//router
 import { Link } from 'react-router-dom';
+//redux
 import { userLogout } from '../../actions/user';
+import { changeTheme } from '../../actions/theme';
 import { connect } from 'react-redux';
-import type { USER_ACTION } from '../../@flow-types';
+//types
+import type { USER_ACTION, THEME_ACTION } from '../../@flow-types';
 
 type P = {
   userLogout: (id: null) => USER_ACTION,
+  changeTheme: (value: boolean) => THEME_ACTION,
+  darkTheme: boolean,
 };
+
 type S = {
   anchorEl: ?HTMLButtonElement,
 };
+
 class UserMenu extends React.Component<P, S> {
   constructor(props: any) {
     super(props);
@@ -32,6 +40,9 @@ class UserMenu extends React.Component<P, S> {
   _handleLogOut = () => {
     this.props.userLogout(null);
     this.handleClose();
+  };
+  changeTheme = () => {
+    this.props.changeTheme(!this.props.darkTheme);
   };
   render() {
     return (
@@ -65,6 +76,9 @@ class UserMenu extends React.Component<P, S> {
           <MenuItem onClick={this.handleClose}>
             <PureIcon iconType="Settings" />Settings
           </MenuItem>
+          <MenuItem onClick={this.changeTheme}>
+            <PureIcon iconType="Theme" />Change Theme
+          </MenuItem>
           <MenuItem onClick={this._handleLogOut}>
             <PureIcon iconType="LogOut" />Logout
           </MenuItem>
@@ -75,6 +89,6 @@ class UserMenu extends React.Component<P, S> {
 }
 
 export default connect(
-  null,
-  { userLogout }
+  state => ({ darkTheme: state.theme.darkTheme }),
+  { userLogout, changeTheme }
 )(UserMenu);

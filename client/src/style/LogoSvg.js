@@ -11,7 +11,7 @@ const LogoSvg = (props: any) => {
     >
       <g
         transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)"
-        fill="#ffe082"
+        fill="#ff8a65"
         stroke="none"
       >
         <path

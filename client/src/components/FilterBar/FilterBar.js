@@ -4,32 +4,36 @@ import type { FILTER_ACTION } from '../../@flow-types';
 
 type P = {
   filters: {},
-  removeFilter: (name: string) => FILTER_ACTION,
+  removeFilter: (key: string) => FILTER_ACTION,
 };
 
-class WrappedChip extends React.PureComponent<any> {
+class WrappedChip extends React.PureComponent<{
+  value: string,
+  name: string,
+  delete: (name: string) => FILTER_ACTION,
+}> {
   deleteChip = () => {
-    this.props.delete(this.props.n);
+    this.props.delete(this.props.name);
   };
   render() {
-    return <Chip label={this.props.v} onDelete={this.deleteChip} />;
+    return <Chip label={this.props.value} onDelete={this.deleteChip} />;
   }
 }
 
 const FilterBar = (props: P) => {
-  const values = Object.values(props.filters);
-  const names = Object.keys(props.filters);
+  const filterValues = Object.values(props.filters);
+  const filterNames = Object.keys(props.filters);
   return (
     <Snackbar
-      open={values.length > 0}
+      open={filterValues.length > 0}
       message={
         <div>
-          {values.map((v: any, i) => {
+          {filterValues.map((value: any, i) => {
             return (
               <WrappedChip
-                key={v}
-                v={v}
-                n={names[i]}
+                key={value}
+                value={value}
+                name={filterNames[i]}
                 delete={props.removeFilter}
               />
             );
