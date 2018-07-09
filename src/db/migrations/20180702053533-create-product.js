@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      brand: {
+      department: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -20,17 +20,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      color: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       size: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
+      width: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      color: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       price: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       UserId: {
         type: Sequelize.INTEGER,
