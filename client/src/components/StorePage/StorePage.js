@@ -7,6 +7,7 @@ import Waypoint from 'react-waypoint';
 import SideDrawer from '../SideDrawer/SideDrawer';
 import FilterBar from '../FilterBar';
 import StoreDrawerContent from '../StoreDrawerContent';
+import UploadImage from './UploadImage';
 
 //this component that displays products
 // import ProductCard from './ProductCard';
@@ -52,7 +53,7 @@ class StorePage extends React.Component<P, S> {
     this.setState({ loading: true });
     //currently just getting images from giphy api, replace with call to backend
     const URL =
-      'https://api.giphy.com/v1/gifs/search?q=BMW&api_key=dc6zaTOxFJmzC&limit=11&lang=en';
+      'https://api.giphy.com/v1/gifs/search?q=Shoes&api_key=dc6zaTOxFJmzC&limit=11&lang=en';
 
     fetch(URL)
       .then(response => {
@@ -86,6 +87,7 @@ class StorePage extends React.Component<P, S> {
           <StoreDrawerContent />
         </SideDrawer>
         <div className={this.props.classes.container}>
+          <UploadImage height={300} inpt_id="img-vision" />
           {this.state.response.map((item, i) => {
             return (
               <img

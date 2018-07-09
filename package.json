@@ -23,8 +23,10 @@
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bcrypt": "^2.0.1",
     "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.18.3",
     "connect-session-sequelize": "^5.2.2",
     "cookie-parser": "^1.4.3",
     "dataloader": "^1.4.0",
@@ -37,6 +39,7 @@
     "mysql2": "^1.5.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "request": "^2.87.0",
     "sequelize": "^4.38.0",
     "sequelize-cli": "^4.0.0"
   },
