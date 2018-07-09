@@ -28,6 +28,12 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING,
       },
+      privilege: {
+        allowNull: false,
+        type: DataTypes.ENUM,
+        values: ['user', 'reviewer', 'partner'],
+        defaultValue: 'user',
+      },
       PrivilegeId: {
         type: Sequelize.INTEGER,
         references: {

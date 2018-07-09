@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
           len: [1],
         },
       },
+      privilege: {
+        type: DataTypes.ENUM,
+        values: ['user', 'reviewer', 'partner'],
+        defaultValue: 'user',
+        allowNull: false,
+      },
       paymentMethod: {
         type: DataTypes.STRING,
         allowNull: true,
