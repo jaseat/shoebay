@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 
 const plcUrl =
   'http://via.placeholder.com/400x300?text=*.jpeg *.jpg *.png *.bmp';
@@ -10,11 +10,13 @@ type P = {
 };
 type S = {
   src: null | string,
+  query: null | string,
 };
 
 class UploadImage extends React.Component<P, S> {
   state = {
     src: null,
+    query: null,
   };
 
   handleSubmitImg = (event: SyntheticInputEvent<HTMLInputElement>) => {
@@ -46,8 +48,7 @@ class UploadImage extends React.Component<P, S> {
           return response.json();
         })
         .then(data => {
-          let parsedData = JSON.parse(data);
-          console.log(parsedData);
+          this.setState({ query: data });
         })
         .catch(err => {
           console.log(err);
@@ -73,6 +74,11 @@ class UploadImage extends React.Component<P, S> {
               alt="placeholder"
               style={{ height: this.props.height }}
             />
+          )}
+          {this.state.query && (
+            <Typography variant="headline" align="left">
+              {this.state.query}
+            </Typography>
           )}
         </Grid>
         <Grid item xs={12}>
