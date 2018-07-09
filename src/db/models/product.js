@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       width: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
         allowNull: false,
       }
       color: {
