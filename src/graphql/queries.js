@@ -42,6 +42,13 @@ const NodeQuery = {
   },
 };
 
+// const SearchQuery = {
+//   search: {
+//     description: 'Peform a search',
+
+//   }
+// }
+
 const ShapeSearchQuery = {
   shapeSearch: {
     type: new GraphQLList(Types.ProductType),

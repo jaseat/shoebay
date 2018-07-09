@@ -28,7 +28,6 @@ export const fetchQuery = async (
     const data = await res.json();
     if (data.errors) {
       const errors = data.errors.map(e => ({ message: e.message }));
-      console.log(errors);
       throw errors;
     }
     return data;
@@ -64,6 +63,25 @@ export const logOut = async (): Promise<Object> => {
   try {
     const data = await fetchQuery(query);
     return data.data.logOut;
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * Creates new user and returns that user's information.
+ * @param {object} newUser Object containing new user data.
+ * @param {strings[]} [fields] Optional array of strings specifying which aditional return data to include.
+ * @returns A promise containing the new user's information.
+ */
+export const signUp = async (
+  newUser: Object,
+  fields?: Array<string>
+): Promise<Object> => {
+  const query = `mutation SignUp(input: UserInput!){createUser(input:$input){id,${fields}}}`;
+  try {
+    const data = await fetchQuery(query, { input: newUser });
+    return data.data.createUser;
   } catch (e) {
     throw e;
   }
