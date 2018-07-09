@@ -12,15 +12,15 @@
     "production-prepare": "cross-env NODE_ENV=production yarn prepare-db",
     "install": "cd client && yarn",
     "server": "nodemon src/app.js",
-    "production-test": "set NODE_ENV=production&&nodemon src/app.js",
     "client": "cd client && yarn start",
     "dev": "cross-env NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "production-test": "set NODE_ENV=production&&nodemon src/app.js",
     "build": "cd client && yarn build",
-    "pretest": "cross-env-shell NODE_ENV=test yarn test-prepare",
-    "test": "cross-env NODE_ENV=test mocha",
-    "posttest": "yarn begin-test-server",
+    "begin-test-server": "cross-env NODE_ENV=test npm-run-all server wait",
+    "wait": "wait-on http://localhost:3001",
+    "pretest": "cross-env-shell NODE_ENV=test npm-run-all -p test-prepare begin-test-server",
+    "test": "cross-env NODE_ENV=test npm-run-all mocha test-client",
     "start": "node src/app.js",
-    "begin-test-server": "cross-env NODE_ENV=test yarn server",
     "test-client": "cd client && yarn test",
     "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
@@ -48,6 +48,7 @@
     "concurrently": "^3.6.0",
     "cross-env": "^5.2.0",
     "mocha": "^5.2.0",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "wait-on": "^2.1.0"
   }
 }
