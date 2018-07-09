@@ -108,30 +108,30 @@ const ProductType = new GraphQLObjectType({
 //   }
 // })
 
-const SearchType = new GraphQLObjectType({
-  name: 'Search',
-  description: 'Search for products',
-  fields: {
-    byShape: {
-      args: {
-        input: { type: new GraphQLNonNull(ShapeSearchInputType) },
-      },
-      type: new GraphQLNonNull(ProductType),
-    },
-    byImage: {
-      args: {
-        input: { type: new GraphQLNonNull(ImageSearchInputType) },
-      },
-      type: new GraphQLNonNull(ProductType),
-    },
-    byText: {
-      args: {
-        input: { type: new GraphQLNonNull(TextSearcgInputType) },
-      },
-      type: new GraphQLNonNull(ProductType),
-    },
-  },
-});
+// const SearchType = new GraphQLObjectType({
+//   name: 'Search',
+//   description: 'Search for products',
+//   fields: {
+//     byShape: {
+//       args: {
+//         input: { type: new GraphQLNonNull(ShapeSearchInputType) },
+//       },
+//       type: new GraphQLNonNull(ProductType),
+//     },
+//     byImage: {
+//       args: {
+//         input: { type: new GraphQLNonNull(ImageSearchInputType) },
+//       },
+//       type: new GraphQLNonNull(ProductType),
+//     },
+//     byText: {
+//       args: {
+//         input: { type: new GraphQLNonNull(TextSearcgInputType) },
+//       },
+//       type: new GraphQLNonNull(ProductType),
+//     },
+//   },
+// });
 
 module.exports = {
   NodeInterface,

@@ -1,3 +1,5 @@
+if (process.env.NODE_ENV !== 'production') process.title = 'myApp';
+
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');

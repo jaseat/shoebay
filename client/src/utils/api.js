@@ -2,12 +2,11 @@
  * Performs a request with any query string.
  * @param {string} query The query string.
  * @param {object} [variables] Object of variables. Keys must match variables in the query string.
- * @returns Promise containing the data in `res.data`.
+ * @returns Promise containing the data.
  */
 export const fetchQuery = async (
   query: string,
   variables?: Object
-  cookie: string
 ): Promise<Object> => {
   const { NODE_ENV } = process.env;
   const options = {
@@ -19,19 +18,23 @@ export const fetchQuery = async (
     headers: {
       'content-type': 'application/json',
       Accept: 'application/json',
-      Cookie: null;
+      credentials: 'same-origin',
     },
   };
-  if (NODE_ENV === 'test')
-    options.headers.Cookie = cookie;
-  const url =
-    NODE_ENV === 'test' ? 'http://localhost:3001/api/graphql' : '/api/graphql';
-  const res = await fetch(url, options);
-  const data = await res.json();
-  if (NODE_ENV === 'test' && res.headers._headers['set-cookie']) {
-    data.__cookie = res.headers._headers['set-cookie'].pop().split(';')[0];
+  const url = '/api/graphql';
+
+  try {
+    const res = await fetch(url, options);
+    const data = await res.json();
+    if (data.errors) {
+      const errors = data.errors.map(e => ({ message: e.message }));
+      console.log(errors);
+      throw errors;
+    }
+    return data;
+  } catch (e) {
+    throw e;
   }
-  return data;
 };
 
 /**
@@ -39,18 +42,29 @@ export const fetchQuery = async (
  * @param {object} credentials Credentials
  * @param {string} credentials.email
  * @param {string} credentials.password
- * @returns Promise containing user id in `res.data.logIn`.
+ * @returns Promise containing a response of the user's id or
+ * error array with message 'Unauthorized` in first message if credentials are wrong.
  */
 export const logIn = async (credentials: Object): Promise<Object> => {
   const query = `query LogIn($input:LogInInput!){logIn(input:$input)}`;
-  return fetchQuery(query, { input: credentials });
+  try {
+    const data = await fetchQuery(query, { input: credentials });
+    return data.data.logIn;
+  } catch (e) {
+    throw e;
+  }
 };
 
 /**
  * Logs out user.
- * @returns Promise containing null in `res.data.logOut`.
+ * @returns Promise containing null in response.
  */
 export const logOut = async (): Promise<Object> => {
   const query = `query LogOut{logOut}`;
-  return fetchQuery(query);
+  try {
+    const data = await fetchQuery(query);
+    return data.data.logOut;
+  } catch (e) {
+    throw e;
+  }
 };
