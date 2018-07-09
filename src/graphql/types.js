@@ -45,10 +45,7 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLID),
       resolve: resolveId,
     },
-    firstName: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    lastName: {
+    username: {
       type: new GraphQLNonNull(GraphQLString),
     },
     email: {
@@ -59,7 +56,7 @@ const UserType = new GraphQLObjectType({
       type: GraphQLString,
       resolve: resolveProtected,
     },
-    footImg: {
+    footShape: {
       type: GraphQLString,
       resolve: resolveProtected,
     },

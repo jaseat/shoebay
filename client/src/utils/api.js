@@ -6,7 +6,7 @@
  */
 export const fetchQuery = async (
   query: string,
-  variables?: Object
+  variables: ?Object
 ): Promise<Object> => {
   const { NODE_ENV } = process.env;
   const options = {
@@ -69,16 +69,23 @@ export const logOut = async (): Promise<Object> => {
 };
 
 /**
+ * @typedef {object} User
+ * @property {string} username
+ * @property {string} email
+ * @property {string} password
+ */
+
+/**
  * Creates new user and returns that user's information.
- * @param {object} newUser Object containing new user data.
+ * @param {User} newUser New user config.
  * @param {strings[]} [fields] Optional array of strings specifying which aditional return data to include.
  * @returns A promise containing the new user's information.
  */
 export const signUp = async (
-  newUser: Object,
-  fields?: Array<string>
+  newUser,
+  fields: ?Array<string>
 ): Promise<Object> => {
-  const query = `mutation SignUp(input: UserInput!){createUser(input:$input){id,${fields}}}`;
+  const query = `mutation SignUp($input: UserInput!){createUser(input:$input){id,${fields}}}`;
   try {
     const data = await fetchQuery(query, { input: newUser });
     return data.data.createUser;

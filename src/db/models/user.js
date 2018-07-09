@@ -11,14 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          len: [1],
-        },
-      },
-      lastName: {
+      username: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -46,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
           len: [1],
         },
       },
-      footImg: {
+      footShape: {
         type: DataTypes.STRING,
         allowNull: true,
         validate: {

@@ -23,10 +23,7 @@ const UserInputType = new GraphQLInputObjectType({
   name: 'UserInput',
   description: 'Payload for user',
   fields: {
-    firstName: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    lastName: {
+    username: {
       type: new GraphQLNonNull(GraphQLString),
     },
     email: {

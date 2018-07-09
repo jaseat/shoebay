@@ -14,47 +14,19 @@ module.exports.getNodeById = (nodeId, loaders, db) => {
 };
 
 /**
- * Creates new user and returns that user.
- * @param {object} db The current database context.
- * @param {object} newUser The new user.
- * @param {string} newUser.firstName First name.
- * @param {string} newUser.lastName
- * @param {string} newUser.email
- * @param {string} newUser.paymentMethod
- * @param {string} newUser.footmg
- */
-module.exports.createUser = (
-  db,
-  { firstName, lastName, email, password, paymentMethod, footImg }
-) => {
-  return db.User.create({
-    firstName,
-    lastName,
-    email,
-    password,
-    paymentMethod,
-    footImg,
-  })
-    .then(user => user.dataValues)
-    .then(user => {
-      user.__tableName = 'user';
-      return user;
-    });
-};
-
-/**
  * Log-ins user.
  * @param {string} email User email.
  * @param {string} password User password.
  * @param {object} req The current request context.
  * @returns `User.id` if found, `Unauthorized` otherwise, wrapped in a promise.
  */
-module.exports.logIn = (email, password, req) => {
+const logIn = (email, password, req) => {
   return new Promise((resolve, reject) => {
     req.body = {
       email,
       password,
     };
+    if (req.user) req.logOut();
     passport.authenticate('local', (err, user) => {
       if (err) reject(err);
       if (!user) reject('Unauthorized');
@@ -64,6 +36,41 @@ module.exports.logIn = (email, password, req) => {
       });
     })(req);
   });
+};
+
+module.exports.logIn = logIn;
+
+/**
+ * Creates new user and returns that user.
+ * @param {object} db The current database context.
+ * @param {object} newUser The new user.
+ * @param {string} newUser.username User name.
+ * @param {string} newUser.lastName
+ * @param {string} newUser.email
+ * @param {string} newUser.paymentMethod
+ * @param {string} newUser.footShape
+ * @param {object} req The request context
+ * @return The new user.
+ */
+module.exports.createUser = (
+  db,
+  { username, email, password, paymentMethod, footShape },
+  req
+) => {
+  return db.User.create({
+    username,
+    email,
+    password,
+    paymentMethod,
+    footShape,
+  })
+    .then(user => user.dataValues)
+    .then(user => {
+      user.__tableName = 'user';
+      return logIn(email, password, req).then(res => {
+        return user;
+      });
+    });
 };
 
 /**

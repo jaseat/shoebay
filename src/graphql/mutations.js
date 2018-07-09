@@ -20,7 +20,7 @@ const CreateUserMutation = {
       input: { type: new GraphQLNonNull(UserInputType) },
     },
     resolve(source, args, context) {
-      return resolvers.createUser(args.input);
+      return resolvers.createUser(context.db, args.input, context.req);
     },
   },
 };
