@@ -115,7 +115,7 @@ app.use(
     };
   })
 );
-app.use('/', html);
+// app.use('/', html);
 app.use('/vision', vision);
 app.use('/product', amazon);
 
