@@ -32,22 +32,25 @@ const NodeQuery = {
   node: {
     type: Types.NodeInterface,
     args: {
-      input: {
-        type: new GraphQLNonNull(InputTypes.NodeInputType),
+      id: {
+        type: new GraphQLNonNull(GraphQLID),
       },
     },
     resolve(source, args, context, info) {
-      return resolvers.getNodeById(args.input.id, context.loaders, context.db);
+      return resolvers.getNodeById(args.id, context.loaders, context.db);
     },
   },
 };
 
-// const SearchQuery = {
-//   search: {
-//     description: 'Peform a search',
-
-//   }
-// }
+const SearchQuery = {
+  search: {
+    description: 'Peform a search',
+    type: Types.SearchType,
+    resolve(source, args, context) {
+      return '';
+    },
+  },
+};
 
 const ShapeSearchQuery = {
   shapeSearch: {
@@ -99,4 +102,5 @@ module.exports = {
   ...ShapeSearchQuery,
   ...LogInQuery,
   ...LogOutQuery,
+  ...SearchQuery,
 };

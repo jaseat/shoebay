@@ -1,6 +1,7 @@
 const {
   GraphQLInterfaceType,
   GraphQLObjectType,
+  GraphQLBoolean,
   GraphQLID,
   GraphQLInt,
   GraphQLFloat,
@@ -10,6 +11,7 @@ const {
   GraphQLInputObjectType,
 } = require('graphql');
 const db = require('../db');
+const resolvers = require('./resolvers');
 
 const NodeInterface = new GraphQLInterfaceType({
   name: 'Node',
@@ -143,34 +145,107 @@ const ArticleType = new GraphQLObjectType({
 //   }
 // })
 
-// const SearchType = new GraphQLObjectType({
-//   name: 'Search',
-//   description: 'Search for products',
-//   fields: {
-//     byShape: {
-//       args: {
-//         input: { type: new GraphQLNonNull(ShapeSearchInputType) },
-//       },
-//       type: new GraphQLNonNull(ProductType),
-//     },
-//     byImage: {
-//       args: {
-//         input: { type: new GraphQLNonNull(ImageSearchInputType) },
-//       },
-//       type: new GraphQLNonNull(ProductType),
-//     },
-//     byText: {
-//       args: {
-//         input: { type: new GraphQLNonNull(TextSearcgInputType) },
-//       },
-//       type: new GraphQLNonNull(ProductType),
-//     },
-//   },
-// });
+const PageInfoType = new GraphQLObjectType({
+  name: 'PageInfo',
+  fields: {
+    hasNextPage: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    hasPreviousPage: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+    },
+    startCuroser: {
+      type: GraphQLString,
+    },
+    endCursor: {
+      type: GraphQLString,
+    },
+  },
+});
+
+const ArticleEdgeType = new GraphQLObjectType({
+  name: 'AricleEdge',
+  fields: () => {
+    return {
+      cursor: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      node: {
+        type: new GraphQLNonNull(ArticleType),
+      },
+    };
+  },
+});
+
+const ArticleConnectionType = new GraphQLObjectType({
+  name: 'ArticleConnection',
+  fields: {
+    pageInfo: {
+      type: new GraphQLNonNull(PageInfoType),
+    },
+    edges: {
+      type: new GraphQLList(ArticleEdgeType),
+    },
+  },
+});
+
+const SearchType = new GraphQLObjectType({
+  name: 'Search',
+  description: 'Search for things',
+  fields: {
+    // byShape: {
+    //   args: {
+    //     input: { type: new GraphQLNonNull(ShapeSearchInputType) },
+    //   },
+    //   type: new GraphQLNonNull(ProductType),
+    // },
+    // byImage: {
+    //   args: {
+    //     input: { type: new GraphQLNonNull(ImageSearchInputType) },
+    //   },
+    //   type: new GraphQLNonNull(ProductType),
+    // },
+    // byText: {
+    //   args: {
+    //     input: { type: new GraphQLNonNull(TextSearcgInputType) },
+    //   },
+    //   type: new GraphQLNonNull(ProductType),
+    // },
+    recentArticles: {
+      type: ArticleConnectionType,
+      args: {
+        after: {
+          type: GraphQLString,
+        },
+        first: {
+          type: GraphQLInt,
+        },
+      },
+      resolve(source, args, context) {
+        return resolvers
+          .getRecentArticles(source, args, context)
+          .then(({ rows, pageInfo }) => {
+            const edges = rows.map(row => {
+              return {
+                node: row,
+                cursor: row.__cursor,
+              };
+            });
+            return {
+              edges,
+              pageInfo,
+            };
+          });
+      },
+    },
+  },
+});
 
 module.exports = {
   NodeInterface,
   UserType,
   ProductType,
   ArticleType,
+  ArticleConnectionType,
+  SearchType,
 };

@@ -3,7 +3,7 @@ const GraphQLError = require('graphql/error');
 
 /**
  * Get node by id.
- * @param {string} nodeId Node id string in the format `ta.ble:id`.
+ * @param {string} nodeId Node id string in the format `table:id`.
  * @param {object} loaders Node loaders for dataloader
  * @param {object} db The current database context.
  * @returns Returns the node specified by nodeId.
@@ -108,4 +108,39 @@ module.exports.createArticle = (db, newArticle, user) => {
  */
 module.exports.shapeSearch = points => {
   return null;
+};
+
+module.exports.getRecentArticles = (source, args, context) => {
+  let { after, first } = args;
+  let id, createdAt;
+  let options = {};
+  if (!first) first = 5;
+  options.limit = first + 1;
+  if (after) {
+    options.where = {
+      createdAt: {
+        $gt: new Date(parseInt(after)).toISOString(),
+      },
+    };
+  }
+  return context.db.Article.findAll(options).then(allRows => {
+    const rows = allRows.slice(0, first);
+    rows.forEach(row => {
+      row.__tableName = context.db.Article.getName();
+      row.__cursor = row.createdAt.getTime();
+    });
+    const hasNextPage = allRows.length > first;
+    const hasPreviousPage = false;
+
+    const pageInfo = {
+      hasNextPage,
+      hasPreviousPage,
+    };
+
+    if (rows.length > 0) {
+      pageInfo.startCurosr = rows[0].__cursor;
+      pageInfo.endCurosr = rows[rows.length - 1].__cursor;
+    }
+    return { rows, pageInfo };
+  });
 };
