@@ -37,7 +37,7 @@ class UploadImage extends React.Component<P, S> {
   };
 
   handleUpload = () => {
-    if (this.state.src) {
+    if (this.state.src !== null) {
       var base64 = this.state.src.replace(/^data:image\/\w+;base64,/, '');
       fetch('/vision/img', {
         method: 'POST',

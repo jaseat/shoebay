@@ -1,4 +1,4 @@
-const shoes = /(footwear|shoe|footgear||sportswear)/g;
+const shoes = /(footwear|shoes)/g;
 
 const categories = /(athletic|sneakers|boots|sandals|loafers|oxfords|outdoor|work)/g;
 

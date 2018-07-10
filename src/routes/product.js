@@ -3,7 +3,6 @@ const router = express.Router();
 const { requestBuilder, itemLookup } = require('../amazon/api');
 
 router.post('/search', (req, res) => {
-  console.log(req.body);
   requestBuilder(req.body)
     .then(data => {
       res.json(data);
