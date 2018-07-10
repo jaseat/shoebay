@@ -12,6 +12,8 @@ import { connect } from 'react-redux';
 //types
 import type { USER_ACTION, THEME_ACTION } from '../../@flow-types';
 
+import * as API from '../../utils/api';
+
 type P = {
   userLogout: (id: null) => USER_ACTION,
   changeTheme: (value: boolean) => THEME_ACTION,
@@ -39,7 +41,14 @@ class UserMenu extends React.Component<P, S> {
   };
   _handleLogOut = () => {
     this.props.userLogout(null);
-    this.handleClose();
+    API.logOut()
+      .then(id => {
+        this.props.userLogout(id);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    // this.handleClose();
   };
   changeTheme = () => {
     this.props.changeTheme(!this.props.darkTheme);
