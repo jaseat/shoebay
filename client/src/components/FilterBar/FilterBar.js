@@ -15,8 +15,19 @@ class WrappedChip extends React.PureComponent<{
   deleteChip = () => {
     this.props.delete(this.props.name);
   };
+
   render() {
-    return <Chip label={this.props.value} onDelete={this.deleteChip} />;
+    const { name, value } = this.props;
+
+    return (
+      <React.Fragment>
+        {name === 'maxPrice' || name === 'minPrice' ? (
+          <Chip label={name.substr(0, 3)} onDelete={this.deleteChip} />
+        ) : (
+          <Chip label={this.props.value} onDelete={this.deleteChip} />
+        )}
+      </React.Fragment>
+    );
   }
 }
 

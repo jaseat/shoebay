@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
+import { addFilter } from '../../actions/filter';
 import { connect } from 'react-redux';
+//types
+import type { FILTER_ACTION } from '../../@flow-types';
 
 const plcUrl =
   'http://via.placeholder.com/400x300?text=*.jpeg *.jpg *.png *.bmp';
@@ -8,20 +11,20 @@ const plcUrl =
 type P = {
   inpt_id: string,
   height: number,
+  addFilter: (key: string, value: string) => FILTER_ACTION,
 };
 type S = {
   src: null | string,
-  query: null | string,
 };
 
 class UploadImage extends React.Component<P, S> {
   state = {
     src: null,
-    query: null,
   };
 
   handleSubmitImg = (event: SyntheticInputEvent<HTMLInputElement>) => {
     event.preventDefault();
+
     if (event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.currentTarget.files[0]);
@@ -33,8 +36,7 @@ class UploadImage extends React.Component<P, S> {
     }
   };
 
-  handleUpload = (event: SyntheticInputEvent<HTMLInputElement>) => {
-    event.preventDefault();
+  handleUpload = () => {
     if (this.state.src) {
       var base64 = this.state.src.replace(/^data:image\/\w+;base64,/, '');
       fetch('/vision/img', {
@@ -48,37 +50,14 @@ class UploadImage extends React.Component<P, S> {
         .then(response => {
           return response.json();
         })
-        .then(data => {
-          console.log('query:', data);
-          this.getItems(data);
+        .then(visiondata => {
+          console.log(visiondata);
+          this.props.addFilter('query', visiondata);
         })
         .catch(err => {
           console.log(err);
         });
-    } else {
-      console.log('upload img first');
     }
-  };
-
-  getItems = query => {
-    var body = { ...this.props.filters, keyword: query };
-    fetch(`/product/search`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    })
-      .then(resp => {
-        return resp.json();
-      })
-      .then(amazondata => {
-        this.props.setResponse(amazondata);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 
   render() {
@@ -90,24 +69,12 @@ class UploadImage extends React.Component<P, S> {
         spacing={8}
       >
         <Grid item xs={12}>
-          {this.state.src ? (
-            <img
-              src={this.state.src}
-              alt="user-img"
-              style={{ height: this.props.height }}
-            />
-          ) : (
-            <img
-              src={plcUrl}
-              alt="placeholder"
-              style={{ height: this.props.height }}
-            />
-          )}
-          {this.state.query && (
-            <Typography variant="headline" align="left">
-              {this.state.query}
-            </Typography>
-          )}
+          <img
+            src={this.state.src || plcUrl}
+            alt="user-img"
+            style={{ height: this.props.height }}
+            onLoad={this.handleUpload}
+          />
         </Grid>
         <Grid item xs={12}>
           <input
@@ -118,19 +85,17 @@ class UploadImage extends React.Component<P, S> {
             onInput={this.handleSubmitImg}
           />
           <label htmlFor={this.props.inpt_id}>
-            <Button variant="raised" color="primary" component="span">
+            <Button variant="raised" color="primary" component="span" fullWidth>
               Upload
             </Button>
           </label>
-          <Button variant="raised" color="primary" onClick={this.handleUpload}>
-            Find
-          </Button>
         </Grid>
       </Grid>
     );
   }
 }
 
-export default connect(state => ({
-  filters: state.filter.filters,
-}))(UploadImage);
+export default connect(
+  null,
+  { addFilter }
+)(UploadImage);

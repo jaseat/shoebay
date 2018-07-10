@@ -1,7 +1,6 @@
 import * as React from 'react';
 //material-ui
 import {
-  Slide,
   Card,
   CardActions,
   CardContent,
@@ -16,7 +15,6 @@ type P = {
   parentAsin: string,
   title: string,
   aLink: string,
-  delay: number,
 };
 type S = {
   src: null | string,
@@ -33,7 +31,6 @@ class ProductCard extends React.Component<P, S> {
         return resp.json();
       })
       .then(imgdata => {
-        console.log(imgdata);
         this.setState({ src: imgdata });
       })
       .catch(err => {
@@ -42,39 +39,34 @@ class ProductCard extends React.Component<P, S> {
   }
   render() {
     return (
-      <Slide
-        direction="left"
-        in={true}
-        // style={{ transitionDelay: props.delay }} - one by one
-        timeout={this.props.delay}
-        mountOnEnter
-        unmountOnExit
-      >
-        <Card style={{ maxWidth: 300 }}>
-          <CardMedia
-            image={this.state.src}
-            style={{
-              height: 0,
-              maxHeight: 200,
-              paddingTop: '80.25%',
-            }}
-          />
-          <CardContent>
-            <Typography variant="body1">{this.props.title}</Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              variant="flat"
-              color="primary"
-              href={this.props.aLink}
-              target="_blank"
-            >
-              <PureIcon iconType="Amazon" />
-              Product Page
-            </Button>
-          </CardActions>
-        </Card>
-      </Slide>
+      <Card style={{ maxWidth: 250 }}>
+        <CardMedia
+          image={
+            this.state.src ||
+            `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
+          }
+          style={{
+            height: 0,
+            paddingTop: '90.25%',
+          }}
+        />
+
+        <CardContent>
+          <Typography variant="body1">{this.props.title}</Typography>
+          <Typography variant="subheading">{this.props.price}</Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            variant="flat"
+            color="primary"
+            href={this.props.aLink}
+            target="_blank"
+          >
+            <PureIcon iconType="Amazon" />
+            Product Page
+          </Button>
+        </CardActions>
+      </Card>
     );
   }
 }

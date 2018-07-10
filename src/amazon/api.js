@@ -28,6 +28,7 @@ const requestBuilder = params => {
   return new Promise((resolve, reject) => {
     let nodeId = '';
     let index = '';
+    //values from amazon api docs to narrow down search
     switch (params.department) {
       case 'Men':
         index = 'FashionMen';
@@ -39,6 +40,7 @@ const requestBuilder = params => {
         break;
       default:
         index = 'Fashion';
+        nodeId = '7141124011';
         break;
     }
     delete params.department;
@@ -50,12 +52,15 @@ const requestBuilder = params => {
     delete params.maxPrice;
     let minPrice = params.minPrice || '';
     delete params.minPrice;
+    let page = params.page || 1;
+    delete params.page;
+
     let keywords = '';
     //all other filters will be part of keywords
     for (key in params) {
       keywords += params[key] + ' ';
     }
-    console.log(minPrice, maxPrice, index, nodeId, category, keywords);
+
     client
       .itemSearch({
         condition: 'New', //looking only for new
@@ -65,11 +70,12 @@ const requestBuilder = params => {
         browseNode: nodeId,
         Title: category, //here goes category
         Keywords: keywords, //width size and color can be here
-        responseGroup: 'ItemAttributes,Images,Offers',
-        itemPage: 1,
+        responseGroup: 'ItemAttributes,Offers',
+        itemPage: page,
         availability: 'Available',
       })
       .then(function(results) {
+        //return clean object with only needed fields
         var generateResultArr = [];
         results.map(item => {
           generateResultArr.push({
@@ -77,6 +83,7 @@ const requestBuilder = params => {
             parent_asin: item.ParentASIN[0],
             url: item.DetailPageURL[0],
             title: item.ItemAttributes[0].Title[0],
+            price: item.ItemAttributes[0].ListPrice[0].FormattedPrice[0],
           });
         });
         resolve(generateResultArr);

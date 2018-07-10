@@ -24,7 +24,32 @@ type P = {
 class PriceGroup extends Component<P> {
   handleClick = (value: string) => {
     return () => {
-      this.props.addFilter('price', value);
+      var minPrice = 0;
+      var maxPrice = 0;
+      switch (value) {
+        case priceBrackets[0]:
+          minPrice = 0;
+          maxPrice = 2500;
+          break;
+        case priceBrackets[1]:
+          minPrice = 2500;
+          maxPrice = 5000;
+          break;
+        case priceBrackets[2]:
+          minPrice = 5000;
+          maxPrice = 10000;
+          break;
+        case priceBrackets[3]:
+          minPrice = 10000;
+          maxPrice = 20000;
+          break;
+        case priceBrackets[4]:
+          minPrice = 20000;
+          maxPrice = 999999999;
+          break;
+      }
+      this.props.addFilter('minPrice', minPrice);
+      this.props.addFilter('maxPrice', maxPrice);
     };
   };
   render() {
