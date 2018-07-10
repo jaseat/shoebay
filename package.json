@@ -10,7 +10,7 @@
     "dev-prepare": "cross-env NODE_ENV=development yarn prepare-db",
     "test-prepare": "cross-env NODE_ENV=test yarn prepare-db",
     "production-prepare": "cross-env NODE_ENV=production yarn prepare-db",
-    "heroku-db": "sequelize db:undo:all && sequelize db:migrate&sequelize db:seed:all",
+    "heroku-db": "sequelize db:migrate:undo:all && sequelize db:migrate&sequelize db:seed:all",
     "install": "cd client && yarn",
     "server": "nodemon src/app.js",
     "client": "cd client && yarn start",
