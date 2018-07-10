@@ -1,7 +1,6 @@
 import * as React from 'react';
 //material-ui
 import {
-  Slide,
   Card,
   CardActions,
   CardContent,
@@ -13,38 +12,54 @@ import {
 import PureIcon from '../../style/Icons';
 
 type P = {
-  imgUrl: string,
-  details: string,
+  parentAsin: string,
+  title: string,
   aLink: string,
-  delay: number,
+};
+type S = {
+  src: null | string,
 };
 
-const ProductCard = (props: P) => {
-  return (
-    <Slide
-      direction="left"
-      in={true}
-      // style={{ transitionDelay: props.delay }} - one by one
-      timeout={props.delay}
-      mountOnEnter
-      unmountOnExit
-    >
-      <Card style={{ maxWidth: 400 }}>
+class ProductCard extends React.Component<P, S> {
+  state = {
+    src: null,
+  };
+
+  componentDidMount() {
+    fetch(`product/search/item/${this.props.parentAsin}`)
+      .then(resp => {
+        return resp.json();
+      })
+      .then(imgdata => {
+        this.setState({ src: imgdata });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+  render() {
+    return (
+      <Card style={{ maxWidth: 250 }}>
         <CardMedia
-          image={props.imgUrl}
+          image={
+            this.state.src ||
+            `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
+          }
           style={{
             height: 0,
-            paddingTop: '56.25%',
+            paddingTop: '90.25%',
           }}
         />
+
         <CardContent>
-          <Typography variant="body2">{props.details}</Typography>
+          <Typography variant="body1">{this.props.title}</Typography>
+          <Typography variant="subheading">{this.props.price}</Typography>
         </CardContent>
         <CardActions>
           <Button
             variant="flat"
             color="primary"
-            href={props.aLink}
+            href={this.props.aLink}
             target="_blank"
           >
             <PureIcon iconType="Amazon" />
@@ -52,8 +67,8 @@ const ProductCard = (props: P) => {
           </Button>
         </CardActions>
       </Card>
-    </Slide>
-  );
-};
+    );
+  }
+}
 
 export default ProductCard;

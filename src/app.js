@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production') process.title = 'myApp';
 
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
@@ -26,9 +27,13 @@ const myStore = new SequelizeStore({
 //routes
 const html = require('./routes/html');
 const auth = require('./routes/auth');
+const vision = require('./routes/vision');
+const amazon = require('./routes/product');
 
 //log for dev
 app.use(logger('dev'));
+//body-parser from testing vision api
+app.use(bodyParser.json());
 
 //session set up
 app.use(
@@ -110,5 +115,7 @@ app.use(
   })
 );
 app.use('/', html);
+app.use('/vision', vision);
+app.use('/product', amazon);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -7,10 +7,13 @@ import Waypoint from 'react-waypoint';
 import SideDrawer from '../SideDrawer/SideDrawer';
 import FilterBar from '../FilterBar';
 import StoreDrawerContent from '../StoreDrawerContent';
-
-//this component that displays products
-// import ProductCard from './ProductCard';
-//<ProductCard delay={i * 200} details={item.details} aLink={item.href} imgUrl={item.img}/>
+import UploadImage from './UploadImage';
+import ProductCard from './ProductCard';
+import { Grid } from '@material-ui/core';
+//
+import { connect } from 'react-redux';
+import { addFilter } from '../../actions/filter';
+import Button from '@material-ui/core/Button';
 
 const style = theme => ({
   root: {
@@ -44,39 +47,57 @@ class StorePage extends React.Component<P, S> {
     response: [],
   };
 
-  componentDidMount() {
-    this.requestProducs();
-  }
-
-  requestProducs = () => {
-    this.setState({ loading: true });
-    //currently just getting images from giphy api, replace with call to backend
-    const URL =
-      'https://api.giphy.com/v1/gifs/search?q=BMW&api_key=dc6zaTOxFJmzC&limit=11&lang=en';
-
-    fetch(URL)
-      .then(response => {
-        return response.json();
+  getItems = () => {
+    fetch(`/product/search`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.props.filters),
+    })
+      .then(resp => {
+        return resp.json();
       })
-      .then(data => {
-        var currentResponse = this.state.response;
-        for (var i = 0; i < 11; i++) {
-          currentResponse.push(data.data[i]);
+      .then(amazondata => {
+        var current = this.state.response;
+        for (let i = 0; i < amazondata.length; i++) {
+          current.push(amazondata[i]);
         }
-
         this.setState({
-          response: currentResponse,
+          response: current,
           loading: false,
         });
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
-
+  changePage = () => {
+    var nextPage = this.props.filters.page + 1 || 2;
+    this.props.addFilter('page', nextPage);
+    this.getItems();
+  };
   renderWaypoint = () => {
     if (!this.state.loading) {
-      return <Waypoint onEnter={this.requestProducs} />;
+      return <Waypoint onEnter={this.changePage} />;
     }
   };
-
+  renderCards = () => {
+    return this.state.response.map((item, i) => {
+      return (
+        <Grid item xs={3} key={item.asin}>
+          <ProductCard
+            title={item.title}
+            aLink={item.url}
+            parentAsin={item.asin}
+            price={item.price}
+            image={item.image}
+          />
+        </Grid>
+      );
+    });
+  };
   render() {
     return (
       <div className={this.props.classes.root}>
@@ -86,16 +107,15 @@ class StorePage extends React.Component<P, S> {
           <StoreDrawerContent />
         </SideDrawer>
         <div className={this.props.classes.container}>
-          {this.state.response.map((item, i) => {
-            return (
-              <img
-                key={item.images.fixed_height_still.url + i}
-                src={item.images.fixed_height_still.url}
-                alt="still-gif"
-                style={{ height: 250, border: '1px solid black' }}
-              />
-            );
-          })}
+          <UploadImage
+            height={300}
+            inpt_id="img-vision"
+            setResponse={this.requestProducs}
+          />
+          <Button variant="raised" onClick={this.getItems}>
+            Find
+          </Button>
+          {this.state.response && <Grid container>{this.renderCards()}</Grid>}
           <div>
             {this.renderWaypoint()}
             Loading more items…
@@ -106,4 +126,11 @@ class StorePage extends React.Component<P, S> {
   }
 }
 
-export default withStyles(style)(StorePage);
+let ConnectedStorePage = connect(
+  state => ({
+    filters: state.filter.filters,
+  }),
+  { addFilter }
+)(StorePage);
+
+export default withStyles(style)(ConnectedStorePage);
