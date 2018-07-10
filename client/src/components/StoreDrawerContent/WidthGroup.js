@@ -13,7 +13,7 @@ type P = {
   addFilter: (key: string, value: string) => FILTER_ACTION,
 };
 
-const widthSizes = ['XXN', 'XN', 'N', 'M', 'W', 'XW', 'XXW'];
+const widthSizes = ['C', 'D', 'E'];
 
 class WidthGroup extends Component<P> {
   handleClick = value => {

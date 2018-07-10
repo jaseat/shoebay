@@ -20,7 +20,7 @@ const colors: Array<string> = [
   'gold',
   'red',
   'yellow',
-  'cream',
+  'navy',
   'pink',
   'purple',
 ];
