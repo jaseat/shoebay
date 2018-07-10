@@ -16,20 +16,40 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           len: [1],
+          isUnique: function(value, next) {
+            User.find({ where: { username: value } })
+              .then(user => {
+                if (user) return next('Username already in use');
+                next();
+              })
+              .catch(error => {
+                if (error) return next(error);
+              });
+          },
         },
       },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [1],
+          isEmail: true,
+          isUnique: function(value, next) {
+            User.find({ where: { email: value } })
+              .then(user => {
+                if (user) return next('Email already in use');
+                next();
+              })
+              .catch(error => {
+                if (error) return next(error);
+              });
+          },
         },
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [1],
+          len: [4],
         },
       },
       privilege: {
@@ -41,16 +61,10 @@ module.exports = (sequelize, DataTypes) => {
       paymentMethod: {
         type: DataTypes.STRING,
         allowNull: true,
-        validate: {
-          len: [1],
-        },
       },
       footShape: {
         type: DataTypes.STRING,
         allowNull: true,
-        validate: {
-          len: [1],
-        },
       },
     },
     {}

@@ -30,7 +30,7 @@ module.exports = {
       },
       privilege: {
         allowNull: false,
-        type: DataTypes.ENUM,
+        type: Sequelize.ENUM,
         values: ['user', 'reviewer', 'partner'],
         defaultValue: 'user',
       },
