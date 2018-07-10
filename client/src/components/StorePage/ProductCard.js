@@ -7,14 +7,16 @@ import {
   CardMedia,
   Typography,
   Button,
+  Grid,
 } from '@material-ui/core';
 //custom
 import PureIcon from '../../style/Icons';
 
 type P = {
-  parentAsin: string,
+  asin: string,
   title: string,
   aLink: string,
+  price: string,
 };
 type S = {
   src: null | string,
@@ -26,7 +28,7 @@ class ProductCard extends React.Component<P, S> {
   };
 
   componentDidMount() {
-    fetch(`product/search/item/${this.props.parentAsin}`)
+    fetch(`product/search/item/${this.props.asin}`)
       .then(resp => {
         return resp.json();
       })
@@ -38,35 +40,40 @@ class ProductCard extends React.Component<P, S> {
       });
   }
   render() {
+    if (!this.state.src) {
+      return null;
+    }
     return (
-      <Card style={{ maxWidth: 250 }}>
-        <CardMedia
-          image={
-            this.state.src ||
-            `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
-          }
-          style={{
-            height: 0,
-            paddingTop: '90.25%',
-          }}
-        />
+      <Grid item xs={3}>
+        <Card style={{ maxWidth: 250 }}>
+          <CardMedia
+            image={
+              this.state.src ||
+              `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
+            }
+            style={{
+              height: 0,
+              paddingTop: '90.25%',
+            }}
+          />
 
-        <CardContent>
-          <Typography variant="body1">{this.props.title}</Typography>
-          <Typography variant="subheading">{this.props.price}</Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            variant="flat"
-            color="primary"
-            href={this.props.aLink}
-            target="_blank"
-          >
-            <PureIcon iconType="Amazon" />
-            Product Page
-          </Button>
-        </CardActions>
-      </Card>
+          <CardContent>
+            <Typography variant="body1">{this.props.title}</Typography>
+            <Typography variant="subheading">{this.props.price}</Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="flat"
+              color="primary"
+              href={this.props.aLink}
+              target="_blank"
+            >
+              <PureIcon iconType="Amazon" />
+              Product Page
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
     );
   }
 }

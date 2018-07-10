@@ -9,10 +9,12 @@ import FilterBar from '../FilterBar';
 import StoreDrawerContent from '../StoreDrawerContent';
 import UploadImage from './UploadImage';
 import ProductCard from './ProductCard';
-import { Grid } from '@material-ui/core';
+
+import { Grid, Typography } from '@material-ui/core';
 //
 import { connect } from 'react-redux';
 import { addFilter } from '../../actions/filter';
+import { nextPage, refreshPage } from '../../actions/page';
 import Button from '@material-ui/core/Button';
 
 const style = theme => ({
@@ -32,20 +34,27 @@ const style = theme => ({
   },
 });
 
-type P = {
-  classes: { root: {}, container: {} },
-};
-
 type S = {
   loading: boolean,
   response: Array<Object>,
+  done: boolean,
 };
 
-class StorePage extends React.Component<P, S> {
+class StorePage extends React.Component<any, S> {
   state = {
     loading: true,
     response: [],
+    done: false,
   };
+
+  componentWillUpdate(prevProps, prevState) {
+    if (prevProps.filters !== this.props.filters) {
+      if (!prevState.done) {
+        this.props.refreshPage();
+        this.setState({ response: [], done: false });
+      }
+    }
+  }
 
   getItems = () => {
     fetch(`/product/search`, {
@@ -54,47 +63,51 @@ class StorePage extends React.Component<P, S> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this.props.filters),
+      body: JSON.stringify({
+        filters: this.props.filters,
+        page: this.props.page,
+      }),
     })
       .then(resp => {
         return resp.json();
       })
       .then(amazondata => {
-        var current = this.state.response;
-        for (let i = 0; i < amazondata.length; i++) {
-          current.push(amazondata[i]);
+        console.log(amazondata);
+        if (amazondata[0].Code === undefined) {
+          var current = this.state.response;
+          for (let i = 0; i < amazondata.length; i++) {
+            current.push(amazondata[i]);
+          }
+          this.setState({
+            response: current,
+            loading: false,
+          });
+        } else {
+          this.setState({ done: true });
         }
-        this.setState({
-          response: current,
-          loading: false,
-        });
       })
       .catch(err => {
         console.log(err);
       });
   };
+
   changePage = () => {
-    var nextPage = this.props.filters.page + 1 || 2;
-    this.props.addFilter('page', nextPage);
-    this.getItems();
-  };
-  renderWaypoint = () => {
-    if (!this.state.loading) {
-      return <Waypoint onEnter={this.changePage} />;
+    if (!this.state.done) {
+      this.props.nextPage();
+      this.getItems();
     }
   };
+
   renderCards = () => {
     return this.state.response.map((item, i) => {
       return (
-        <Grid item xs={3} key={item.asin}>
-          <ProductCard
-            title={item.title}
-            aLink={item.url}
-            parentAsin={item.asin}
-            price={item.price}
-            image={item.image}
-          />
-        </Grid>
+        <ProductCard
+          key={item.asin + i}
+          title={item.title}
+          aLink={item.url}
+          asin={item.asin}
+          price={item.price}
+        />
       );
     });
   };
@@ -116,10 +129,10 @@ class StorePage extends React.Component<P, S> {
             Find
           </Button>
           {this.state.response && <Grid container>{this.renderCards()}</Grid>}
-          <div>
-            {this.renderWaypoint()}
-            Loading more items…
-          </div>
+          {!this.state.loading && <Waypoint onEnter={this.changePage} />}
+          {this.state.done && (
+            <Typography variant="display1">THE END</Typography>
+          )}
         </div>
       </div>
     );
@@ -129,8 +142,9 @@ class StorePage extends React.Component<P, S> {
 let ConnectedStorePage = connect(
   state => ({
     filters: state.filter.filters,
+    page: state.page.page,
   }),
-  { addFilter }
+  { addFilter, nextPage, refreshPage }
 )(StorePage);
 
 export default withStyles(style)(ConnectedStorePage);

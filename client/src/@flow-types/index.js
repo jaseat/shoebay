@@ -22,4 +22,8 @@ export type THEME_ACTION = {
   },
 };
 
+export type PAGE_ACTION = {
+  type: typeof types.PageTypes.NEXT_PAGE | typeof types.PageTypes.REFRESH_PAGE,
+};
+
 export type STATE = {};
