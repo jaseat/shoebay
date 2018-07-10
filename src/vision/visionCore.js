@@ -18,7 +18,7 @@ function detect(base64img, method) {
         features: [
           {
             type: method + '_DETECTION', //LABEL_DETECTION or WEB_DETECTION
-            maxResults: 5,
+            maxResults: 3,
           },
         ],
       },

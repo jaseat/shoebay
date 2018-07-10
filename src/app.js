@@ -25,6 +25,7 @@ const myStore = new SequelizeStore({
 const html = require('./routes/html');
 const auth = require('./routes/auth');
 const vision = require('./routes/vision');
+const amazon = require('./routes/product');
 
 //log for dev
 app.use(logger('dev'));
@@ -83,5 +84,6 @@ app.use(
 );
 app.use('/', html);
 app.use('/vision', vision);
+app.use('/product', amazon);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

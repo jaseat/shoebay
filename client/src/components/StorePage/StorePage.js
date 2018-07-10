@@ -8,10 +8,8 @@ import SideDrawer from '../SideDrawer/SideDrawer';
 import FilterBar from '../FilterBar';
 import StoreDrawerContent from '../StoreDrawerContent';
 import UploadImage from './UploadImage';
-
-//this component that displays products
-// import ProductCard from './ProductCard';
-//<ProductCard delay={i * 200} details={item.details} aLink={item.href} imgUrl={item.img}/>
+import ProductCard from './ProductCard';
+import { Grid } from '@material-ui/core';
 
 const style = theme => ({
   root: {
@@ -42,41 +40,30 @@ type S = {
 class StorePage extends React.Component<P, S> {
   state = {
     loading: true,
-    response: [],
+    response: null,
   };
 
-  componentDidMount() {
-    this.requestProducs();
-  }
+  // componentDidMount() {
+  //   this.requestProducs();
+  // }
+  // renderCards = () => {
+  //   for (let i = 0; i < this.state.response.length; i++) {
+  //     return <p>{this.state.response[i].ASIN[0]}</p>;
+  //   }
+  // };
 
-  requestProducs = () => {
-    this.setState({ loading: true });
-    //currently just getting images from giphy api, replace with call to backend
-    const URL =
-      'https://api.giphy.com/v1/gifs/search?q=Shoes&api_key=dc6zaTOxFJmzC&limit=11&lang=en';
-
-    fetch(URL)
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        var currentResponse = this.state.response;
-        for (var i = 0; i < 11; i++) {
-          currentResponse.push(data.data[i]);
-        }
-
-        this.setState({
-          response: currentResponse,
-          loading: false,
-        });
-      });
+  requestProducs = products => {
+    this.setState({
+      response: products,
+      loading: false,
+    });
   };
 
-  renderWaypoint = () => {
-    if (!this.state.loading) {
-      return <Waypoint onEnter={this.requestProducs} />;
-    }
-  };
+  // renderWaypoint = () => {
+  //   if (!this.state.loading) {
+  //     return <Waypoint onEnter={this.requestProducs} />;
+  //   }
+  // };
 
   render() {
     return (
@@ -87,19 +74,29 @@ class StorePage extends React.Component<P, S> {
           <StoreDrawerContent />
         </SideDrawer>
         <div className={this.props.classes.container}>
-          <UploadImage height={300} inpt_id="img-vision" />
-          {this.state.response.map((item, i) => {
-            return (
-              <img
-                key={item.images.fixed_height_still.url + i}
-                src={item.images.fixed_height_still.url}
-                alt="still-gif"
-                style={{ height: 250, border: '1px solid black' }}
-              />
-            );
-          })}
+          <UploadImage
+            height={300}
+            inpt_id="img-vision"
+            setResponse={this.requestProducs}
+          />
+          {!this.state.loading && (
+            <Grid container>
+              {this.state.response.map((item, i) => {
+                return (
+                  <Grid item xs={3}>
+                    <ProductCard
+                      delay={i * 200}
+                      title={item.title}
+                      aLink={item.url}
+                      parentAsin={item.asin}
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          )}
           <div>
-            {this.renderWaypoint()}
+            {/* {this.renderWaypoint()} */}
             Loading more items…
           </div>
         </div>

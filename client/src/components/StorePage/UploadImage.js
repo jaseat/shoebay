@@ -48,7 +48,18 @@ class UploadImage extends React.Component<P, S> {
           return response.json();
         })
         .then(data => {
-          this.setState({ query: data });
+          console.log('phraze', data);
+          fetch(`/product/search/${data}`)
+            .then(resp => {
+              return resp.json();
+            })
+            .then(amazondata => {
+              console.log(amazondata);
+              this.props.setResponse(amazondata);
+            })
+            .catch(err => {
+              console.log(err);
+            });
         })
         .catch(err => {
           console.log(err);
