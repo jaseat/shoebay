@@ -31,8 +31,6 @@ describe('Database', function() {
         password: 'test',
       };
       db.User.create(newUser).catch(err => {
-        console.log(err);
-        console.log(err.errors);
         expect(err.errors[0].message).to.equal('Username already in use');
         done();
       });
