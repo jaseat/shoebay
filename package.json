@@ -25,7 +25,7 @@
     "test:server": "cross-env NODE_ENV=test start-server-and-test start:test http://localhost:3001 test-server",
     "test-server": "mocha",
     "test-client": "cd client && yarn test",
-    "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
+    "heroku-postbuild": "yarn production-prepare && cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
     "amazon-product-api": "^0.4.4",
