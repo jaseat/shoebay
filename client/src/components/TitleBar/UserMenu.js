@@ -40,7 +40,6 @@ class UserMenu extends React.Component<P, S> {
     this.setState({ anchorEl: null });
   };
   _handleLogOut = () => {
-    this.props.userLogout(null);
     API.logOut()
       .then(id => {
         this.props.userLogout(id);
