@@ -1,7 +1,7 @@
 //core functions that make calls to Vision API and return promises
-//detect labbes, detect colors and websearches
+//detect labbes, and websearches
 //takes one argument image in base64 encoding
-//the response provided needs to be parsed to JSON object
+//the response provided is an array of objects with keys (etc descritption, ratio)
 
 function detect(base64img, method) {
   // [BEGIN vision_detection]

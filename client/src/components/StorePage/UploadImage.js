@@ -49,7 +49,15 @@ class UploadImage extends React.Component<P, S> {
         })
         .then(data => {
           console.log('phraze', data);
-          fetch(`/product/search/${data}`)
+
+          fetch(`/product/search`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ department: 'WOMEN', keyword: data }),
+          })
             .then(resp => {
               return resp.json();
             })

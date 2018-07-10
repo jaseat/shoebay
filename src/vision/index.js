@@ -11,7 +11,7 @@ function analyze(img) {
         for (var i = 0; i < resp.length; i++) {
           queryString += resp[i].description + ' ';
         }
-        //cuz feels good
+        //we don't need certain words since search will be narrowed down by amazon api
         var alter = queryString.replace(shoesRexEx, '');
         //removing double entrees
         var removeDoubles = alter
@@ -20,7 +20,7 @@ function analyze(img) {
             return i == allwords.indexOf(word);
           })
           .join(' ');
-
+        //returning final string
         resolve(removeDoubles);
       })
       .catch(err => {

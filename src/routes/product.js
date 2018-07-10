@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { requestBuilder, itemLookup } = require('../amazon/api');
 
-router.get('/search/:keywords', (req, res) => {
-  requestBuilder(req.params.keywords)
+router.post('/search', (req, res) => {
+  console.log(req.body);
+  requestBuilder(req.body)
     .then(data => {
       res.json(data);
     })

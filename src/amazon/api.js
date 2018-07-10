@@ -5,7 +5,7 @@ const client = amazon.createClient({
   awsSecret: process.env.AWS_SECRET,
   awsTag: process.env.AWS_TAG,
 });
-
+//lookUpSpecific item and return image url
 const itemLookup = itemASIN => {
   return new Promise((resolve, reject) => {
     client
@@ -26,21 +26,48 @@ const itemLookup = itemASIN => {
 
 const requestBuilder = params => {
   return new Promise((resolve, reject) => {
-    const womenShoesNodeId = '679337011';
-    const menShoesNodeId = '679255011';
-    const keywords = params;
+    let nodeId = '';
+    let index = '';
+    switch (params.department) {
+      case 'MEN':
+        index = 'FashionMen';
+        nodeId = '679255011';
+        break;
+      case 'WOMEN':
+        index = 'FashionWomen';
+        nodeId = '679337011';
+        break;
+      default:
+        index = 'Fashion';
+        break;
+    }
+    delete params.department;
+
+    let category = params.category || '';
+    delete params.category;
+
+    let maxPrice = params.maxPrice || '';
+    delete params.maxPrice;
+    let minPrice = params.minPrice || '';
+    delete params.minPrice;
+    let keywords = '';
+    //all other filters will be part of keywords
+    for (key in params) {
+      keywords += params[key] + ' ';
+    }
+    console.log(minPrice, maxPrice, index, nodeId, category, keywords);
     client
       .itemSearch({
-        condition: 'New',
-        // MinimumPrice: minPrice,
-        // MaximumPrice: maxPrice,
-        searchIndex: 'FashionWomen',
-        browseNode: womenShoesNodeId,
-        // Title: category,//here goes category
+        condition: 'New', //looking only for new
+        MinimumPrice: minPrice,
+        MaximumPrice: maxPrice,
+        searchIndex: index,
+        browseNode: nodeId,
+        Title: category, //here goes category
         Keywords: keywords, //width size and color can be here
         responseGroup: 'ItemAttributes,Images,Offers',
         itemPage: 1,
-        // availability: 'Available',
+        availability: 'Available',
       })
       .then(function(results) {
         var generateResultArr = [];
@@ -58,47 +85,6 @@ const requestBuilder = params => {
         reject(err[0].Error);
       });
   });
-
-  // var minPrice = '';
-  // var maxPrice = '';
-  // var department = '';
-  // var type = '';
-  // var size = '';
-  // var width = '';
-  // var color = '';
-
-  // for (var k in params) {
-  //   if (k == 'minPrice') {
-  //     var minPrice = minPrice + params[k];
-  //     console.log(minPrice);
-  //   } else if (k == 'maxPrice') {
-  //     var maxPrice = maxPrice + params[k];
-  //     console.log(maxPrice);
-  //   } else if (k == 'department') {
-  //     if (params[k] == 'Men') {
-  //       var department = 'FashionMen';
-  //       console.log(department);
-  //     } else if (params[k] == 'Women') {
-  //       var department = 'FashionWomen';
-  //       console.log(department);
-  //     }
-  //   } else if (k == 'category') {
-  //     var type = type + params[k];
-  //     console.log(type);
-  //   } else if (k == 'size') {
-  //     var size = size + params[k];
-  //     console.log(size);
-  //   } else if (k == 'width') {
-  //     var width = width + params[k];
-  //     console.log(width);
-  //   } else if (k == 'color') {
-  //     var color = color + params[k];
-  //     console.log(color);
-  //   } else {
-  //     console.log('Missing Input');
-  //   }
-  // }
-  // var keywords = 'shoes' + ', ' + width + ', ' + size + ', ' + color;
 };
 
 module.exports = { requestBuilder, itemLookup };
