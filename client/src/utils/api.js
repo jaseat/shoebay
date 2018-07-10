@@ -28,7 +28,7 @@ export const fetchQuery = async (
     const data = await res.json();
     if (data.errors) {
       const errors = data.errors.map(e => ({ message: e.message }));
-      throw errors;
+      throw errors.flat();
     }
     return data;
   } catch (e) {

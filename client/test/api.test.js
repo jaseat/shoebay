@@ -52,5 +52,14 @@ describe('Api', function() {
         done();
       });
     });
+    it('should fail because of username and email', function(done) {
+      API.signUp({
+        username: 'tester1',
+        email: 'tester1@test.com',
+        password: 'tester',
+      }).catch(err => {
+        expect(err[0].message).to.equal('Username already in use');
+      });
+    });
   });
 });
