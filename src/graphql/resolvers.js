@@ -78,6 +78,28 @@ module.exports.createUser = (
 };
 
 /**
+ * Creates new article and returns that article.
+ * @param {object} db The current database context.
+ * @param {object} newArticle The new article.
+ * @param {object} user The currently logged-in user.
+ * @return The new article.
+ */
+module.exports.createArticle = (db, newArticle, user) => {
+  if (!user || user.privilege !== 'reviewer') return new Error('Unauthorized');
+  const config = { ...newArticle, UserId: user.id };
+  return db.Article.create(config)
+    .then(article => article.dataValues)
+    .then(article => {
+      article.__tableName = 'article';
+      return article;
+    })
+    .catch(err => {
+      const errors = err.errors.map(e => e.message);
+      throw new Error(JSON.stringify(errors));
+    });
+};
+
+/**
  * Performs search based on array of points.
  * @param {object[]} points Array of points.
  * @param {number} points.x

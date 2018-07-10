@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       date: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       text: {
@@ -21,10 +21,11 @@ module.exports = {
         type: Sequelize.STRING,
       },
       images: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING,
       },
       UserId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',

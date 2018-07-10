@@ -22,6 +22,8 @@ const NodeInterface = new GraphQLInterfaceType({
     switch (source.__tableName) {
       case db.User.getName():
         return UserType;
+      case db.Article.getName():
+        return ArticleType;
       default:
         throw new Error('Undefined node type');
     }
@@ -98,6 +100,42 @@ const ProductType = new GraphQLObjectType({
   },
 });
 
+const ArticleType = new GraphQLObjectType({
+  name: 'Article',
+  interfaces: [NodeInterface],
+  description: 'Articles for the blog.',
+  fields: {
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+      description: 'Article ID.',
+      resolve: resolveId,
+    },
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Article title.',
+    },
+    text: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Article text.',
+    },
+    author: {
+      type: new GraphQLNonNull(UserType),
+      description: 'Article author.',
+      resolve: (source, args, context) => {
+        return context.loaders.user.load(source.UserId);
+      },
+    },
+    createdAt: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Article creation date.',
+    },
+    updatedAt: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Article last edit date.',
+    },
+  },
+});
+
 // const SearchInterface = new GraphQLInterfaceType({
 //   name: 'SearchInterface',
 //   fields: {
@@ -134,4 +172,5 @@ module.exports = {
   NodeInterface,
   UserType,
   ProductType,
+  ArticleType,
 };

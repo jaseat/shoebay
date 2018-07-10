@@ -31,5 +31,6 @@ const createNodeLoader = table => {
 module.exports.nodeLoaders = authToken => {
   return {
     user: createNodeLoader(db.User),
+    article: createNodeLoader(db.Article),
   };
 };

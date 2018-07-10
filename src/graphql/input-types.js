@@ -41,6 +41,19 @@ const UserInputType = new GraphQLInputObjectType({
   },
 });
 
+const ArticleInputType = new GraphQLInputObjectType({
+  name: 'ArticleInput',
+  description: 'Payload for article.',
+  fields: {
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    text: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  },
+});
+
 const PointInputType = new GraphQLInputObjectType({
   name: 'PointInput',
   fields: {
@@ -68,6 +81,7 @@ const LogInInputType = new GraphQLInputObjectType({
 
 module.exports = {
   UserInputType,
+  ArticleInputType,
   PointInputType,
   NodeInputType,
   LogInInputType,
