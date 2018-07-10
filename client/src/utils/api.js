@@ -27,7 +27,7 @@ export const fetchQuery = async (
     const res = await fetch(url, options);
     const data = await res.json();
     if (data.errors) {
-      const errors = data.errors.map(e => ({ message: e.message }));
+      const errors = flattenErrors(data.errors);
       throw errors;
     }
     return data;
@@ -81,10 +81,7 @@ export const logOut = async (): Promise<Object> => {
  * @param {strings[]} [fields] Optional array of strings specifying which aditional return data to include.
  * @returns A promise containing the new user's information.
  */
-export const signUp = async (
-  newUser,
-  fields: ?Array<string>
-): Promise<Object> => {
+export const signUp = async (newUser, fields = ['']): Promise<Object> => {
   const query = `mutation SignUp($input: UserInput!){createUser(input:$input){id,${fields}}}`;
   try {
     const data = await fetchQuery(query, { input: newUser });
@@ -93,3 +90,15 @@ export const signUp = async (
     throw e;
   }
 };
+
+function flattenErrors(errors) {
+  const err = [];
+  errors.forEach(e => {
+    if (e.message instanceof Array) {
+      e.message.forEach(msg => {
+        err.push({ message: msg });
+      });
+    } else err.push({ message: e.message });
+  });
+  return err;
+}

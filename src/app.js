@@ -68,6 +68,28 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
+if (process.env.NODE_ENV === 'production') {
+  function formatError(error) {
+    let message = null;
+    if (error.message[0] === '[') message = JSON.parse(error.message);
+    else message = error.message;
+    return {
+      message,
+    };
+  }
+} else {
+  function formatError(error) {
+    let message = null;
+    if (error.message[0] === '[') message = JSON.parse(error.message);
+    else message = error.message;
+    return {
+      message,
+      locations: error.locations,
+      path: error.path,
+    };
+  }
+}
+
 app.use('/auth', auth);
 app.use(
   '/api/graphql',
@@ -88,6 +110,7 @@ app.use(
       graphiql: process.env.NODE_ENV === 'production' ? false : true,
       context,
       pretty: true,
+      formatError: formatError,
     };
   })
 );

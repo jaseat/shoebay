@@ -32,7 +32,7 @@ describe('Api', function() {
         done();
       });
     });
-    it('should create a new user with id 2', function(done) {
+    it('should create a new user with id 3', function(done) {
       API.signUp(
         {
           username: 'tester1',
@@ -41,14 +41,24 @@ describe('Api', function() {
         },
         ['username']
       ).then(res => {
-        expect(res.id).to.equal('user:2');
+        expect(res.id).to.equal('user:3');
         done();
       });
     });
-    it('should get user 2', function(done) {
+    it('should get user 3', function(done) {
       const query = '{viewer {id}}';
       API.fetchQuery(query).then(res => {
-        expect(res.data.viewer.id).to.equal('user:2');
+        expect(res.data.viewer.id).to.equal('user:3');
+        done();
+      });
+    });
+    it('should fail because of username and email', function(done) {
+      API.signUp({
+        username: 'tester1',
+        email: 'tester1@test.com',
+        password: 'tester',
+      }).catch(err => {
+        expect(err[0].message).to.equal('Username already in use');
         done();
       });
     });
