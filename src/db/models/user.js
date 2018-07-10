@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   User.associate = function(models) {
-    User.belongsTo(models.Privilege);
+    // User.belongsTo(models.Privilege);
     User.hasMany(models.Comment);
     User.hasMany(models.Article);
     User.hasMany(models.Product);

@@ -17,6 +17,8 @@ import { userLogin } from '../../actions/user';
 //types
 import type { USER_ACTION } from '../../@flow-types';
 
+import * as API from '../../utils/api';
+
 type P = {
   userLogin: (id: string) => USER_ACTION,
   closeParent?: void => void,
@@ -35,6 +37,7 @@ class LoginBtnDlg extends React.Component<P, S> {
     is_btn_active: false,
     user_email: '',
     user_password: '',
+    login_error: null,
   };
 
   _handleOpenDialog = (): void => {
@@ -61,8 +64,17 @@ class LoginBtnDlg extends React.Component<P, S> {
   };
 
   _handleLogin = (): void => {
-    this.props.userLogin('123');
-    this._handleCloseDialog();
+    const credentials = {
+      email: this.state.user_email,
+      password: this.state.user_password,
+    };
+    API.logIn(credentials)
+      .then(id => {
+        this.props.userLogin(id);
+      })
+      .catch(err => {
+        this.setState({ login_error: 'is ' + err[0].message });
+      });
   };
 
   render() {
@@ -77,7 +89,9 @@ class LoginBtnDlg extends React.Component<P, S> {
           keepMounted
           onClose={this._handleCloseDialog}
         >
-          <DialogTitle id="login-dialog">Log In</DialogTitle>
+          <DialogTitle id="login-dialog">
+            Log In {this.state.login_error}
+          </DialogTitle>
           <DialogContent>
             <Grid container spacing={8} alignItems="flex-end">
               <Grid item xs={1}>

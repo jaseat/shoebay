@@ -25,5 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     Comment.belongsTo(models.Article);
     Comment.belongsTo(models.Product);
   };
+  Comment.getName = function() {
+    return 'comment';
+  };
   return Comment;
 };

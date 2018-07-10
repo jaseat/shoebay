@@ -41,6 +41,35 @@ const UserInputType = new GraphQLInputObjectType({
   },
 });
 
+const ArticleInputType = new GraphQLInputObjectType({
+  name: 'ArticleInput',
+  description: 'Payload for article.',
+  fields: {
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    text: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+  },
+});
+
+const CommentInputType = new GraphQLInputObjectType({
+  name: 'CommentInput',
+  description: 'Payload for comment.',
+  fields: {
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    text: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    articleId: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+  },
+});
+
 const PointInputType = new GraphQLInputObjectType({
   name: 'PointInput',
   fields: {
@@ -68,6 +97,8 @@ const LogInInputType = new GraphQLInputObjectType({
 
 module.exports = {
   UserInputType,
+  ArticleInputType,
+  CommentInputType,
   PointInputType,
   NodeInputType,
   LogInInputType,

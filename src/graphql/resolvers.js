@@ -3,7 +3,7 @@ const GraphQLError = require('graphql/error');
 
 /**
  * Get node by id.
- * @param {string} nodeId Node id string in the format `ta.ble:id`.
+ * @param {string} nodeId Node id string in the format `table:id`.
  * @param {object} loaders Node loaders for dataloader
  * @param {object} db The current database context.
  * @returns Returns the node specified by nodeId.
@@ -33,7 +33,7 @@ const logIn = (email, password, req) => {
       if (!user) reject('Unauthorized');
       req.logIn(user, err => {
         if (err) return reject(err);
-        return resolve(user.id);
+        return resolve('user:' + user.id);
       });
     })(req);
   });
@@ -67,9 +67,53 @@ module.exports.createUser = (
     .then(user => user.dataValues)
     .then(user => {
       user.__tableName = 'user';
+      user.id = db.User.getName() + user.id;
       return logIn(email, password, req).then(res => {
         return user;
       });
+    })
+    .catch(err => {
+      const errors = err.errors.map(e => e.message);
+      throw new Error(JSON.stringify(errors));
+    });
+};
+
+/**
+ * Creates new article and returns that article.
+ * @param {object} db The current database context.
+ * @param {object} newArticle The new article.
+ * @param {object} user The currently logged-in user.
+ * @return The new article.
+ */
+module.exports.createArticle = (db, newArticle, user, article) => {
+  if (!user || user.privilege !== 'reviewer') return new Error('Unauthorized');
+  const config = { ...newArticle, UserId: user.id };
+  return db.Article.create(config)
+    .then(article => article.dataValues)
+    .then(article => {
+      article.__tableName = 'article';
+      article.id = db.Article.getName() + article.id;
+      return article;
+    })
+    .catch(err => {
+      const errors = err.errors.map(e => e.message);
+      throw new Error(JSON.stringify(errors));
+    });
+};
+
+module.exports.createComment = (db, newComment, user) => {
+  if (!user) return new Error('Unauthorized');
+  const config = {
+    ...newComment,
+    UserId: user.id,
+    ArticleId: newComment.articleId,
+  };
+  return db.Comment.create(config)
+    .then(comment => comment.dataValues)
+    .then(comment => {
+      comment.__tableName = 'comment';
+      comment.id = db.Comment.getName() + comment.id;
+      return comment;
     })
     .catch(err => {
       const errors = err.errors.map(e => e.message);
@@ -86,4 +130,51 @@ module.exports.createUser = (
  */
 module.exports.shapeSearch = points => {
   return null;
+};
+
+const getConnection = (source, args, context, table, where) => {
+  let { after, first } = args;
+  let options = {};
+  if (!first) first = 5;
+  options.limit = first + 1;
+  if (after) {
+    options.where = {
+      createdAt: {
+        $gt: new Date(parseInt(after)),
+      },
+    };
+  }
+  options.where = { ...options.where, ...where };
+  return table.findAll(options).then(allRows => {
+    const rows = allRows.slice(0, first);
+    rows.forEach(row => {
+      row.__tableName = table.getName();
+      row.__cursor = row.createdAt.getTime();
+    });
+    const hasNextPage = allRows.length > first;
+    const hasPreviousPage = false;
+
+    const pageInfo = {
+      hasNextPage,
+      hasPreviousPage,
+    };
+
+    if (rows.length > 0) {
+      pageInfo.startCurosr = rows[0].__cursor;
+      pageInfo.endCurosr = rows[rows.length - 1].__cursor;
+    }
+    return { rows, pageInfo };
+  });
+};
+
+module.exports.getRecentArticles = (source, args, context) => {
+  return getConnection(source, args, context, context.db.Article);
+};
+
+module.exports.getArticleComments = (source, args, context) => {
+  const ArticleId = source.id;
+  const where = {
+    ArticleId,
+  };
+  return getConnection(source, args, context, context.db.Comment, where);
 };

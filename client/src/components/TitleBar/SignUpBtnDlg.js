@@ -16,6 +16,8 @@ import { userLogin } from '../../actions/user';
 //type
 import type { USER_ACTION } from '../../@flow-types';
 
+import * as API from '../../utils/api';
+
 type P = {
   userLogin: (id: string) => USER_ACTION,
   closeParent?: void => void,
@@ -36,6 +38,9 @@ class SignUpBtnDlg extends React.Component<P, S> {
     user_email: '',
     user_password: '',
     user_confirm_pass: '',
+    username_error: null,
+    email_error: null,
+    password_error: null,
   };
 
   _handleOpenDialog = (): void => {
@@ -53,9 +58,38 @@ class SignUpBtnDlg extends React.Component<P, S> {
   };
 
   _handleSignup = () => {
-    this.props.userLogin('1234');
-    this._handleCloseDialog();
-    if (this.props.closeParent) this.props.closeParent();
+    // this.props.userLogin('1234');
+    // this._handleCloseDialog();
+    if (this.state.user_password != this.state.user_confirm_pass)
+      return this.setState({ password_error: "Passwords don't match" });
+    const newUser = {
+      username: this.state.user_name,
+      email: this.state.user_email,
+      password: this.state.user_password,
+    };
+    API.signUp(newUser)
+      .then(user => {
+        this.props.userLogin(user.id);
+        if (this.props.closeParent) this.props.closeParent();
+      })
+      .catch(err => {
+        let username_error = null;
+        let email_error = null;
+        let password_error = null;
+        err.forEach(e => {
+          if (
+            e.message === 'Username already in use' ||
+            e.message === 'Validation len on username failed'
+          )
+            username_error = e.message;
+          else if (
+            e.message === 'Email already in use' ||
+            e.message === 'Validation isEmail on email failed'
+          )
+            email_error = e.message;
+        });
+        this.setState({ username_error, email_error, password_error });
+      });
   };
 
   render() {
@@ -81,6 +115,8 @@ class SignUpBtnDlg extends React.Component<P, S> {
                   id="user_name"
                   label="User Name"
                   fullWidth
+                  error={this.state.username_error != null}
+                  helperText={this.state.username_error}
                   value={this.state.user_name}
                   onChange={this._handleInput('user_name')}
                 />
@@ -93,6 +129,8 @@ class SignUpBtnDlg extends React.Component<P, S> {
                   id="user_email"
                   label="Email"
                   fullWidth
+                  error={this.state.email_error != null}
+                  helperText={this.state.email_error}
                   value={this.state.user_email}
                   onChange={this._handleInput('user_email')}
                 />
@@ -105,6 +143,8 @@ class SignUpBtnDlg extends React.Component<P, S> {
                   id="user-password"
                   label="Password"
                   type="password"
+                  error={this.state.password_error != null}
+                  helperText={this.state.password_error}
                   fullWidth
                   value={this.state.user_password}
                   onChange={this._handleInput('user_password')}
@@ -116,6 +156,8 @@ class SignUpBtnDlg extends React.Component<P, S> {
                   id="confirm-password"
                   label="Confirm Password"
                   type="password"
+                  error={this.state.password_error != null}
+                  helperText={this.state.password_error}
                   fullWidth
                   value={this.state.user_confirm_pass}
                   onChange={this._handleInput('user_confirm_pass')}
