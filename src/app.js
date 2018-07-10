@@ -63,29 +63,55 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-app.use('/auth', auth);
-app.use(
-  '/api/graphql',
-  // graphqhlHTTP({
-  //   schema: Schema,
-  //   graphiql: true,
-  //   pretty: true,
-  // })
-  graphqhlHTTP(req => {
-    const context = {
-      user: req.user ? req.user : null,
-      loaders: Loaders.nodeLoaders(req.user ? req.user.id : null),
-      req: req,
-      db,
-    };
-    return {
-      schema: Schema,
-      graphiql: process.env.NODE_ENV === 'production' ? false : true,
-      context,
-      pretty: true,
-    };
-  })
-);
+// // if (process.env.NODE_ENV === 'production') {
+// //   function formatError(error) {
+// //     let message = null;
+// //     if (typeof JSON.parse(error.message) === 'object')
+// //       message = JSON.parse(error.message);
+// //     else message = error.message;
+// //     return {
+// //       message,
+// //     };
+// //   }
+// // } else {
+// //   function formatError(error) {
+// //     let message = null;
+// //     if (typeof JSON.parse(error.message) === 'object')
+// //       message = JSON.parse(error.message);
+// //     else message = error.message;
+// //     return {
+// //       message,
+// //       locations: error.locations,
+// //       path: error.path,
+// //       details: error.originalError.details,
+// //     };
+// //   }
+// // }
+
+// app.use('/auth', auth);
+// app.use(
+//   '/api/graphql',
+//   // graphqhlHTTP({
+//   //   schema: Schema,
+//   //   graphiql: true,
+//   //   pretty: true,
+//   // })
+//   graphqhlHTTP(req => {
+//     const context = {
+//       user: req.user ? req.user : null,
+//       loaders: Loaders.nodeLoaders(req.user ? req.user.id : null),
+//       req: req,
+//       db,
+//     };
+//     return {
+//       schema: Schema,
+//       graphiql: process.env.NODE_ENV === 'production' ? false : true,
+//       context,
+//       pretty: true,
+//       // formatError: formatError,
+//     };
+//   })
+// );
 app.use('/', html);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
