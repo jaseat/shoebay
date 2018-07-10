@@ -79,6 +79,7 @@ if (process.env.NODE_ENV === 'production') {
   }
 } else {
   function formatError(error) {
+    console.log(error);
     let message = null;
     if (error.message[0] === '[') message = JSON.parse(error.message);
     else message = error.message;

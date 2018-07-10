@@ -37,6 +37,7 @@ class LoginBtnDlg extends React.Component<P, S> {
     is_btn_active: false,
     user_email: '',
     user_password: '',
+    login_error: null,
   };
 
   _handleOpenDialog = (): void => {
@@ -72,7 +73,7 @@ class LoginBtnDlg extends React.Component<P, S> {
         this.props.userLogin(id);
       })
       .catch(err => {
-        console.log(err);
+        this.setState({ login_error: 'is ' + err[0].message });
       });
   };
 
@@ -88,7 +89,9 @@ class LoginBtnDlg extends React.Component<P, S> {
           keepMounted
           onClose={this._handleCloseDialog}
         >
-          <DialogTitle id="login-dialog">Log In</DialogTitle>
+          <DialogTitle id="login-dialog">
+            Log In {this.state.login_error}
+          </DialogTitle>
           <DialogContent>
             <Grid container spacing={8} alignItems="flex-end">
               <Grid item xs={1}>
