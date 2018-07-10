@@ -26,6 +26,8 @@ const NodeInterface = new GraphQLInterfaceType({
         return UserType;
       case db.Article.getName():
         return ArticleType;
+      case db.Comment.getName():
+        return CommentType;
       default:
         throw new Error('Undefined node type');
     }
@@ -106,34 +108,103 @@ const ArticleType = new GraphQLObjectType({
   name: 'Article',
   interfaces: [NodeInterface],
   description: 'Articles for the blog.',
+  fields: () => {
+    return {
+      id: {
+        type: new GraphQLNonNull(GraphQLID),
+        description: 'Article ID.',
+        resolve: resolveId,
+      },
+      title: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'Article title.',
+      },
+      text: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'Article text.',
+      },
+      author: {
+        type: new GraphQLNonNull(UserType),
+        description: 'Article author.',
+        resolve: (source, args, context) => {
+          return context.loaders.user.load(source.UserId);
+        },
+      },
+      comments: {
+        args: {
+          first: { type: GraphQLInt },
+          after: { type: GraphQLString },
+        },
+        type: new GraphQLNonNull(CommentConnectionType),
+        description: 'Article comments.',
+        resolve: (source, args, context) => {
+          return resolvers
+            .getArticleComments(source, args, context)
+            .then(({ rows, pageInfo }) => {
+              const edges = rows.map(row => {
+                return {
+                  node: row,
+                  cursor: row.__cursor,
+                };
+              });
+              return {
+                edges,
+                pageInfo,
+              };
+            });
+        },
+      },
+      createdAt: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'Article creation date.',
+      },
+      updatedAt: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'Article last edit date.',
+      },
+    };
+  },
+});
+
+const CommentType = new GraphQLObjectType({
+  name: 'Comment',
+  interfaces: [NodeInterface],
+  description: 'Comment for an article.',
   fields: {
     id: {
       type: new GraphQLNonNull(GraphQLID),
-      description: 'Article ID.',
+      description: 'Comment ID.',
       resolve: resolveId,
     },
     title: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'Article title.',
+      description: 'Comment title.',
     },
     text: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'Article text.',
+      description: 'Comment text.',
     },
     author: {
       type: new GraphQLNonNull(UserType),
-      description: 'Article author.',
+      description: 'Comment author.',
       resolve: (source, args, context) => {
         return context.loaders.user.load(source.UserId);
       },
     },
+    article: {
+      type: new GraphQLNonNull(ArticleType),
+      description: 'Article comment is attatched to.',
+      resolve: (source, args, context) => {
+        return context.loaders.article.load(source.ArticleId);
+      },
+    },
     createdAt: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'Article creation date.',
+      description: 'Comment creation date.',
     },
     updatedAt: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'Article last edit date.',
+      description: 'Comment last edit date.',
     },
   },
 });
@@ -177,6 +248,20 @@ const ArticleEdgeType = new GraphQLObjectType({
   },
 });
 
+const CommentEdgeType = new GraphQLObjectType({
+  name: 'CommentEdge',
+  fields: () => {
+    return {
+      cursor: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      node: {
+        type: new GraphQLNonNull(CommentType),
+      },
+    };
+  },
+});
+
 const ArticleConnectionType = new GraphQLObjectType({
   name: 'ArticleConnection',
   fields: {
@@ -185,6 +270,18 @@ const ArticleConnectionType = new GraphQLObjectType({
     },
     edges: {
       type: new GraphQLList(ArticleEdgeType),
+    },
+  },
+});
+
+const CommentConnectionType = new GraphQLObjectType({
+  name: 'CommentConnection',
+  fields: {
+    pageInfo: {
+      type: new GraphQLNonNull(PageInfoType),
+    },
+    edges: {
+      type: new GraphQLList(CommentEdgeType),
     },
   },
 });
@@ -247,5 +344,6 @@ module.exports = {
   ProductType,
   ArticleType,
   ArticleConnectionType,
+  CommentType,
   SearchType,
 };

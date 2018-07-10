@@ -84,7 +84,7 @@ module.exports.createUser = (
  * @param {object} user The currently logged-in user.
  * @return The new article.
  */
-module.exports.createArticle = (db, newArticle, user) => {
+module.exports.createArticle = (db, newArticle, user, article) => {
   if (!user || user.privilege !== 'reviewer') return new Error('Unauthorized');
   const config = { ...newArticle, UserId: user.id };
   return db.Article.create(config)
@@ -92,6 +92,25 @@ module.exports.createArticle = (db, newArticle, user) => {
     .then(article => {
       article.__tableName = 'article';
       return article;
+    })
+    .catch(err => {
+      const errors = err.errors.map(e => e.message);
+      throw new Error(JSON.stringify(errors));
+    });
+};
+
+module.exports.createComment = (db, newComment, user) => {
+  if (!user) return new Error('Unauthorized');
+  const config = {
+    ...newComment,
+    UserId: user.id,
+    ArticleId: newComment.articleId,
+  };
+  return db.Comment.create(config)
+    .then(comment => comment.dataValues)
+    .then(comment => {
+      comment.__tableName = 'comment';
+      return comment;
     })
     .catch(err => {
       const errors = err.errors.map(e => e.message);
@@ -110,23 +129,23 @@ module.exports.shapeSearch = points => {
   return null;
 };
 
-module.exports.getRecentArticles = (source, args, context) => {
+const getConnection = (source, args, context, table, where) => {
   let { after, first } = args;
-  let id, createdAt;
   let options = {};
   if (!first) first = 5;
   options.limit = first + 1;
   if (after) {
     options.where = {
       createdAt: {
-        $gt: new Date(parseInt(after)).toISOString(),
+        $gt: new Date(parseInt(after)),
       },
     };
   }
-  return context.db.Article.findAll(options).then(allRows => {
+  options.where = { ...options.where, ...where };
+  return table.findAll(options).then(allRows => {
     const rows = allRows.slice(0, first);
     rows.forEach(row => {
-      row.__tableName = context.db.Article.getName();
+      row.__tableName = table.getName();
       row.__cursor = row.createdAt.getTime();
     });
     const hasNextPage = allRows.length > first;
@@ -143,4 +162,16 @@ module.exports.getRecentArticles = (source, args, context) => {
     }
     return { rows, pageInfo };
   });
+};
+
+module.exports.getRecentArticles = (source, args, context) => {
+  return getConnection(source, args, context, context.db.Article);
+};
+
+module.exports.getArticleComments = (source, args, context) => {
+  const ArticleId = source.id;
+  const where = {
+    ArticleId,
+  };
+  return getConnection(source, args, context, context.db.Comment, where);
 };

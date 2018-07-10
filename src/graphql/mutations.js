@@ -8,11 +8,17 @@ const {
   GraphQLList,
   GraphQLInputObjectType,
 } = require('graphql');
-const { NodeInterface, UserType, ArticleType } = require('./types');
+const {
+  NodeInterface,
+  UserType,
+  ArticleType,
+  CommentType,
+} = require('./types');
 const {
   UserInputType,
   PointInputType,
   ArticleInputType,
+  CommentInputType,
 } = require('./input-types');
 const resolvers = require('./resolvers');
 
@@ -42,7 +48,21 @@ const CreateArticleMutation = {
   },
 };
 
+const CreateCommentMutation = {
+  createComment: {
+    description: 'Create a new comment.',
+    type: CommentType,
+    args: {
+      input: { type: new GraphQLNonNull(CommentInputType) },
+    },
+    resolve(source, args, context) {
+      return resolvers.createComment(context.db, args.input, context.user);
+    },
+  },
+};
+
 module.exports = {
   ...CreateUserMutation,
   ...CreateArticleMutation,
+  ...CreateCommentMutation,
 };

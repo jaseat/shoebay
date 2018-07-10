@@ -32,5 +32,6 @@ module.exports.nodeLoaders = authToken => {
   return {
     user: createNodeLoader(db.User),
     article: createNodeLoader(db.Article),
+    comment: createNodeLoader(db.comment),
   };
 };
