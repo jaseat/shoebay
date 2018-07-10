@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
+import { connect } from 'react-redux';
 
 const plcUrl =
   'http://via.placeholder.com/400x300?text=*.jpeg *.jpg *.png *.bmp';
@@ -48,26 +49,8 @@ class UploadImage extends React.Component<P, S> {
           return response.json();
         })
         .then(data => {
-          console.log('phraze', data);
-
-          fetch(`/product/search`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ department: 'WOMEN', keyword: data }),
-          })
-            .then(resp => {
-              return resp.json();
-            })
-            .then(amazondata => {
-              console.log(amazondata);
-              this.props.setResponse(amazondata);
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          console.log('query:', data);
+          this.getItems(data);
         })
         .catch(err => {
           console.log(err);
@@ -77,9 +60,35 @@ class UploadImage extends React.Component<P, S> {
     }
   };
 
+  getItems = query => {
+    var body = { ...this.props.filters, keyword: query };
+    fetch(`/product/search`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(resp => {
+        return resp.json();
+      })
+      .then(amazondata => {
+        this.props.setResponse(amazondata);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
     return (
-      <Grid container>
+      <Grid
+        container
+        justify="space-between"
+        alignItems="flex-start"
+        spacing={8}
+      >
         <Grid item xs={12}>
           {this.state.src ? (
             <img
@@ -122,4 +131,6 @@ class UploadImage extends React.Component<P, S> {
   }
 }
 
-export default UploadImage;
+export default connect(state => ({
+  filters: state.filter.filters,
+}))(UploadImage);

@@ -29,11 +29,11 @@ const requestBuilder = params => {
     let nodeId = '';
     let index = '';
     switch (params.department) {
-      case 'MEN':
+      case 'Men':
         index = 'FashionMen';
         nodeId = '679255011';
         break;
-      case 'WOMEN':
+      case 'Women':
         index = 'FashionWomen';
         nodeId = '679337011';
         break;

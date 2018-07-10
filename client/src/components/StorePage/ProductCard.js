@@ -50,17 +50,17 @@ class ProductCard extends React.Component<P, S> {
         mountOnEnter
         unmountOnExit
       >
-        <Card style={{ maxWidth: 400 }}>
+        <Card style={{ maxWidth: 300 }}>
           <CardMedia
             image={this.state.src}
             style={{
               height: 0,
               maxHeight: 200,
-              paddingTop: '56.25%',
+              paddingTop: '80.25%',
             }}
           />
           <CardContent>
-            <Typography variant="body2">{this.props.title}</Typography>
+            <Typography variant="body1">{this.props.title}</Typography>
           </CardContent>
           <CardActions>
             <Button
