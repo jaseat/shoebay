@@ -33,9 +33,6 @@ const TitleBar = (props: Props) => {
                 <Button variant="flat">
                   <PureIcon iconType="Blog" />Blog
                 </Button>
-                <Button variant="flat">
-                  <PureIcon iconType="StarCalendar" />Coming Soon
-                </Button>
                 {props.userId !== null ? (
                   <UserMenu />
                 ) : (

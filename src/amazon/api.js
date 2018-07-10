@@ -28,8 +28,9 @@ const requestBuilder = params => {
   return new Promise((resolve, reject) => {
     let nodeId = '';
     let index = '';
+    var { filters, page } = params;
     //values from amazon api docs to narrow down search
-    switch (params.department) {
+    switch (filters.department) {
       case 'Men':
         index = 'FashionMen';
         nodeId = '679255011';
@@ -40,39 +41,40 @@ const requestBuilder = params => {
         break;
       default:
         index = 'Fashion';
-        nodeId = '7141124011';
+        nodeId = '7141123011';
         break;
     }
-    delete params.department;
+    delete filters.department;
 
-    let category = params.category || '';
-    delete params.category;
+    let category = filters.category || '';
+    delete filters.category;
 
-    let maxPrice = params.maxPrice || '';
-    delete params.maxPrice;
-    let minPrice = params.minPrice || '';
-    delete params.minPrice;
-    let page = params.page || 1;
-    delete params.page;
+    let maxPrice = filters.maxPrice || '';
+    delete filters.maxPrice;
+    let minPrice = filters.minPrice || '';
+    delete filters.minPrice;
 
     let keywords = '';
+    //cuz amazon doesn't have browse node only for shoes
+    if (index == 'Fashion') keywords += 'shoes ';
     //all other filters will be part of keywords
-    for (key in params) {
-      keywords += params[key] + ' ';
+    for (key in filters) {
+      keywords += filters[key] + ' ';
     }
-
+    console.log(keywords);
+    console.log(page);
     client
       .itemSearch({
-        condition: 'New', //looking only for new
+        Condition: 'New', //looking only for new
         MinimumPrice: minPrice,
         MaximumPrice: maxPrice,
         searchIndex: index,
         browseNode: nodeId,
         Title: category, //here goes category
-        Keywords: keywords, //width size and color can be here
-        responseGroup: 'ItemAttributes,Offers',
+        keywords: keywords, //width size and color can be here
+        responseGroup: 'Small,OfferSummary',
         itemPage: page,
-        availability: 'Available',
+        Availability: 'Available',
       })
       .then(function(results) {
         //return clean object with only needed fields
@@ -83,7 +85,7 @@ const requestBuilder = params => {
             parent_asin: item.ParentASIN[0],
             url: item.DetailPageURL[0],
             title: item.ItemAttributes[0].Title[0],
-            price: item.ItemAttributes[0].ListPrice[0].FormattedPrice[0],
+            price: item.OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
           });
         });
         resolve(generateResultArr);

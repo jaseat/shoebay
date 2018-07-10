@@ -1,7 +1,8 @@
 //core functions that make calls to Vision API and return promises
 //detect labbes, and websearches
 //takes one argument image in base64 encoding
-//the response provided is an array of objects with keys (etc descritption, ratio)
+//LABEL - the response provided is an array of objects with keys (etc descritption, ratio)
+//WEB - response is a single string
 
 function detect(base64img, method) {
   // [BEGIN vision_detection]
@@ -41,10 +42,10 @@ function detect(base64img, method) {
         // }
         //otherwise everything is cool returning object to work with
         var annotations = null;
-
         switch (method) {
           case 'WEB':
-            annotations = parse.responses[0].webDetection.bestGuessLabels;
+            annotations =
+              parse.responses[0].webDetection.bestGuessLabels[0].label;
             break;
           case 'LABEL':
             annotations = parse.responses[0].labelAnnotations;
