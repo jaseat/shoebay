@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
           len: [1],
         },
       },
-      brand: {
+      department: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -24,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
           len: [1],
         },
       },
+      size: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      width: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       color: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -31,12 +39,8 @@ module.exports = (sequelize, DataTypes) => {
           len: [1],
         },
       },
-      size: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       price: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
     },

@@ -1,3 +1,5 @@
+if (process.env.NODE_ENV !== 'production') process.title = 'myApp';
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -16,6 +18,7 @@ const { Schema } = require('./graphql');
 //database
 const db = require('./db');
 const sequelize = require('./db/config/sequelize');
+const Loaders = require('./dataloader/loaders');
 
 const myStore = new SequelizeStore({
   db: sequelize,
@@ -75,11 +78,17 @@ app.use(
   // })
   graphqhlHTTP(req => {
     const context = {
-      user: 'user:' + (req.user ? req.user.id : 'null'),
-      req,
+      user: req.user ? req.user : null,
+      loaders: Loaders.nodeLoaders(req.user ? req.user.id : null),
+      req: req,
       db,
     };
-    return { schema: Schema, graphiql: true, context, pretty: true };
+    return {
+      schema: Schema,
+      graphiql: process.env.NODE_ENV === 'production' ? false : true,
+      context,
+      pretty: true,
+    };
   })
 );
 app.use('/', html);

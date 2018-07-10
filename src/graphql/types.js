@@ -2,6 +2,8 @@ const {
   GraphQLInterfaceType,
   GraphQLObjectType,
   GraphQLID,
+  GraphQLInt,
+  GraphQLFloat,
   GraphQLString,
   GraphQLNonNull,
   GraphQLList,
@@ -30,6 +32,11 @@ const resolveId = source => {
   return db.dbIdToNodeId(source.id, source.__tableName);
 };
 
+const resolveProtected = (source, args, context, { fieldName }) => {
+  if (context.user && context.user.id === source.id) return source[fieldName];
+  else return 'Unauthorized';
+};
+
 const UserType = new GraphQLObjectType({
   name: 'User',
   interfaces: [NodeInterface],
@@ -38,50 +45,93 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLID),
       resolve: resolveId,
     },
-    firstName: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    lastName: {
+    username: {
       type: new GraphQLNonNull(GraphQLString),
     },
     email: {
       type: new GraphQLNonNull(GraphQLString),
+      resolve: resolveProtected,
     },
     paymentMethod: {
       type: GraphQLString,
+      resolve: resolveProtected,
     },
-    footImg: {
+    footShape: {
       type: GraphQLString,
+      resolve: resolveProtected,
     },
   },
 });
 
-const UserInputType = new GraphQLInputObjectType({
-  name: 'UserInput',
+const ProductType = new GraphQLObjectType({
+  name: 'Product',
+  interfaces: [NodeInterface],
   fields: {
-    firstName: {
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: resolveId,
+    },
+    name: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    lastName: {
+    departhment: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    email: {
+    category: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    password: {
+    size: {
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+    width: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    paymentMethod: {
-      type: GraphQLString,
+    color: {
+      type: new GraphQLNonNull(GraphQLString),
     },
-    footImg: {
-      type: GraphQLString,
+    price: {
+      type: new GraphQLNonNull(GraphQLFloat),
+    },
+    similarity: {
+      type: GraphQLFloat,
     },
   },
 });
+
+// const SearchInterface = new GraphQLInterfaceType({
+//   name: 'SearchInterface',
+//   fields: {
+
+//   }
+// })
+
+// const SearchType = new GraphQLObjectType({
+//   name: 'Search',
+//   description: 'Search for products',
+//   fields: {
+//     byShape: {
+//       args: {
+//         input: { type: new GraphQLNonNull(ShapeSearchInputType) },
+//       },
+//       type: new GraphQLNonNull(ProductType),
+//     },
+//     byImage: {
+//       args: {
+//         input: { type: new GraphQLNonNull(ImageSearchInputType) },
+//       },
+//       type: new GraphQLNonNull(ProductType),
+//     },
+//     byText: {
+//       args: {
+//         input: { type: new GraphQLNonNull(TextSearcgInputType) },
+//       },
+//       type: new GraphQLNonNull(ProductType),
+//     },
+//   },
+// });
 
 module.exports = {
   NodeInterface,
   UserType,
-  UserInputType,
+  ProductType,
 };

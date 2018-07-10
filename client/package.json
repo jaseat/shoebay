@@ -19,12 +19,16 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "cross-env NODE_ENV=test mocha --require test/init.js --compilers js:babel-core/register",
     "eject": "react-scripts eject",
     "flow": "flow check"
   },
   "proxy": "http://localhost:3001/",
   "devDependencies": {
-    "flow-bin": "^0.75.0"
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "flow-bin": "^0.75.0",
+    "isomorphic-fetch": "^2.2.1"
   }
 }
