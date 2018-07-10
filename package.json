@@ -10,6 +10,7 @@
     "dev-prepare": "cross-env NODE_ENV=development yarn prepare-db",
     "test-prepare": "cross-env NODE_ENV=test yarn prepare-db",
     "production-prepare": "cross-env NODE_ENV=production yarn prepare-db",
+    "heroku-db": "sequelize db:undo:all && sequelize db:migrate&sequelize db:seed:all",
     "install": "cd client && yarn",
     "server": "nodemon src/app.js",
     "client": "cd client && yarn start",
@@ -25,7 +26,7 @@
     "test:server": "cross-env NODE_ENV=test start-server-and-test start:test http://localhost:3001 test-server",
     "test-server": "mocha",
     "test-client": "cd client && yarn test",
-    "heroku-postbuild": "yarn production-prepare && cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
+    "heroku-postbuild": "yarn heroku-db && cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "dependencies": {
     "amazon-product-api": "^0.4.4",
