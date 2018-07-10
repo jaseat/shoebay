@@ -33,7 +33,7 @@ const logIn = (email, password, req) => {
       if (!user) reject('Unauthorized');
       req.logIn(user, err => {
         if (err) return reject(err);
-        return resolve(user.id);
+        return resolve('user:' + user.id);
       });
     })(req);
   });
@@ -67,6 +67,7 @@ module.exports.createUser = (
     .then(user => user.dataValues)
     .then(user => {
       user.__tableName = 'user';
+      user.id = db.User.getName() + user.id;
       return logIn(email, password, req).then(res => {
         return user;
       });
@@ -91,6 +92,7 @@ module.exports.createArticle = (db, newArticle, user, article) => {
     .then(article => article.dataValues)
     .then(article => {
       article.__tableName = 'article';
+      article.id = db.Article.getName() + article.id;
       return article;
     })
     .catch(err => {
@@ -110,6 +112,7 @@ module.exports.createComment = (db, newComment, user) => {
     .then(comment => comment.dataValues)
     .then(comment => {
       comment.__tableName = 'comment';
+      comment.id = db.Comment.getName() + comment.id;
       return comment;
     })
     .catch(err => {
