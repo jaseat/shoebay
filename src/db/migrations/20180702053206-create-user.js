@@ -34,14 +34,14 @@ module.exports = {
         values: ['user', 'reviewer', 'partner'],
         defaultValue: 'user',
       },
-      PrivilegeId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Privileges',
-          key: 'id',
-        },
-        onDelete: 'SET NULL',
-      },
+      // PrivilegeId: {
+      //   type: Sequelize.INTEGER,
+      //   references: {
+      //     model: 'Privileges',
+      //     key: 'id',
+      //   },
+      //   onDelete: 'SET NULL',
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       text: {
         type: DataTypes.STRING,
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       images: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {}
@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
   Article.associate = function(models) {
     Article.belongsTo(models.User);
     Article.hasMany(models.Comment);
+  };
+  Article.getName = function() {
+    return 'article';
   };
   return Article;
 };
