@@ -1,4 +1,5 @@
 const passport = require('../auth');
+const GraphQLError = require('graphql/error');
 
 /**
  * Get node by id.
@@ -45,7 +46,6 @@ module.exports.logIn = logIn;
  * @param {object} db The current database context.
  * @param {object} newUser The new user.
  * @param {string} newUser.username User name.
- * @param {string} newUser.lastName
  * @param {string} newUser.email
  * @param {string} newUser.paymentMethod
  * @param {string} newUser.footShape
@@ -70,6 +70,10 @@ module.exports.createUser = (
       return logIn(email, password, req).then(res => {
         return user;
       });
+    })
+    .catch(err => {
+      const errors = err.errors.map(e => e.message);
+      throw new Error(JSON.stringify(errors));
     });
 };
 

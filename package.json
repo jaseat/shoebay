@@ -17,7 +17,7 @@
     "production-test": "set NODE_ENV=production&&nodemon src/app.js",
     "build": "cd client && yarn build",
     "start": "node src/app.js",
-    "start:test": "cross-env NODE_ENV=test yarn start",
+    "start:test": "cross-env NODE_ENV=test yarn server",
     "pretest": "cross-env-shell NODE_ENV=test yarn test-prepare",
     "test": "start-server-and-test begin-test-server http://localhost:3001 test:run",
     "test:run": "cross-env NODE_ENV=test mocha --exit && yarn test-client",
