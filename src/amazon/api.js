@@ -80,18 +80,28 @@ const requestBuilder = params => {
         //return clean object with only needed fields
         var generateResultArr = [];
         results.map(item => {
-          generateResultArr.push({
-            asin: item.ASIN[0],
-            parent_asin: item.ParentASIN[0],
-            url: item.DetailPageURL[0],
-            title: item.ItemAttributes[0].Title[0],
-            price: item.OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
-          });
+          if (
+            item.ASIN &&
+            item.DetailPageURL &&
+            item.ItemAttributes &&
+            item.OfferSummary
+          )
+            generateResultArr.push({
+              asin: item.ASIN[0],
+              // parent_asin: item.ParentASIN[0],
+              url: item.DetailPageURL[0],
+              title: item.ItemAttributes[0].Title[0],
+              price: item.OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
+            });
         });
         resolve(generateResultArr);
       })
       .catch(function(err) {
+        console.log(err);
         reject(err[0].Error);
+      })
+      .catch(err => {
+        reject(err);
       });
   });
 };
