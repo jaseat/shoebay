@@ -93,6 +93,7 @@ class StorePage extends React.Component<any, S> {
 
   changePage = () => {
     if (!this.state.done) {
+      console.log('crossed the border');
       this.props.nextPage();
       this.getItems();
     }
@@ -120,18 +121,13 @@ class StorePage extends React.Component<any, S> {
           <StoreDrawerContent />
         </SideDrawer>
         <div className={this.props.classes.container}>
-          <UploadImage
-            height={300}
-            inpt_id="img-vision"
-            setResponse={this.requestProducs}
-          />
+          <UploadImage height={300} inpt_id="img-vision" />
           <Button variant="raised" onClick={this.getItems}>
             Find
           </Button>
           {this.state.response && <Grid container>{this.renderCards()}</Grid>}
-          {!this.state.loading && <Waypoint onEnter={this.changePage} />}
-          {this.state.done && (
-            <Typography variant="display1">THE END</Typography>
+          {!this.state.loading && (
+            <Waypoint onEnter={this.changePage} bottomOffset="-80%" />
           )}
         </div>
       </div>
