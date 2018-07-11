@@ -72,7 +72,7 @@ class UploadImage extends React.Component<P, S> {
           <img
             src={this.state.src || plcUrl}
             alt="user-img"
-            style={{ height: this.props.height }}
+            style={{ height: this.props.height, width: '100%' }}
             onLoad={this.handleUpload}
           />
         </Grid>

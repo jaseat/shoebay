@@ -9,6 +9,7 @@ import FilterBar from '../FilterBar';
 import StoreDrawerContent from '../StoreDrawerContent';
 import UploadImage from './UploadImage';
 import ProductCard from './ProductCard';
+import SearchContainer from './SearchContainer';
 
 import { Grid, Typography } from '@material-ui/core';
 //
@@ -121,11 +122,30 @@ class StorePage extends React.Component<any, S> {
           <StoreDrawerContent />
         </SideDrawer>
         <div className={this.props.classes.container}>
-          <UploadImage height={300} inpt_id="img-vision" />
-          <Button variant="raised" onClick={this.getItems}>
-            Find
-          </Button>
-          {this.state.response && <Grid container>{this.renderCards()}</Grid>}
+          <SearchContainer>
+            <div
+              style={{
+                width: '400px',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <UploadImage height={300} inpt_id="img-vision" />
+              <Button
+                color="secondary"
+                variant="raised"
+                onClick={this.getItems}
+              >
+                Find
+              </Button>
+            </div>
+          </SearchContainer>
+
+          {this.state.response && (
+            <Grid style={{ marginTop: 24 }} container>
+              {this.renderCards()}
+            </Grid>
+          )}
           {!this.state.loading && (
             <Waypoint onEnter={this.changePage} bottomOffset="-80%" />
           )}

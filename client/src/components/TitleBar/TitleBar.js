@@ -20,9 +20,7 @@ const TitleBar = (props: Props) => {
     <AppBar position="sticky" color="primary">
       <ToolBar>
         <Grid container alignItems="center">
-          <Grid item md={6} xs={11}>
-            <LogoSvg />
-          </Grid>
+          <Grid item md={6} xs={11} />
 
           <Hidden smDown implementation="js">
             <Grid item md={6} xs={11}>
