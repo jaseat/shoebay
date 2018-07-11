@@ -44,16 +44,16 @@ class ProductCard extends React.Component<P, S> {
       return null;
     }
     return (
-      <Grid item xs={3}>
-        <Card style={{ maxWidth: 250 }}>
-          <CardMedia
-            image={
+      <Grid item xs={4}>
+        <Card style={{ maxWidth: 300 }}>
+          <img
+            src={
               this.state.src ||
               `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
             }
             style={{
-              height: 0,
-              paddingTop: '90.25%',
+              height: 250,
+              margin: 'auto',
             }}
           />
 
