@@ -11,6 +11,8 @@ import PhoneMenu from './PhoneMenu';
 import PureIcon from '../../style/Icons';
 import LogoSvg from '../../style/LogoSvg';
 
+import { Link } from 'react-router-dom';
+
 type Props = {
   userId: null | string,
 };
@@ -25,12 +27,16 @@ const TitleBar = (props: Props) => {
           <Hidden smDown implementation="js">
             <Grid item md={6} xs={11}>
               <Typography align="right" variant="button">
-                <Button variant="flat">
-                  <PureIcon iconType="Store" />Store
-                </Button>
-                <Button variant="flat">
-                  <PureIcon iconType="Blog" />Blog
-                </Button>
+                <Link to="/">
+                  <Button variant="flat">
+                    <PureIcon iconType="Store" />Store
+                  </Button>
+                </Link>
+                <Link to="/blog">
+                  <Button variant="flat">
+                    <PureIcon iconType="Blog" />Blog
+                  </Button>
+                </Link>
                 {props.userId !== null ? (
                   <UserMenu />
                 ) : (

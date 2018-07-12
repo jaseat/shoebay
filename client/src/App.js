@@ -9,7 +9,9 @@ import StorePage from './components/StorePage';
 import BlogPage from './components/BlogPage';
 
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
+//route
 import { Switch, Route } from 'react-router-dom';
 
 type P = {
@@ -31,4 +33,6 @@ class App extends Component<P> {
   }
 }
 
-export default connect(state => ({ darkTheme: state.theme.darkTheme }))(App);
+export default withRouter(
+  connect(state => ({ darkTheme: state.theme.darkTheme }))(App)
+);
