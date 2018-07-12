@@ -58,6 +58,10 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       resolve: resolveProtected,
     },
+    privilege: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: resolveProtected,
+    },
     paymentMethod: {
       type: GraphQLString,
       resolve: resolveProtected,
