@@ -42,8 +42,6 @@ app.use(
     secret: 'should_be_in_env_when_dployed_on_heroku', // session secret
   })
 );
-myStore.sync();
-
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 

@@ -4,19 +4,19 @@ import BlogForm from './BlogForm';
 
 import { Button, Dialog, DialogContent } from '@material-ui/core';
 
-class BlogList extends Component {
+class BlogMain extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: [],
       blogDialogOpen: false,
     };
   }
   handleOpen = () => {
     this.setState({ blogDialogOpen: true });
   };
-  handleClose = () => {
+  handleClose = submit => {
     this.setState({ blogDialogOpen: false });
+    if (submit) window.location.reload();
   };
   render() {
     return (
@@ -35,4 +35,4 @@ class BlogList extends Component {
   }
 }
 
-export default BlogList;
+export default BlogMain;

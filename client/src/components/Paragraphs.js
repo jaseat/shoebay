@@ -7,9 +7,10 @@ const Paragraphs = props => {
     <React.Fragment>
       {paragraphs.map((p, idx) => {
         return (
-          <React.Fragment>
+          <React.Fragment key={idx}>
             {/\S/.test(p) && <p>{p}</p>}
-            {idx < paragraphs.length - 1 && <br />}
+            {idx < paragraphs.length - 2 &&
+              !/\S/.test(paragraphs[idx + 1]) && <br />}
           </React.Fragment>
         );
       })}

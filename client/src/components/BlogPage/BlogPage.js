@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import BlogList from './BlogList';
+import BlogMain from './BlogMain';
 import BlogArticlePage from './BlogArticlePage';
 
 //route
@@ -10,7 +10,7 @@ class BlogPage extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path="/blog" component={BlogList} />
+        <Route exact path="/blog" component={BlogMain} />
         <Route path="/blog/:id" component={BlogArticlePage} />
       </Switch>
     );

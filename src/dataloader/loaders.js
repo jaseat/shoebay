@@ -24,7 +24,8 @@ const createNodeLoader = table => {
         });
         return rows;
       })
-      .then(rows => insertNullInEmpty(rows, ids));
+      .then(rows => ids.map(i => rows.find(r => r.id === parseInt(i))));
+    // .then(rows => insertNullInEmpty(rows, ids));
   });
 };
 

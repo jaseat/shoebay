@@ -339,6 +339,7 @@ const SearchType = new GraphQLObjectType({
                 cursor: row.__cursor,
               };
             });
+            console.log(pageInfo);
             return {
               edges,
               pageInfo,

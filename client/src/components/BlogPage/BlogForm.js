@@ -20,7 +20,7 @@ class BlogForm extends Component {
     this.setState({ [name]: event.target.value });
   };
   handleClose = () => {
-    if (this.props.close) this.props.close();
+    if (this.props.close) this.props.close(false);
   };
   closeSnack = () => {
     this.setState({ snackbar: false });
@@ -33,7 +33,7 @@ class BlogForm extends Component {
     postArticle(newArticle)
       .then(a => {
         console.log(a);
-        if (this.props.close) this.props.close();
+        if (this.props.close) this.props.close(true);
       })
       .catch(err => {
         console.log(err);

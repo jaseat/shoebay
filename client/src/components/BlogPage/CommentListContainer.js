@@ -6,8 +6,14 @@ class CommentListContainer extends Component {
     return (
       <div>
         <h2>Comments</h2>
-        {this.props.comments.map(a => (
-          <Comment title={a.title} text={a.text} author={a.author} />
+        {this.props.comments.map((a, idx) => (
+          <Comment
+            key={idx}
+            title={a.title}
+            text={a.text}
+            author={a.author}
+            createdAt={a.createdAt}
+          />
         ))}
       </div>
     );
