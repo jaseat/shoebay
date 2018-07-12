@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, FormControlLabel, Checkbox } from '@material-ui/core';
 import { addFilter } from '../../actions/filter';
 import { connect } from 'react-redux';
 //types
 import type { FILTER_ACTION } from '../../@flow-types';
 
 const plcUrl =
-  'http://via.placeholder.com/400x300?text=*.jpeg *.jpg *.png *.bmp';
+  'http://via.placeholder.com/300x300?text=*.jpeg *.jpg *.png *.bmp';
 
 type P = {
   inpt_id: string,
@@ -15,11 +15,19 @@ type P = {
 };
 type S = {
   src: null | string,
+  checked: boolean,
 };
 
 class UploadImage extends React.Component<P, S> {
   state = {
     src: null,
+    checked: false,
+  };
+
+  handleCheckChange = () => {
+    this.setState({ checked: !this.state.checked }, () => {
+      this.handleUpload();
+    });
   };
 
   handleSubmitImg = (event: SyntheticInputEvent<HTMLInputElement>) => {
@@ -37,9 +45,18 @@ class UploadImage extends React.Component<P, S> {
   };
 
   handleUpload = () => {
-    if (this.state.src !== null) {
-      var base64 = this.state.src.replace(/^data:image\/\w+;base64,/, '');
-      fetch('/vision/img', {
+    const { src, checked } = this.state;
+    if (src !== null) {
+      //this allows to use label or web detection
+      var URL = '';
+      if (checked) {
+        URL = '/vision/img/web';
+      } else {
+        URL = '/vision/img/label';
+      }
+      //this
+      var base64 = src.replace(/^data:image\/\w+;base64,/, '');
+      fetch(URL, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -51,7 +68,6 @@ class UploadImage extends React.Component<P, S> {
           return response.json();
         })
         .then(visiondata => {
-          console.log(visiondata);
           this.props.addFilter('query', visiondata);
         })
         .catch(err => {
@@ -62,35 +78,39 @@ class UploadImage extends React.Component<P, S> {
 
   render() {
     return (
-      <Grid
-        container
-        justify="space-between"
-        alignItems="flex-start"
-        spacing={8}
-      >
-        <Grid item xs={12}>
-          <img
-            src={this.state.src || plcUrl}
-            alt="user-img"
-            style={{ height: this.props.height, width: '100%' }}
-            onLoad={this.handleUpload}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <input
-            type="file"
-            accept="image/*"
-            id={this.props.inpt_id}
-            style={{ display: 'none' }}
-            onInput={this.handleSubmitImg}
-          />
-          <label htmlFor={this.props.inpt_id}>
-            <Button variant="raised" color="primary" component="span" fullWidth>
-              Upload
-            </Button>
-          </label>
-        </Grid>
-      </Grid>
+      <div>
+        <img
+          src={this.state.src || plcUrl}
+          alt="user-img"
+          style={{ height: this.props.height }}
+          onLoad={this.handleUpload}
+        />
+
+        <input
+          type="file"
+          accept="image/*"
+          id={this.props.inpt_id}
+          style={{ display: 'none' }}
+          onInput={this.handleSubmitImg}
+        />
+
+        <label htmlFor={this.props.inpt_id}>
+          <Button variant="raised" color="primary" component="span" fullWidth>
+            Upload
+          </Button>
+        </label>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={this.state.checked}
+              onChange={this.handleCheckChange}
+              value="brand"
+              color="primary"
+            />
+          }
+          label="Try to guess which brand"
+        />
+      </div>
     );
   }
 }

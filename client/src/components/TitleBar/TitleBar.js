@@ -9,7 +9,6 @@ import UserMenu from './UserMenu';
 import PhoneMenu from './PhoneMenu';
 //icons
 import PureIcon from '../../style/Icons';
-import LogoSvg from '../../style/LogoSvg';
 
 import { Link } from 'react-router-dom';
 
@@ -27,16 +26,22 @@ const TitleBar = (props: Props) => {
           <Hidden smDown implementation="js">
             <Grid item md={6} xs={11}>
               <Typography align="right" variant="button">
-                <Link to="/">
-                  <Button variant="flat">
-                    <PureIcon iconType="Store" />Store
-                  </Button>
-                </Link>
-                <Link to="/blog">
-                  <Button variant="flat">
-                    <PureIcon iconType="Blog" />Blog
-                  </Button>
-                </Link>
+                <Button
+                  variant="flat"
+                  component={props => {
+                    return <Link to="/" {...props} />;
+                  }}
+                >
+                  <PureIcon iconType="Store" />Store
+                </Button>
+                <Button
+                  variant="flat"
+                  component={props => {
+                    return <Link to="/blog" {...props} />;
+                  }}
+                >
+                  <PureIcon iconType="Blog" />Blog
+                </Button>
                 {props.userId !== null ? (
                   <UserMenu />
                 ) : (

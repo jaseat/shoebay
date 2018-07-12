@@ -13,7 +13,7 @@ export default function(state: S = initialState, action: PAGE_ACTION): STATE {
     case types.NEXT_PAGE:
       return Object.assign({}, state, { page: state.page + 1 });
     case types.REFRESH_PAGE:
-      return state;
+      return Object.assign({}, state, { page: 1 });
     default:
       return state;
   }

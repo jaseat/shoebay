@@ -1,10 +1,10 @@
 import * as React from 'react';
 //material-ui
 import {
-  Card,
+  Slide,
+  Paper,
   CardActions,
   CardContent,
-  CardMedia,
   Typography,
   Button,
   Grid,
@@ -13,66 +13,83 @@ import {
 import PureIcon from '../../style/Icons';
 
 type P = {
-  asin: string,
   title: string,
   aLink: string,
   price: string,
+  image: string,
+  index: number,
 };
+
 type S = {
-  src: null | string,
+  delay: number,
 };
 
-class ProductCard extends React.Component<P, S> {
+class ProductCard extends React.PureComponent<P, S> {
   state = {
-    src: null,
+    delay: 0,
   };
-
   componentDidMount() {
-    fetch(`product/search/item/${this.props.asin}`)
-      .then(resp => {
-        return resp.json();
-      })
-      .then(imgdata => {
-        this.setState({ src: imgdata });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    const { index } = this.props;
+    if (index < 10) {
+      this.setState({ delay: index * 100 });
+    }
+    this.setState({ delay: (index % 10) * 100 });
   }
   render() {
-    if (!this.state.src) {
-      return null;
-    }
     return (
-      <Grid item xs={4}>
-        <Card style={{ maxWidth: 300 }}>
-          <img
-            src={
-              this.state.src ||
-              `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
-            }
+      <Grid item xs={6} sm={4} md={3}>
+        <Slide
+          in={true}
+          direction="up"
+          mountOnEnter
+          unmountOnExit
+          style={{ transitionDelay: this.state.delay }}
+        >
+          <Paper
+            elevation={0}
             style={{
-              height: 250,
-              margin: 'auto',
+              border: '1px solid #abacad',
             }}
-          />
+          >
+            <img
+              src={
+                this.props.image ||
+                `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
+              }
+              alt="img"
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                maxHeight: 200,
+                width: 'auto',
+                margin: 'auto',
+                padding: 24,
+                display: 'block',
+              }}
+            />
 
-          <CardContent>
-            <Typography variant="body1">{this.props.title}</Typography>
-            <Typography variant="subheading">{this.props.price}</Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              variant="flat"
-              color="primary"
-              href={this.props.aLink}
-              target="_blank"
-            >
-              <PureIcon iconType="Amazon" />
-              Product Page
-            </Button>
-          </CardActions>
-        </Card>
+            <CardContent>
+              <Typography variant="body1" noWrap>
+                {this.props.title}
+              </Typography>
+              <Typography variant="subheading" color="primary" align="left">
+                {this.props.price}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                variant="flat"
+                color="primary"
+                href={this.props.aLink}
+                target="_blank"
+                fullWidth
+              >
+                <PureIcon iconType="Amazon" />
+                Product page
+              </Button>
+            </CardActions>
+          </Paper>
+        </Slide>
       </Grid>
     );
   }

@@ -1,7 +1,7 @@
-function analyze(img) {
-  const visionCore = require('./visionCore');
-  const shoesRexEx = require('./dictionary').shoes;
+const visionCore = require('./visionCore');
+const shoesRexEx = require('./dictionary').shoes;
 
+function LabelDetection(img) {
   return new Promise((resolve, reject) => {
     visionCore
       .detect(img, 'LABEL')
@@ -21,23 +21,9 @@ function analyze(img) {
             return i == allwords.indexOf(word);
           })
           .join(' ');
-        //returning final string
+        removeDoubles = removeDoubles.trim();
 
         resolve(removeDoubles);
-        //For later combine best guess
-
-        // visionCore.detect(img, 'WEB').then(resp => {
-        //   var newResponse = queryString + resp;
-        //   var removeDoubles = newResponse
-        //     .split(' ')
-        //     .filter((word, i, allwords) => {
-        //       return i == allwords.indexOf(word);
-        //     })
-        //     .join(' ');
-
-        //   var FINAL = removeDoubles.replace(shoesRexEx, '');
-        //   resolve(FINAL);
-        // });
       })
       .catch(err => {
         reject(err);
@@ -45,4 +31,26 @@ function analyze(img) {
   });
 }
 
-module.exports = analyze;
+function WebDetection(img) {
+  return new Promise((resolve, reject) => {
+    visionCore
+      .detect(img, 'WEB')
+      .then(resp => {
+        var removeDoubles = resp
+          .split(' ')
+          .filter((word, i, allwords) => {
+            return i == allwords.indexOf(word);
+          })
+          .join(' ');
+
+        var FINAL = removeDoubles.replace(shoesRexEx, '');
+        FINAL = FINAL.trim();
+        resolve(FINAL);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+
+module.exports = { LabelDetection, WebDetection };

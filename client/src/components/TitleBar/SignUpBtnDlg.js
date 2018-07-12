@@ -60,7 +60,7 @@ class SignUpBtnDlg extends React.Component<P, S> {
   _handleSignup = () => {
     // this.props.userLogin('1234');
     // this._handleCloseDialog();
-    if (this.state.user_password != this.state.user_confirm_pass)
+    if (this.state.user_password !== this.state.user_confirm_pass)
       return this.setState({ password_error: "Passwords don't match" });
     const newUser = {
       username: this.state.user_name,

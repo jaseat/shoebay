@@ -11,12 +11,7 @@ import UploadImage from './UploadImage';
 import ProductCard from './ProductCard';
 import SearchContainer from './SearchContainer';
 
-import { Grid, Typography } from '@material-ui/core';
-//
-import { connect } from 'react-redux';
-import { addFilter } from '../../actions/filter';
-import { nextPage, refreshPage } from '../../actions/page';
-import Button from '@material-ui/core/Button';
+import { Grid, Button } from '@material-ui/core';
 
 const style = theme => ({
   root: {
@@ -43,21 +38,22 @@ type S = {
 
 class StorePage extends React.Component<any, S> {
   state = {
-    loading: true,
     response: [],
+    //flag turns true if no more responses left
     done: false,
+    //flag while loading
+    loading: true,
   };
 
-  componentWillUpdate(prevProps, prevState) {
-    if (prevProps.filters !== this.props.filters) {
-      if (!prevState.done) {
-        this.props.refreshPage();
-        this.setState({ response: [], done: false });
-      }
+  componentDidUpdate(prevP) {
+    if (prevP.filters !== this.props.filters) {
+      this.props.refreshPage();
+      this.setState({ response: [], done: false, loading: false });
     }
   }
 
   getItems = () => {
+    this.setState({ loading: true });
     fetch(`/product/search`, {
       method: 'POST',
       mode: 'cors',
@@ -73,8 +69,11 @@ class StorePage extends React.Component<any, S> {
         return resp.json();
       })
       .then(amazondata => {
-        console.log(amazondata);
-        if (amazondata[0].Code === undefined) {
+        if (
+          amazondata &&
+          amazondata.done === undefined &&
+          amazondata.done !== true
+        ) {
           var current = this.state.response;
           for (let i = 0; i < amazondata.length; i++) {
             current.push(amazondata[i]);
@@ -84,7 +83,7 @@ class StorePage extends React.Component<any, S> {
             loading: false,
           });
         } else {
-          this.setState({ done: true });
+          if (amazondata.done) this.setState({ done: true });
         }
       })
       .catch(err => {
@@ -93,26 +92,28 @@ class StorePage extends React.Component<any, S> {
   };
 
   changePage = () => {
-    if (!this.state.done) {
-      console.log('crossed the border');
+    if (!this.state.done && !this.state.loading) {
       this.props.nextPage();
       this.getItems();
     }
   };
 
   renderCards = () => {
-    return this.state.response.map((item, i) => {
+    const { response } = this.state;
+    return response.map((item, i) => {
       return (
         <ProductCard
           key={item.asin + i}
+          index={i}
           title={item.title}
           aLink={item.url}
-          asin={item.asin}
+          image={item.image}
           price={item.price}
         />
       );
     });
   };
+
   render() {
     return (
       <div className={this.props.classes.root}>
@@ -123,22 +124,10 @@ class StorePage extends React.Component<any, S> {
         </SideDrawer>
         <div className={this.props.classes.container}>
           <SearchContainer>
-            <div
-              style={{
-                width: '400px',
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <UploadImage height={300} inpt_id="img-vision" />
-              <Button
-                color="secondary"
-                variant="raised"
-                onClick={this.getItems}
-              >
-                Find
-              </Button>
-            </div>
+            <UploadImage height={300} inpt_id="img-vision" />
+            <Button color="secondary" variant="raised" onClick={this.getItems}>
+              Find
+            </Button>
           </SearchContainer>
 
           {this.state.response && (
@@ -146,21 +135,11 @@ class StorePage extends React.Component<any, S> {
               {this.renderCards()}
             </Grid>
           )}
-          {!this.state.loading && (
-            <Waypoint onEnter={this.changePage} bottomOffset="-80%" />
-          )}
+          <Waypoint onEnter={this.changePage} bottomOffset="-200px" />
         </div>
       </div>
     );
   }
 }
 
-let ConnectedStorePage = connect(
-  state => ({
-    filters: state.filter.filters,
-    page: state.page.page,
-  }),
-  { addFilter, nextPage, refreshPage }
-)(StorePage);
-
-export default withStyles(style)(ConnectedStorePage);
+export default withStyles(style)(StorePage);

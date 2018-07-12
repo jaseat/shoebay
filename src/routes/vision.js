@@ -1,18 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const analyze = require('../vision');
+const { LabelDetection, WebDetection } = require('../vision');
 
-router.post('/img', (req, res) => {
-  analyze(req.body.image).then(result => {
-    res.json(result);
-  });
-  // detectLabel(req.body.image)
-  // .then(data => {
-  //   res.json(data);
-  // })
-  // .catch(err => {
-  //   res.sendStatus(503);
-  // });
+router.post('/img/label', (req, res) => {
+  LabelDetection(req.body.image)
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => console.log(err));
+});
+
+router.post('/img/web', (req, res) => {
+  WebDetection(req.body.image)
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 module.exports = router;
