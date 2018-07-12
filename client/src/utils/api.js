@@ -135,6 +135,36 @@ export const getRecentArticles = async (first = null, after = null) => {
   }
 };
 
+export const getUserArticles = async (id, first = null, after = null) => {
+  const query = `
+  query RecentArticles($first:Int = null $after:String = null){
+    node(id:"${id}"){
+      ...on User{
+        articles(first:$first,after:$after){
+          pageInfo{
+            hasNextPage
+            endCursor
+          }
+          edges{
+            cursor
+            node{
+              id
+              title
+            }
+          }
+        }
+      }
+    }
+}`;
+  try {
+    const res = await fetchQuery(query, { first, after });
+    const data = res.data.node.articles;
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const postArticle = async newArticle => {
   const query = `
   mutation PostArticle($input:ArticleInput!){
