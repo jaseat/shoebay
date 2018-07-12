@@ -113,8 +113,8 @@ app.use(
     };
   })
 );
-// app.use('/', html);
 app.use('/vision', vision);
 app.use('/product', amazon);
+app.use('/', html);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
