@@ -6,8 +6,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 //custom
 import TitleBar from './components/TitleBar';
 import StorePage from './components/StorePage';
+import BlogPage from './components/BlogPage';
 
 import { connect } from 'react-redux';
+
+import { Switch, Route } from 'react-router-dom';
 
 type P = {
   darkTheme: boolean,
@@ -19,7 +22,10 @@ class App extends Component<P> {
       <MuiThemeProvider theme={this.props.darkTheme ? ThemeDark : ThemeLight}>
         <CssBaseline />
         <TitleBar />
-        <StorePage />
+        <Switch>
+          <Route exact path="/" component={StorePage} />
+          <Route path="/blog" component={BlogPage} />
+        </Switch>
       </MuiThemeProvider>
     );
   }

@@ -154,6 +154,17 @@ const ArticleType = new GraphQLObjectType({
             });
         },
       },
+      shortText: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'Article text shortened to a max word count.',
+        resolve: source => {
+          let shortText = '';
+          if (source.text.length > 255) {
+            shortText = source.text.slice(0, 252) + '...';
+          } else shortText = source.text;
+          return shortText;
+        },
+      },
       createdAt: {
         type: new GraphQLNonNull(GraphQLString),
         description: 'Article creation date.',

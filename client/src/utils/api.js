@@ -8,7 +8,6 @@ export const fetchQuery = async (
   query: string,
   variables: ?Object
 ): Promise<Object> => {
-  const { NODE_ENV } = process.env;
   const options = {
     method: 'POST',
     body: JSON.stringify({
@@ -86,6 +85,67 @@ export const signUp = async (newUser, fields = ['']): Promise<Object> => {
   try {
     const data = await fetchQuery(query, { input: newUser });
     return data.data.createUser;
+  } catch (e) {
+    throw e;
+  }
+};
+
+// query RecentArticles(${first ? '$first:Int' : ''} ${
+//   after ? '$after:String' : ''
+// }){
+//   search{
+//     recentArticles(${first ? 'first:$first' : ''} ${
+//   after ? 'after:$after' : ''
+// }){
+
+// query RecentArticles($first:Int $after:String){
+//   search{
+//     recentArticles(first:$first,after:$after){
+
+export const getRecentArticles = async (first = null, after = null) => {
+  const query = `
+  query RecentArticles($first:Int = null $after:String = null){
+    search{
+      recentArticles(first:$first,after:$after){
+        pageInfo{
+          hasNextPage
+          endCursor
+        }
+        edges{
+          cursor
+          node{
+            author{
+              username
+            }
+            title
+            shortText
+            createdAt
+          }
+        }
+      }
+  }
+}`;
+  try {
+    const res = await fetchQuery(query, { first, after });
+    const data = res.data.search.recentArticles;
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const postArticle = async newArticle => {
+  const query = `
+  mutation PostArticle($input:ArticleInput!){
+    createArticle(input:$input){
+      id
+    }
+  }
+  `;
+  try {
+    const res = await fetchQuery(query, { input: newArticle });
+    const data = res.data.createArticle;
+    return data;
   } catch (e) {
     throw e;
   }
