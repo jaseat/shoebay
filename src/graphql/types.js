@@ -58,6 +58,10 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       resolve: resolveProtected,
     },
+    privilege: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: resolveProtected,
+    },
     paymentMethod: {
       type: GraphQLString,
       resolve: resolveProtected,
@@ -152,6 +156,17 @@ const ArticleType = new GraphQLObjectType({
                 pageInfo,
               };
             });
+        },
+      },
+      shortText: {
+        type: new GraphQLNonNull(GraphQLString),
+        description: 'Article text shortened to a max word count.',
+        resolve: source => {
+          let shortText = '';
+          if (source.text.length > 255) {
+            shortText = source.text.slice(0, 252) + '...';
+          } else shortText = source.text;
+          return shortText;
         },
       },
       createdAt: {
@@ -328,6 +343,7 @@ const SearchType = new GraphQLObjectType({
                 cursor: row.__cursor,
               };
             });
+            console.log(pageInfo);
             return {
               edges,
               pageInfo,
