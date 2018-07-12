@@ -11,7 +11,7 @@ import UploadImage from './UploadImage';
 import ProductCard from './ProductCard';
 import SearchContainer from './SearchContainer';
 
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Typography } from '@material-ui/core';
 
 const style = theme => ({
   root: {
@@ -48,7 +48,11 @@ class StorePage extends React.Component<any, S> {
   componentDidUpdate(prevP) {
     if (prevP.filters !== this.props.filters) {
       this.props.refreshPage();
-      this.setState({ response: [], done: false, loading: false });
+      this.setState({
+        response: [],
+        done: false,
+        loading: false,
+      });
     }
   }
 
@@ -125,7 +129,12 @@ class StorePage extends React.Component<any, S> {
         <div className={this.props.classes.container}>
           <SearchContainer>
             <UploadImage height={300} inpt_id="img-vision" />
-            <Button color="secondary" variant="raised" onClick={this.getItems}>
+            <Button
+              color="secondary"
+              variant="raised"
+              onClick={this.getItems}
+              size="small"
+            >
               Find
             </Button>
           </SearchContainer>
