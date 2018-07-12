@@ -29,11 +29,13 @@ class ProductCard extends React.PureComponent<P, S> {
     delay: 0,
   };
   componentDidMount() {
-    const { index } = this.props;
-    if (index < 10) {
-      this.setState({ delay: index * 100 });
-    }
-    this.setState({ delay: (index % 10) * 100 });
+    var random = Math.floor(Math.random() * 4 + 1);
+    this.setState({ delay: random * 100 });
+    // const { index } = this.props;
+    // if (index < 10) {
+    //   this.setState({ delay: index * 100 });
+    // }
+    // this.setState({ delay: (index % 10) * 100 });
   }
   render() {
     return (
@@ -49,6 +51,7 @@ class ProductCard extends React.PureComponent<P, S> {
             elevation={0}
             style={{
               border: '1px solid #abacad',
+              backgroundColor: '#fff',
             }}
           >
             <img

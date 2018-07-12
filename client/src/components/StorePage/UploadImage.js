@@ -78,11 +78,17 @@ class UploadImage extends React.Component<P, S> {
 
   render() {
     return (
-      <div>
+      <div style={{ with: this.props.height, maxWidth: 'auto' }}>
         <img
           src={this.state.src || plcUrl}
           alt="user-img"
-          style={{ height: this.props.height }}
+          style={{
+            maxHeight: this.props.height,
+            height: 'auto',
+            width: 'auto',
+            display: 'block',
+            margin: 'auto',
+          }}
           onLoad={this.handleUpload}
         />
 
@@ -93,12 +99,7 @@ class UploadImage extends React.Component<P, S> {
           style={{ display: 'none' }}
           onInput={this.handleSubmitImg}
         />
-
-        <label htmlFor={this.props.inpt_id}>
-          <Button variant="raised" color="primary" component="span" fullWidth>
-            Upload
-          </Button>
-        </label>
+        <br />
         <FormControlLabel
           control={
             <Checkbox
@@ -110,6 +111,11 @@ class UploadImage extends React.Component<P, S> {
           }
           label="Try to guess which brand"
         />
+        <label htmlFor={this.props.inpt_id}>
+          <Button variant="raised" color="primary" component="span" fullWidth>
+            Upload
+          </Button>
+        </label>
       </div>
     );
   }

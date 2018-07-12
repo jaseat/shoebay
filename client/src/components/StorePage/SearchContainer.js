@@ -1,17 +1,26 @@
 import * as React from 'react';
+import UploadImage from './UploadImage';
+import { Button, Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
 type P = {
-  children: React.Node,
+  classes: Object,
+  children: React.ReactNode,
 };
+
+const style = theme => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    // padding: theme.spacing.unit,
+    backgroundColor: theme.palette.background.default,
+    width: 'auto',
+  },
+});
 class SearchContainer extends React.Component<P> {
   render() {
-    const style = {
-      display: 'flex',
-      justifyContent: 'center',
-      background: '#abcabc',
-    };
-    return <div style={style}>{this.props.children}</div>;
+    return <div className={this.props.classes.root}>{this.props.children}</div>;
   }
 }
 
-export default SearchContainer;
+export default withStyles(style)(SearchContainer);
