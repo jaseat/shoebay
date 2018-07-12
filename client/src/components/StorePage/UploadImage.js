@@ -25,7 +25,9 @@ class UploadImage extends React.Component<P, S> {
   };
 
   handleCheckChange = () => {
-    this.setState({ checked: !this.state.checked });
+    this.setState({ checked: !this.state.checked }, () => {
+      this.handleUpload();
+    });
   };
 
   handleSubmitImg = (event: SyntheticInputEvent<HTMLInputElement>) => {
@@ -43,15 +45,17 @@ class UploadImage extends React.Component<P, S> {
   };
 
   handleUpload = () => {
-    if (this.state.src !== null) {
+    const { src, checked } = this.state;
+    if (src !== null) {
       //this allows to use label or web detection
-      let URL = '';
-      if (this.state.checked) {
+      var URL = '';
+      if (checked) {
         URL = '/vision/img/web';
       } else {
         URL = '/vision/img/label';
       }
-      var base64 = this.state.src.replace(/^data:image\/\w+;base64,/, '');
+      //this
+      var base64 = src.replace(/^data:image\/\w+;base64,/, '');
       fetch(URL, {
         method: 'POST',
         mode: 'cors',
@@ -100,10 +104,11 @@ class UploadImage extends React.Component<P, S> {
             <Checkbox
               checked={this.state.checked}
               onChange={this.handleCheckChange}
-              value="checkedA"
+              value="brand"
+              color="primary"
             />
           }
-          label="I'm feeling lucky"
+          label="Try to guess which brand"
         />
       </div>
     );

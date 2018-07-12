@@ -45,6 +45,9 @@ const requestBuilder = params => {
     for (key in filters) {
       keywords += filters[key] + ' ';
     }
+    keywords = keywords.trim();
+
+    console.log(page, keywords);
     client
       .itemSearch({
         Condition: 'New', //looking only for new

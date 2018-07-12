@@ -21,7 +21,7 @@ function LabelDetection(img) {
             return i == allwords.indexOf(word);
           })
           .join(' ');
-        //returning final string
+        removeDoubles = removeDoubles.trim();
 
         resolve(removeDoubles);
       })
@@ -44,6 +44,7 @@ function WebDetection(img) {
           .join(' ');
 
         var FINAL = removeDoubles.replace(shoesRexEx, '');
+        FINAL = FINAL.trim();
         resolve(FINAL);
       })
       .catch(err => {

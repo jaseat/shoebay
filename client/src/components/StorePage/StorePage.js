@@ -135,7 +135,7 @@ class StorePage extends React.Component<any, S> {
               {this.renderCards()}
             </Grid>
           )}
-          <Waypoint onEnter={this.changePage} />
+          <Waypoint onEnter={this.changePage} bottomOffset="-200px" />
         </div>
       </div>
     );
