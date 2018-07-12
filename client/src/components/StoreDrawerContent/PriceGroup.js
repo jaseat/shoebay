@@ -18,41 +18,35 @@ const priceBrackets: Array<string> = [
 ];
 
 type P = {
-  addFilter: (key: string, value: string) => FILTER_ACTION,
+  addFilter: (key: string, value: string | number) => FILTER_ACTION,
 };
 
 class PriceGroup extends Component<P> {
   handleClick = (value: string) => {
     return () => {
-      var minPrice = 0;
-      var maxPrice = 0;
+      const { addFilter } = this.props;
       switch (value) {
         case priceBrackets[0]:
-          minPrice = 0;
-          maxPrice = 2500;
+          addFilter('minPrice', 0);
+          addFilter('maxPrice', 2500);
           break;
         case priceBrackets[1]:
-          minPrice = 2500;
-          maxPrice = 5000;
+          addFilter('minPrice', 2500);
+          addFilter('maxPrice', 5000);
           break;
         case priceBrackets[2]:
-          minPrice = 5000;
-          maxPrice = 10000;
+          addFilter('minPrice', 5000);
+          addFilter('maxPrice', 10000);
           break;
         case priceBrackets[3]:
-          minPrice = 10000;
-          maxPrice = 20000;
+          addFilter('minPrice', 10000);
+          addFilter('maxPrice', 20000);
           break;
         case priceBrackets[4]:
-          minPrice = 20000;
-          maxPrice = 9999999;
+          addFilter('minPrice', 20000);
+          addFilter('maxPrice', 9999999);
           break;
-        default:
-          minPrice = 0;
-          maxPrice = 9999999;
       }
-      this.props.addFilter('minPrice', minPrice);
-      this.props.addFilter('maxPrice', maxPrice);
     };
   };
   render() {

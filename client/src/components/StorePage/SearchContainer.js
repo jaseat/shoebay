@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-class SearchContainer extends Component {
+type P = {
+  children: React.Node,
+};
+class SearchContainer extends React.Component<P> {
   render() {
     const style = {
       display: 'flex',
       justifyContent: 'center',
-      background: '#adadad',
+      background: '#abcabc',
     };
     return <div style={style}>{this.props.children}</div>;
   }

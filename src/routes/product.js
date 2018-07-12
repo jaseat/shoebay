@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { requestBuilder, itemLookup } = require('../amazon/api');
+const { requestBuilder } = require('../amazon/api');
 
 router.post('/search', (req, res) => {
   requestBuilder(req.body)
@@ -8,16 +8,12 @@ router.post('/search', (req, res) => {
       res.json(data);
     })
     .catch(err => {
-      res.json(err);
+      console.log(err);
+      if (err[0].Error) {
+        console.log(err[0].Error[0]);
+      }
+      res.json({ done: true });
     });
-});
-
-router.get('/search/item/:id', (req, res) => {
-  itemLookup(req.params.id)
-    .then(data => {
-      res.json(data);
-    })
-    .catch(err => console.log(err));
 });
 
 module.exports = router;

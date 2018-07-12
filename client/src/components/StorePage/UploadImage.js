@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, FormControlLabel, Checkbox } from '@material-ui/core';
 import { addFilter } from '../../actions/filter';
 import { connect } from 'react-redux';
 //types
@@ -15,11 +15,17 @@ type P = {
 };
 type S = {
   src: null | string,
+  checked: boolean,
 };
 
 class UploadImage extends React.Component<P, S> {
   state = {
     src: null,
+    checked: false,
+  };
+
+  handleCheckChange = () => {
+    this.setState({ checked: !this.state.checked });
   };
 
   handleSubmitImg = (event: SyntheticInputEvent<HTMLInputElement>) => {
@@ -38,8 +44,15 @@ class UploadImage extends React.Component<P, S> {
 
   handleUpload = () => {
     if (this.state.src !== null) {
+      //this allows to use label or web detection
+      let URL = '';
+      if (this.state.checked) {
+        URL = '/vision/img/web';
+      } else {
+        URL = '/vision/img/label';
+      }
       var base64 = this.state.src.replace(/^data:image\/\w+;base64,/, '');
-      fetch('/vision/img', {
+      fetch(URL, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -51,7 +64,6 @@ class UploadImage extends React.Component<P, S> {
           return response.json();
         })
         .then(visiondata => {
-          console.log(visiondata);
           this.props.addFilter('query', visiondata);
         })
         .catch(err => {
@@ -62,30 +74,38 @@ class UploadImage extends React.Component<P, S> {
 
   render() {
     return (
-      <Grid container justify="space-between" alignItems="flex-start">
-        <Grid item xs={12}>
-          <img
-            src={this.state.src || plcUrl}
-            alt="user-img"
-            style={{ height: this.props.height }}
-            onLoad={this.handleUpload}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <input
-            type="file"
-            accept="image/*"
-            id={this.props.inpt_id}
-            style={{ display: 'none' }}
-            onInput={this.handleSubmitImg}
-          />
-          <label htmlFor={this.props.inpt_id}>
-            <Button variant="raised" color="primary" component="span" fullWidth>
-              Upload
-            </Button>
-          </label>
-        </Grid>
-      </Grid>
+      <div>
+        <img
+          src={this.state.src || plcUrl}
+          alt="user-img"
+          style={{ height: this.props.height }}
+          onLoad={this.handleUpload}
+        />
+
+        <input
+          type="file"
+          accept="image/*"
+          id={this.props.inpt_id}
+          style={{ display: 'none' }}
+          onInput={this.handleSubmitImg}
+        />
+
+        <label htmlFor={this.props.inpt_id}>
+          <Button variant="raised" color="primary" component="span" fullWidth>
+            Upload
+          </Button>
+        </label>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={this.state.checked}
+              onChange={this.handleCheckChange}
+              value="checkedA"
+            />
+          }
+          label="I'm feeling lucky"
+        />
+      </div>
     );
   }
 }

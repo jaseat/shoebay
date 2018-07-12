@@ -1,3 +1,4 @@
+//lookUpSpecific item and return image url
 const amazon = require('amazon-product-api');
 
 const client = amazon.createClient({
@@ -5,29 +6,13 @@ const client = amazon.createClient({
   awsSecret: process.env.AWS_SECRET,
   awsTag: process.env.AWS_TAG,
 });
-//lookUpSpecific item and return image url
-const itemLookup = itemASIN => {
-  return new Promise((resolve, reject) => {
-    client
-      .itemLookup({
-        idType: 'ASIN',
-        itemId: itemASIN,
-        responseGroup: 'Images',
-      })
-      .then(response => {
-        var large = response[0].LargeImage[0].URL[0];
-        resolve(large);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
-};
 
 const requestBuilder = params => {
   return new Promise((resolve, reject) => {
     let nodeId = '';
     let index = '';
+    index = 'Fashion';
+    nodeId = '7141123011';
     var { filters, page } = params;
     //values from amazon api docs to narrow down search
     switch (filters.department) {
@@ -53,7 +38,6 @@ const requestBuilder = params => {
     delete filters.maxPrice;
     let minPrice = filters.minPrice || '';
     delete filters.minPrice;
-
     let keywords = '';
     //cuz amazon doesn't have browse node only for shoes
     if (index == 'Fashion') keywords += 'shoes ';
@@ -61,8 +45,6 @@ const requestBuilder = params => {
     for (key in filters) {
       keywords += filters[key] + ' ';
     }
-    console.log(keywords);
-    console.log(page);
     client
       .itemSearch({
         Condition: 'New', //looking only for new
@@ -72,33 +54,33 @@ const requestBuilder = params => {
         browseNode: nodeId,
         Title: category, //here goes category
         keywords: keywords, //width size and color can be here
-        responseGroup: 'Small,OfferSummary',
+        responseGroup: 'Images,Small,OfferSummary',
         itemPage: page,
         Availability: 'Available',
       })
       .then(function(results) {
         //return clean object with only needed fields
         var generateResultArr = [];
-        results.map(item => {
-          if (
-            item.ASIN &&
-            item.DetailPageURL &&
-            item.ItemAttributes &&
-            item.OfferSummary
-          )
-            generateResultArr.push({
-              asin: item.ASIN[0],
-              // parent_asin: item.ParentASIN[0],
-              url: item.DetailPageURL[0],
-              title: item.ItemAttributes[0].Title[0],
-              price: item.OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
-            });
-        });
+        if (results !== undefined && results !== null) {
+          results.map(item => {
+            if (
+              item.ASIN &&
+              item.DetailPageURL &&
+              item.ItemAttributes &&
+              item.OfferSummary[0].LowestNewPrice &&
+              item.LargeImage
+            )
+              generateResultArr.push({
+                asin: item.ASIN[0],
+                url: item.DetailPageURL[0],
+                title: item.ItemAttributes[0].Title[0],
+                price: item.OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
+                image: item.LargeImage[0].URL[0],
+              });
+          });
+        }
+
         resolve(generateResultArr);
-      })
-      .catch(function(err) {
-        console.log(err);
-        reject(err[0].Error);
       })
       .catch(err => {
         reject(err);
@@ -106,4 +88,4 @@ const requestBuilder = params => {
   });
 };
 
-module.exports = { requestBuilder, itemLookup };
+module.exports = { requestBuilder };
