@@ -46,30 +46,46 @@ const resolveProtected = (source, args, context, { fieldName }) => {
 const UserType = new GraphQLObjectType({
   name: 'User',
   interfaces: [NodeInterface],
-  fields: {
-    id: {
-      type: new GraphQLNonNull(GraphQLID),
-      resolve: resolveId,
-    },
-    username: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
-    email: {
-      type: new GraphQLNonNull(GraphQLString),
-      resolve: resolveProtected,
-    },
-    privilege: {
-      type: new GraphQLNonNull(GraphQLString),
-      resolve: resolveProtected,
-    },
-    paymentMethod: {
-      type: GraphQLString,
-      resolve: resolveProtected,
-    },
-    footShape: {
-      type: GraphQLString,
-      resolve: resolveProtected,
-    },
+  fields: () => {
+    return {
+      id: {
+        type: new GraphQLNonNull(GraphQLID),
+        resolve: resolveId,
+      },
+      username: {
+        type: new GraphQLNonNull(GraphQLString),
+      },
+      email: {
+        type: new GraphQLNonNull(GraphQLString),
+        resolve: resolveProtected,
+      },
+      privilege: {
+        type: new GraphQLNonNull(GraphQLString),
+        resolve: resolveProtected,
+      },
+      paymentMethod: {
+        type: GraphQLString,
+        resolve: resolveProtected,
+      },
+      footShape: {
+        type: GraphQLString,
+        resolve: resolveProtected,
+      },
+      articles: {
+        type: ArticleConnectionType,
+        args: {
+          after: {
+            type: GraphQLString,
+          },
+          first: {
+            type: GraphQLInt,
+          },
+        },
+        resolve(source, args, context) {
+          return resolvers.getUserArticles(source, args, context);
+        },
+      },
+    };
   },
 });
 
@@ -142,20 +158,7 @@ const ArticleType = new GraphQLObjectType({
         type: new GraphQLNonNull(CommentConnectionType),
         description: 'Article comments.',
         resolve: (source, args, context) => {
-          return resolvers
-            .getArticleComments(source, args, context)
-            .then(({ rows, pageInfo }) => {
-              const edges = rows.map(row => {
-                return {
-                  node: row,
-                  cursor: row.__cursor,
-                };
-              });
-              return {
-                edges,
-                pageInfo,
-              };
-            });
+          return resolvers.getArticleComments(source, args, context);
         },
       },
       shortText: {
@@ -334,21 +337,7 @@ const SearchType = new GraphQLObjectType({
         },
       },
       resolve(source, args, context) {
-        return resolvers
-          .getRecentArticles(source, args, context)
-          .then(({ rows, pageInfo }) => {
-            const edges = rows.map(row => {
-              return {
-                node: row,
-                cursor: row.__cursor,
-              };
-            });
-            console.log(pageInfo);
-            return {
-              edges,
-              pageInfo,
-            };
-          });
+        return resolvers.getRecentArticles(source, args, context);
       },
     },
   },

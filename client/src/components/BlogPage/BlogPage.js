@@ -11,7 +11,12 @@ class BlogPage extends Component {
     return (
       <Switch>
         <Route exact path="/blog" component={BlogMain} />
-        <Route path="/blog/:id" component={BlogArticlePage} />
+        <Route
+          path="/blog/:id"
+          render={props => {
+            return <BlogArticlePage {...props} />;
+          }}
+        />
       </Switch>
     );
   }

@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 
-import { fetchQuery } from '../../utils/api';
+import { fetchQuery, getUserArticles } from '../../utils/api';
 import Paragraphs from '../Paragraphs';
 import CommentListContainer from './CommentListContainer';
 import CommentForm from './CommentForm';
 
 import Waypoint from 'react-waypoint';
+import { isFirstDayOfMonth } from 'date-fns';
+
+import UserArticles from './UserArticles';
+import infiniteScroll from '../infiniteScroll';
+
+import { withRouter } from 'react-router-dom';
 
 class BlogArticlePage extends Component {
   constructor(props) {
@@ -68,7 +74,13 @@ class BlogArticlePage extends Component {
           console.log(err);
         });
   };
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params !== this.props.match.params) this._setArticle();
+  }
   componentDidMount() {
+    this._setArticle();
+  }
+  _setArticle() {
     const { id } = this.props.match.params;
     const query = `
     {
@@ -130,13 +142,21 @@ class BlogArticlePage extends Component {
     const { article, comments } = this.state;
     const { id } = this.props.match.params;
 
-    if (article)
+    if (article) {
+      const getOtherArticles = (first, after) => {
+        return getUserArticles(article.author.id, first, after);
+      };
+
+      const ArticleInfinite = infiniteScroll(UserArticles, getOtherArticles);
       return (
         <div style={{ margin: 12 }}>
           <h1>{article.title}</h1>
           <h4>By {article.author.username}</h4>
           <div className="article-text">
             <Paragraphs paragraphs={article.text} />
+          </div>
+          <div style={{ height: 256, overflow: 'auto' }}>
+            <ArticleInfinite id={id} />
           </div>
           <CommentForm close={this._getComments} id={id} />
           <CommentListContainer comments={comments} id={id} />
@@ -145,8 +165,8 @@ class BlogArticlePage extends Component {
           </Waypoint>
         </div>
       );
-    else return null;
+    } else return null;
   }
 }
 
-export default BlogArticlePage;
+export default withRouter(BlogArticlePage);

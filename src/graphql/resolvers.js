@@ -136,7 +136,7 @@ module.exports.shapeSearch = points => {
 const getConnection = (source, args, context, table, where, order, desc) => {
   let { after, first } = args;
   let options = {};
-  if (!first) first = 5;
+  if (!first || (first && first > 10)) first = 5;
   options.limit = first + 1;
   if (after) {
     let [id, date] = after.split(':');
@@ -172,6 +172,18 @@ const getConnection = (source, args, context, table, where, order, desc) => {
         pageInfo.endCursor = rows[rows.length - 1].__cursor;
       }
       return { rows, pageInfo };
+    })
+    .then(({ rows, pageInfo }) => {
+      const edges = rows.map(row => {
+        return {
+          node: row,
+          cursor: row.__cursor,
+        };
+      });
+      return {
+        edges,
+        pageInfo,
+      };
     });
 };
 
@@ -185,6 +197,13 @@ module.exports.getRecentArticles = (source, args, context) => {
     [['id', 'DESC'], ['createdAt', 'DESC']],
     true
   );
+};
+
+module.exports.getUserArticles = (source, args, context) => {
+  const where = {
+    UserId: source.id,
+  };
+  return getConnection(source, args, context, context.db.Article, where, null);
 };
 
 module.exports.getArticleComments = (source, args, context) => {
