@@ -37,6 +37,7 @@ class BlogMain extends Component {
             Create Article
           </Button>
         )}
+        <h1>Blog Posts</h1>
         <Dialog open={this.state.blogDialogOpen} fullWidth>
           <DialogContent>
             <BlogForm close={this.handleClose} />
