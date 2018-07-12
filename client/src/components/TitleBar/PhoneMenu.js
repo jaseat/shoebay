@@ -11,6 +11,9 @@ import { changeTheme } from '../../actions/theme';
 //type
 import type { USER_ACTION, THEME_ACTION } from '../../@flow-types';
 
+//react-router
+import { Link } from 'react-router-dom';
+
 type P = {
   userId: string,
   darkTheme: boolean,
@@ -68,12 +71,16 @@ class PhoneMenu extends React.Component<P, S> {
             horizontal: 'center',
           }}
         >
-          <MenuItem>
-            <PureIcon iconType="Store" />Store
-          </MenuItem>
-          <MenuItem>
-            <PureIcon iconType="Blog" />Blog
-          </MenuItem>
+          <Link to="/">
+            <MenuItem>
+              <PureIcon iconType="Store" />Store
+            </MenuItem>
+          </Link>
+          <Link to="/blog">
+            <MenuItem>
+              <PureIcon iconType="Blog" />Blog
+            </MenuItem>
+          </Link>
           {this.props.userId === null ? (
             <div>
               <LoginBtnDlg />

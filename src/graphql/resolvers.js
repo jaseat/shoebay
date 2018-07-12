@@ -1,5 +1,6 @@
 const passport = require('../auth');
 const GraphQLError = require('graphql/error');
+const Op = require('sequelize').Op;
 
 /**
  * Get node by id.
@@ -132,43 +133,58 @@ module.exports.shapeSearch = points => {
   return null;
 };
 
-const getConnection = (source, args, context, table, where) => {
+const getConnection = (source, args, context, table, where, order, desc) => {
   let { after, first } = args;
   let options = {};
   if (!first) first = 5;
   options.limit = first + 1;
   if (after) {
+    let [id, date] = after.split(':');
     options.where = {
       createdAt: {
-        $gt: new Date(parseInt(after)),
+        [desc ? Op.lte : Op.gte]: new Date(parseInt(date)),
+      },
+      id: {
+        [desc ? Op.lt : Op.gt]: id,
       },
     };
   }
   options.where = { ...options.where, ...where };
-  return table.findAll(options).then(allRows => {
-    const rows = allRows.slice(0, first);
-    rows.forEach(row => {
-      row.__tableName = table.getName();
-      row.__cursor = row.createdAt.getTime();
+  options.order = order;
+  return table
+    .findAll(options)
+    .then(rows => rows)
+    .then(allRows => {
+      const rows = allRows.slice(0, first);
+      rows.forEach(row => {
+        row.__tableName = table.getName();
+        row.__cursor = `${row.id}:${row.createdAt.getTime()}`;
+      });
+      const hasNextPage = allRows.length > first;
+      const hasPreviousPage = false;
+
+      const pageInfo = {
+        hasNextPage,
+        hasPreviousPage,
+      };
+      if (rows.length > 0) {
+        pageInfo.startCursor = rows[0].__cursor;
+        pageInfo.endCursor = rows[rows.length - 1].__cursor;
+      }
+      return { rows, pageInfo };
     });
-    const hasNextPage = allRows.length > first;
-    const hasPreviousPage = false;
-
-    const pageInfo = {
-      hasNextPage,
-      hasPreviousPage,
-    };
-
-    if (rows.length > 0) {
-      pageInfo.startCurosr = rows[0].__cursor;
-      pageInfo.endCurosr = rows[rows.length - 1].__cursor;
-    }
-    return { rows, pageInfo };
-  });
 };
 
 module.exports.getRecentArticles = (source, args, context) => {
-  return getConnection(source, args, context, context.db.Article);
+  return getConnection(
+    source,
+    args,
+    context,
+    context.db.Article,
+    {},
+    [['id', 'DESC'], ['createdAt', 'DESC']],
+    true
+  );
 };
 
 module.exports.getArticleComments = (source, args, context) => {
@@ -176,5 +192,5 @@ module.exports.getArticleComments = (source, args, context) => {
   const where = {
     ArticleId,
   };
-  return getConnection(source, args, context, context.db.Comment, where);
+  return getConnection(source, args, context, context.db.Comment, where, null);
 };
