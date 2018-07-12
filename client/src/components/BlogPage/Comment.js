@@ -3,13 +3,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Paragraphs from '../Paragraphs';
 
-import { Link } from 'react-router-dom';
-
-const BlogArticle = props => (
+const Comment = props => (
   <Paper>
-    <Typography variant="headline" component="h3">
-      <Link to={`/blog/${props.id}`}> {props.title} </Link> by{' '}
-      {props.author.username}
+    <Typography component="h1">
+      {props.title} by {props.author.username}
     </Typography>
     <Typography component="div">
       <Paragraphs paragraphs={props.text} />
@@ -17,4 +14,4 @@ const BlogArticle = props => (
   </Paper>
 );
 
-export default BlogArticle;
+export default Comment;

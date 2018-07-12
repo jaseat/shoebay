@@ -117,6 +117,7 @@ export const getRecentArticles = async (first = null, after = null) => {
             author{
               username
             }
+            id
             title
             shortText
             createdAt
@@ -145,6 +146,23 @@ export const postArticle = async newArticle => {
   try {
     const res = await fetchQuery(query, { input: newArticle });
     const data = res.data.createArticle;
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const postComment = async newComment => {
+  const query = `
+  mutation PostComment($input:CommentInput!){
+    createComment(input:$input){
+      id
+    }
+  }
+  `;
+  try {
+    const res = await fetchQuery(query, { input: newComment });
+    const data = res.data.createComment;
     return data;
   } catch (e) {
     throw e;

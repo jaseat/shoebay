@@ -24,7 +24,12 @@ class BlogListContainer extends Component {
     return (
       <div>
         {this.state.articles.map(a => (
-          <BlogArticle title={a.title} text={a.shortText} author={a.author} />
+          <BlogArticle
+            id={a.id.split(':')[1]}
+            title={a.title}
+            text={a.shortText}
+            author={a.author}
+          />
         ))}
       </div>
     );
