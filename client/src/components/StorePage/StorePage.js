@@ -11,12 +11,11 @@ import UploadImage from './UploadImage';
 import ProductCard from './ProductCard';
 import SearchContainer from './SearchContainer';
 
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 //
 import { connect } from 'react-redux';
 import { addFilter } from '../../actions/filter';
 import { nextPage, refreshPage } from '../../actions/page';
-import Button from '@material-ui/core/Button';
 
 const style = theme => ({
   root: {
@@ -48,14 +47,14 @@ class StorePage extends React.Component<any, S> {
     done: false,
   };
 
-  componentWillUpdate(prevProps, prevState) {
-    if (prevProps.filters !== this.props.filters) {
-      if (!prevState.done) {
-        this.props.refreshPage();
-        this.setState({ response: [], done: false });
-      }
-    }
-  }
+  // componentWillUpdate(prevProps, prevState) {
+  //   if (prevProps.filters !== this.props.filters) {
+  //     if (!prevState.done) {
+  //       this.props.refreshPage();
+  //       this.setState({ response: [], done: false });
+  //     }
+  //   }
+  // }
 
   getItems = () => {
     fetch(`/product/search`, {
@@ -74,7 +73,7 @@ class StorePage extends React.Component<any, S> {
       })
       .then(amazondata => {
         console.log(amazondata);
-        if (amazondata[0].Code === undefined) {
+        if (amazondata !== undefined && amazondata[0].Code === undefined) {
           var current = this.state.response;
           for (let i = 0; i < amazondata.length; i++) {
             current.push(amazondata[i]);
@@ -93,8 +92,8 @@ class StorePage extends React.Component<any, S> {
   };
 
   changePage = () => {
-    if (!this.state.done) {
-      console.log('crossed the border');
+    if (!this.state.done && !this.state.loading) {
+      console.log('entered');
       this.props.nextPage();
       this.getItems();
     }
@@ -147,7 +146,13 @@ class StorePage extends React.Component<any, S> {
             </Grid>
           )}
           {!this.state.loading && (
-            <Waypoint onEnter={this.changePage} bottomOffset="-80%" />
+            <Waypoint
+              onLeave={() => {
+                console.log('left');
+              }}
+              onEnter={this.getItems}
+              bottomOffset="-40%"
+            />
           )}
         </div>
       </div>

@@ -45,8 +45,11 @@ class PriceGroup extends Component<P> {
           break;
         case priceBrackets[4]:
           minPrice = 20000;
-          maxPrice = 999999999;
+          maxPrice = 9999999;
           break;
+        default:
+          minPrice = 0;
+          maxPrice = 9999999;
       }
       this.props.addFilter('minPrice', minPrice);
       this.props.addFilter('maxPrice', maxPrice);

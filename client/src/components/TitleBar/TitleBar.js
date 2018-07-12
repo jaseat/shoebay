@@ -9,7 +9,6 @@ import UserMenu from './UserMenu';
 import PhoneMenu from './PhoneMenu';
 //icons
 import PureIcon from '../../style/Icons';
-import LogoSvg from '../../style/LogoSvg';
 
 type Props = {
   userId: null | string,

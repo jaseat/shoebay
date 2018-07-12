@@ -1,10 +1,9 @@
 import * as React from 'react';
 //material-ui
 import {
-  Card,
+  Paper,
   CardActions,
   CardContent,
-  CardMedia,
   Typography,
   Button,
   Grid,
@@ -44,22 +43,26 @@ class ProductCard extends React.Component<P, S> {
       return null;
     }
     return (
-      <Grid item xs={4}>
-        <Card style={{ maxWidth: 300 }}>
+      <Grid item xs={6} sm={4} md={3}>
+        <Paper elevation={0} style={{ border: '1px solid #abacad' }}>
           <img
             src={
               this.state.src ||
               `http://via.placeholder.com/350/b9ceb5?text=IMAGE UNAVAILABLE`
             }
+            alt="img"
             style={{
-              height: 250,
+              maxWidth: '100%',
               margin: 'auto',
+              padding: 24,
             }}
           />
 
           <CardContent>
             <Typography variant="body1">{this.props.title}</Typography>
-            <Typography variant="subheading">{this.props.price}</Typography>
+            <Typography variant="subheading" color="primary" align="left">
+              {this.props.price}
+            </Typography>
           </CardContent>
           <CardActions>
             <Button
@@ -67,12 +70,13 @@ class ProductCard extends React.Component<P, S> {
               color="primary"
               href={this.props.aLink}
               target="_blank"
+              fullWidth
             >
               <PureIcon iconType="Amazon" />
-              Product Page
+              Product page
             </Button>
           </CardActions>
-        </Card>
+        </Paper>
       </Grid>
     );
   }

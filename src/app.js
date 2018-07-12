@@ -33,7 +33,7 @@ const amazon = require('./routes/product');
 //log for dev
 app.use(logger('dev'));
 //body-parser from testing vision api
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
 
 //session set up
 app.use(

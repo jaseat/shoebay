@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { addFilter } from '../../actions/filter';
 import { connect } from 'react-redux';
 //types
 import type { FILTER_ACTION } from '../../@flow-types';
 
 const plcUrl =
-  'http://via.placeholder.com/400x300?text=*.jpeg *.jpg *.png *.bmp';
+  'http://via.placeholder.com/300x300?text=*.jpeg *.jpg *.png *.bmp';
 
 type P = {
   inpt_id: string,
@@ -62,17 +62,12 @@ class UploadImage extends React.Component<P, S> {
 
   render() {
     return (
-      <Grid
-        container
-        justify="space-between"
-        alignItems="flex-start"
-        spacing={8}
-      >
+      <Grid container justify="space-between" alignItems="flex-start">
         <Grid item xs={12}>
           <img
             src={this.state.src || plcUrl}
             alt="user-img"
-            style={{ height: this.props.height, width: '100%' }}
+            style={{ height: this.props.height }}
             onLoad={this.handleUpload}
           />
         </Grid>
