@@ -86,6 +86,7 @@ class UploadImage extends React.Component<P, S> {
             maxHeight: this.props.height,
             height: 'auto',
             width: 'auto',
+            maxWidth: '80vw',
             display: 'block',
             margin: 'auto',
           }}
