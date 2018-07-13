@@ -17,8 +17,8 @@ export const fetchQuery = async (
     headers: {
       'content-type': 'application/json',
       Accept: 'application/json',
-      credentials: 'same-origin',
     },
+    credentials: 'same-origin',
   };
   const url = '/api/graphql';
 
